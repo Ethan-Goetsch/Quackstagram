@@ -1,23 +1,26 @@
 package refactored;
 
+import java.time.LocalDateTime;
+
+import refactored.ui.UIManager;
+
 public class ApplicationManager
 {
-    private final DatabaseManager DatabaseManager;
-
     private UIManager uiManager;
     private CredentialsVerifier credentialsVerifier;
 
-    public ApplicationManager(DatabaseManager databaseManager)
+    public ApplicationManager()
     {
-        DatabaseManager = databaseManager;
-
         uiManager = new UIManager();
-        uiManager.DisplayPage(PageType.SignIn);
     }
 
-    private void onSignIn()
+    public static void main(String[] args)
     {
-        if (credentialsVerifier.isVerifiedCredentials(null, null))
-            uiManager.setFrameAndPage(PageType.Home);
+        ApplicationManager applicationManager = new ApplicationManager();    
+
+        Content testContent = new ContentBuilder()
+        .withPicture(null)
+        .withDate(LocalDateTime.now())
+        .build();
     }
 }
