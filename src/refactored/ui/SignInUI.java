@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import Refactored.User;
+import refactored.stored.User;
 
 public class SignInUI extends JFrame
 {
@@ -38,7 +38,7 @@ public class SignInUI extends JFrame
     private JLabel lblPhoto;
     private User newUser;
     
-    public SignInUI()
+    public SignInUI(User user)
     {
         setTitle("Quackstagram - Register");
         setSize(WIDTH, HEIGHT);

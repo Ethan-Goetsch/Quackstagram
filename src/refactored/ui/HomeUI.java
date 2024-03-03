@@ -2,29 +2,21 @@ package refactored.ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-public class HomeUI extends JFrame
-{
-    private final UIManager manager;
+import refactored.util.generic.functions.IAction;
 
+public class HomeUI extends QuackstagramUI
+{
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private JPanel homePanel;
     private JPanel imageViewPanel;
 
-    public HomeUI(UIManager manager)
+    public HomeUI(int width, int height, int navIconSize, IAction<PageType> onNavigationCallback)
     {
-        this.manager = manager;
-
-        setTitle("Quakstagram Home");
-        setSize(WIDTH, HEIGHT);
-        setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        super(width, height, navIconSize, "Home", onNavigationCallback);
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -33,10 +25,10 @@ public class HomeUI extends JFrame
         imageViewPanel = new JPanel(new BorderLayout());
 
         // Content Panel
-        JPanel contentPanel = manager.createContentPanel();
+        JPanel contentPanel = createContentPanel();
 
         // Scroll Pane
-        JScrollPane scrollPane = manager.createScrollPane(contentPanel);
+        JScrollPane scrollPane = createScrollPane(contentPanel);
         add(scrollPane, BorderLayout.CENTER);
         homePanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -48,11 +40,11 @@ public class HomeUI extends JFrame
         
         // Header Panel (reuse from InstagramProfileUI or customize for home page)
         // Header with the Register label
-        JPanel headerPanel = manager.createHeaderPanel();
+        JPanel headerPanel = createHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
 
         // Navigation Bar
-        JPanel navigationPanel = manager.createNavigationPanel();
+        JPanel navigationPanel = createNavigationPanel();
         add(navigationPanel, BorderLayout.SOUTH);
 
         initializeUI();
