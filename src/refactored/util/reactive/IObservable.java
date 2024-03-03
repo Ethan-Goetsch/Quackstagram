@@ -1,4 +1,6 @@
-package src.Refactored.util;
+package refactored.util.reactive;
+
+import refactored.util.functions.IAction;
 
 public interface IObservable
 {

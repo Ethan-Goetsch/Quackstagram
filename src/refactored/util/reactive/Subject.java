@@ -1,7 +1,9 @@
-package src.Refactored.util;
+package refactored.util.reactive;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import refactored.util.functions.IAction;
 
 public class Subject implements IObservable, IObserver
 {
