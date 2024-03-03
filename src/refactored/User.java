@@ -2,7 +2,7 @@ package refactored;
 
 import java.util.List;
 
-import refactored.stored.Post;
+import refactored.entities.Post;
 
 // Represents a user on Quackstagram
 public class User

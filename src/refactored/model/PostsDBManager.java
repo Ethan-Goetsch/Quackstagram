@@ -1,9 +1,9 @@
 package refactored.model;
 import java.io.Serializable;
 
-import refactored.stored.UserAccount;
+import refactored.entities.UserAccount;
 
-public class PostDBManager
+public class PostsDBManager
 {
     class Picture implements Serializable
     {

@@ -1,4 +1,4 @@
-package refactored.model;
+package refactored.data;
 import java.nio.file.Path;
 
 public abstract class Paths
@@ -17,9 +17,9 @@ public abstract class Paths
     public static final Path notificationsPath = Path.of(rootPath.toString(), "/notifications.json");
     public static final Path messagesPath = Path.of(rootPath.toString(), "/messages.json");
 
-    //pictures
-    public static final Path picturesPath = Path.of(imgPath.toString(), "pictures", "/pictures.json");
-    public static final Path imageDetailsPath = Path.of(imgPath.toString(), "/details");
+    //content
+    public static final Path contentsPath = Path.of(imgPath.toString(), "contents", "/contents.json");
+    public static final Path contentDetailsPath = Path.of(imgPath.toString(), "/details");
 
     //data
     public static final Path userCredentialsPath = Path.of(dataPath.toString(), "/userCredentials.json");

@@ -2,7 +2,8 @@ package refactored.model;
 
 import java.util.ArrayList;
 
-import refactored.stored.UserAccount;
+import refactored.data.Paths;
+import refactored.entities.UserAccount;
 
 public class UserAccountsDBManager extends DBManager<UserAccount>
 {
@@ -23,6 +24,28 @@ public class UserAccountsDBManager extends DBManager<UserAccount>
         users = null;
         retrieveUsers();
         System.out.println(users.get(0).id);
+    }
+
+    /**
+     * Validates credentials and returns the user id if they are correct;
+     * returns -1 if they are not.
+     * @param username
+     * @param password
+     * @return
+     */
+    public int getCredentialsID(String username, String password)
+    {
+        retrieveUsers();
+
+        //credentials validation logic
+        for(UserAccount uc : users)
+        {
+            if(uc.username.equals(username) && uc.password.equals(password))
+            {
+                return uc.id;
+            }
+        }
+        return -1;
     }
 
     public boolean usernameExists(String username) {

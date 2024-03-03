@@ -1,0 +1,48 @@
+package refactored.entities;
+
+import java.time.LocalDateTime;
+
+import refactored.User;
+
+public class Post
+{
+    private final int id;
+
+    private User author;
+    private LocalDateTime timestamp;
+
+    private Content content; //either a picture, a video, or an audio file
+    private String text; //either a caption or a comment
+
+    //stored with the post for efficiency. Otherwise, a full search would be required each page update.
+    private int likeCount;
+    private int commentCount;
+
+    // maybe use a builder pattern here // or a factory
+    public Post(Post parentPost, User author, Content content, String text, LocalDateTime timestamp)
+    {
+        this.id = 0; // TODO: 12 years ago: generate a unique id
+        
+        this.author = author;
+        this.timestamp = timestamp;
+        
+        this.content = content;
+        this.text = text;
+
+        likeCount = 0;
+        commentCount = 0;
+    }
+
+    public int getID() { return id; }
+    public User getAuthor() { return author; }
+    public Content getContent() { return content; }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public int getLikeCount() { return likeCount; }
+    public int getCommentCount() { return commentCount; }
+
+    @Override
+    public String toString()
+    {
+        return "[Post]: " + "Author: " + author.getUsername() + ", Content: " + content;
+    }
+}

@@ -1,18 +1,18 @@
-package refactored.stored;
+package refactored.factories;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
-import refactored.model.PictureDBManager;
+import refactored.entities.Content;
 
+//currently, picture factory functionality is implemente in PictureDBManager.savePicture() // maybe move it here
 public abstract class PictureFactory {
     
-    public static Picture createPicture(Path imagePath) {
+    public static Content createPicture(Path imagePath) {
         // give the picture a unique id
-        PictureDBManager.getNextID();
-
+        //PictureDBManager.getNextID();
+        return null;
     }
 
     //probably should not be here
@@ -37,5 +37,6 @@ public abstract class PictureFactory {
         catch (IOException e)
         {
             e.printStackTrace();
+        }
     }
 }
