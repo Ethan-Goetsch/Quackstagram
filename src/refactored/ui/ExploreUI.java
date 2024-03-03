@@ -1,4 +1,4 @@
-package src.Refactored.ui;
+package refactored.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

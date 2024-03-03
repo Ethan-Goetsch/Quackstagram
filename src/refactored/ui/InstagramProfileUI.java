@@ -1,8 +1,6 @@
-package src.Refactored.ui;
+package refactored.ui;
 
 import javax.swing.*;
-
-import Refactored.User;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
