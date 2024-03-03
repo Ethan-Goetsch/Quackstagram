@@ -3,7 +3,7 @@ package Refactored;
 import java.util.List;
 
 // Represents a user on Quackstagram
-class User
+public class User
 {
     private final int id;
 
