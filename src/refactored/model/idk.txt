@@ -1,0 +1,52 @@
+    unused code from UserDBManager
+    
+    /**
+     * Returns the user account with the given id;
+     * returns null if it does not exist.
+     * @param id
+     * @return
+     */
+    public UserAccount getUser(int id)
+    {
+        if(areUsersLoaded() == false)
+        {
+            return null;
+        }
+
+        //user retrieval logic
+        for(UserAccount ua : users)
+        {
+            if(ua.id == id)
+            {
+                return ua;
+            }
+        }
+        return null;
+    }
+
+    private boolean areCredentialsLoaded()
+    {
+        if (credentials == null)
+        {
+            retrieveCredentials();
+        } if (credentials == null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * users existence logic
+     */
+    private boolean areUsersLoaded()
+    {
+        if (users == null)
+        {
+            retrieveUsers();
+        } if (credentials == null)
+        {
+            return false;
+        }
+        return true;
+    }

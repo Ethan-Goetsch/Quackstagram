@@ -1,7 +1,7 @@
 package refactored.model;
 import java.io.Serializable;
 
-import model.UserAccount;
+import refactored.stored.UserAccount;
 
 public class PostDBManager
 {

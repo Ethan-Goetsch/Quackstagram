@@ -1,8 +1,6 @@
 package refactored.stored;
 import java.io.Serializable;
 
-import Picture;
-
 public class UserAccount implements Serializable
 {
     public int id;
