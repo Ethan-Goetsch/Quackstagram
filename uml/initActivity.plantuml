@@ -1,0 +1,20 @@
+@startuml Activity Diagram
+start
+if (No Account?) then (Register)
+    repeat :SignUp;
+    repeat while (Username already exists?) is (Yes) not (No)
+    :Create Account;
+else (Login)
+    repeat :SignIn;
+    repeat while (Valid Credentials?) is (No) not (Yes)
+endif
+label logged_in
+:View Personal Profile;
+:View Personal Feed;
+:View Explore Page;
+:View Notification Page;
+:View Post;
+
+goto logged_in
+stop
+@enduml

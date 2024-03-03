@@ -1,0 +1,23 @@
+@startuml Test
+
+skinparam class {
+    style strictuml
+    SequenceMessageAlignment cernter
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+    FontColor Black
+    FontSize 12
+    FontName Arial
+}
+
+Class A {
+    -name : String
+    +getName() : String
+    +setName(name : String) : void
+}
+
+A -> B : Hello World
+A <- B : Hi
+
+@enduml

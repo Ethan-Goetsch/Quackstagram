@@ -1,0 +1,297 @@
+@startuml Class Diagram
+
+class User {
+  - username : String
+  - bio : String
+  - password : String
+  - postsCount : int
+  - followersCount : int
+  - followingCount : int
+  - pictures : List<Picture>
+  ' constructors
+  + User(username : String, bio : String, password : String) : idk
+  + User(username : String) : idk
+
+  ' getters
+  + getUsername(): String
+  + getBio(): String
+  + getPostsCount(): int
+  + getFollowersCount(): int
+  + getFollowingCount(): int
+  + getPictures(): List<Picture>
+
+  ' setters
+  + addPicture(picture : Picture) : void
+  + setBio(bio : String) : void
+  + setFollowerCount(followerCount : int) : void
+  + setFollowingCount(followingCount : int) : void
+  + setPostsCount(postsCount : int) : void
+
+  + toString() : String
+}
+
+class SignUpUI {
+  - credentialsFilePath : String
+  - profilePhotoStoragePath : String
+
+  - WIDTH : int
+  - HEIGHT : int
+
+  - txtUsername : JTextField
+  - txtPassword : JTextField
+  - txtBio : JTextField
+  - btnSignIn : JButton
+  - btnRegister : JButton
+  - btnUploadPhoto : JButton
+  - lblPhoto : JLabel
+ 
+ ' constructors
+  + SignUpUI() : void
+
+  - initializeUI() : void
+  - onRegisterClicked(event : ActionEvent) : void
+  - onSignInClicked(event : ActionEvent) : void
+  - doesUsernameExist(username : String) : boolean
+  - handleProfilePictureUpload() : void
+  - saveProfilePicture(file : File, username : String) : void
+  - saveCredentials(username : String, password : String, bio : String) : void
+  - openSignInUI() : void
+}
+
+class SignInUI {
+  - credentialsFilePath : String
+  - profilePhotoStoragePath : String
+
+  - WIDTH : int
+  - HEIGHT : int
+
+  - txtUsername : JTextField
+  - txtPassword : JTextField
+  - btnSignIn : JButton
+  default btnSignIn : JButton
+  - lblPhoto : JLabel
+  - newUser : User
+ 
+ ' constructors
+  + SignInUI() : void
+
+  - initializeUI() : void
+  - onSignInClicked(event : ActionEvent) : void
+  - onRegisterNowClicked(event : ActionEvent) : void
+  - verifyCredentials(username : String) : boolean
+  - saveUserInformation(user : User) : void
+  + main(args : String[]) : void ' static
+}
+
+User --> Picture : has ' one-to-many
+
+class Picture {
+  - imagePath : String
+  - caption : String
+  - likesCount : int
+  - comments : List<String>
+
+  ' constructors
+  + Picture(imagePath : String, caption : String
+
+  + like() : void ' does not have unlike() method
+
+  ' getters
+  + getImagePath() : String
+  + getCaption() : String
+  + getLikesCount() : int
+  ' getCommentsCount() : int
+  + getComments() : List<String>
+
+  ' setters
+  + addComment(comment : String) : void
+}
+
+class NotificationsUI {
+  - WIDTH : int ' static final
+  - HEIGHT : int ' static final
+  - NAV_ICON_SIZE : int ' static final
+
+  ' constructors
+  + NotificationsUI() : void
+
+  - initializeUI() : void
+  - getElapsedTime(timestamp : String) : String
+  - createHeaderPanel() : JPanel
+  - createNavigationPanel() : JPanel
+  - createIconButton(iconPath : String, buttonType : String) : JButton
+  - ImageUploadUI() : void
+  - openProfileUI() : void
+  - NotificationsUI() : void
+  - openHomeUI() : void
+  - exploreUI() : void
+}
+
+SignInUI --> User : uses
+
+
+NotificationsUI --> InstagramProfileUI : creates
+NotificationsUI --> QuakstagramHomeUI : creates
+NotificationsUI --> ExploreUI : creates
+NotificationsUI --> ImageUploadUI : creates
+
+class InstagramProfileUI {
+  - WIDTH : int ' static final
+  - HEIGHT : int ' static final
+  - PROFILE_IMAGE_SIZE : int ' static final
+  - GRID_IMAGE_SIZE : int ' static final
+  - NAV_ICON_SIZE : int ' static final
+
+  - contentPanel : JPanel
+  - headerPanel : JPanel
+  - navigationPanel : JPanel
+  - currentUser : User
+
+  ' constructors
+  + InstagramProfileUI(user : User) : void
+  + InstagramProfileUI() : void
+
+  - initializeUI() : void
+  - createHeaderPanel() : JPanel
+  - handleFollowAction(usernameToFollow : String) : void
+  - createNavigationPanel() : JPanel
+  - initializeImageGrid() : void
+  - displayImage(imageIcon : ImageIcon) : void
+  - createStatLabel(number : String, text : String) : JLabel
+  - createIconButton(iconPath : String, buttonType : String) : JButton
+  - ImageUploadUI() : void
+  - openProfileUI() : void
+  - notificationsUI() : void
+  - openHomeUI() : void
+  - exploreUI() : void
+}
+
+InstagramProfileUI --> User : uses
+InstagramProfileUI --> ImageUploadUI : creates
+InstagramProfileUI --> InstagramProfileUI : creates
+InstagramProfileUI --> NotificationsUI : creates
+InstagramProfileUI --> QuakstagramHomeUI : creates
+InstagramProfileUI --> ExploreUI : creates
+
+class ExploreUI {
+  - WIDTH : int ' static final
+  - HEIGHT : int ' static final
+  - NAV_ICON_SIZE : int ' static final
+  - IMAGE_SIZE : int ' static final
+
+  ' constructors
+  + ExploreUI() : void
+
+  - initializeUI() : void
+  - createMainContentPanel() : JPanel
+  - creatHeaderPanel() : JPanel
+  - creatNavigationPanel() : JPanel
+  - displayImage(imagePath : String) : void
+  - createIconButton(iconPath : String, buttonType : String) : JButton
+  - ImageUploadUI() : void
+  - openProfileUI() : void
+  - notificationsUI() : void
+  - openHomeUI() : void
+  - exploreUI() : void
+}
+
+ExploreUI --> ImageUploadUI : creates
+ExploreUI --> InstagramProfileUI : creates
+ExploreUI --> NotificationsUI : creates
+ExploreUI --> QuakstagramHomeUI : creates
+ExploreUI --> ExploreUI : creates
+
+class ImageUploadUI {
+  - WIDTH : int ' static final
+  - HEIGHT : int ' static final
+  - NAV_ICON_SIZE : int ' static final
+
+  - imagePreviewArea : JPanel
+  - bioTextArea : JTextArea
+  - uploadButton : JButton
+  - saveButton : JButton
+  - imageUploaded : boolean
+  ' default false // unused
+
+  ' constructors
+  + ImageUploadUI() : void
+
+  - initializeUI() : void
+  - uploadAction(event : ActionEvent) : void
+  - getNextImageId(username : String) : int
+  - saveImageInfo(imageId : String, username : String, bio : String) : void
+  - getFileExtension(file : File) : String
+  - saveBioAction(event : ActionEvent) : void
+  - readUsername() : String ' throws IOException
+  
+  - createHeaderPanel() : JPanel
+  - createNavigationPanel() : JPanel
+  - createIconButton(iconPath : String, buttonType : String) : JButton
+  - openProfileUI() : void
+  - notificationsUI() : void
+  - openHomeUI() : void
+  - exploreUI() : void
+}
+
+ImageUploadUI --> InstagramProfileUI : creates
+ImageUploadUI --> NotificationsUI : creates
+ImageUploadUI --> QuakstagramHomeUI : creates
+ImageUploadUI --> ExploreUI : creates
+
+class QuakstagramHomeUI {
+  - WIDTH : int ' static final
+  - HEIGHT : int ' static final
+  - NAV_ICON_SIZE : int ' static final
+  - IMAGE_WIDTH : int ' static final
+  - IMAGE_HEIGHT : int ' static final
+  - LIKE_BUTTON_COLOR : Color ' static final
+  - cardLayout : CardLayout
+  - cardPanel : JPanel
+  - homePanel : JPanel
+  - imageViewPanel : JPanel
+
+  ' constructors
+  + QuakstagramHomeUI() : void
+
+  - initializeUI() : void
+  - populateContentPanel(panel : JPanel, sampleData : String[][]) : void
+  - handleLikeAction(imageId : String, likesLabel : JLabel) : void
+  - createSampleData() : String[][]
+  - createIconButton(iconPath : String) : JButton
+  - createIconButton(iconPath : String, buttonType : String) : JButton
+  - displayImage(postData : String[]) : void
+  - refreshDisplayImage(postData : String[], imageId : String) : void
+  
+
+  - ImageUploadUI() : void
+  - openProfileUI() : void
+  - notificationsUI() : void
+  - openHomeUI() : void
+  - exploreUI() : void
+}
+
+QuakstagramHomeUI --> ImageUploadUI : creates
+QuakstagramHomeUI --> InstagramProfileUI : creates
+QuakstagramHomeUI --> NotificationsUI : creates
+QuakstagramHomeUI --> QuakstagramHomeUI : creates
+QuakstagramHomeUI --> ExploreUI : creates
+
+class ImageLikesManager {
+  - likesFilePath : String
+
+  - likeImage(imageId : String) : void ' throws IOException
+  - readLikes() : Map<String, Set<String>> ' throws IOException
+  - saveLikes(likesMap : Map<String, Set<String>>) : void ' throws IOException
+}
+
+class UserRelationshipManager {
+  - followersFilePath : String
+
+  - followUser(follower : String, followed : String) : void ' throws IOException
+  - isAlreadyFollowing(follower : String, following : String) : void ' throws IOException
+  - getFollowers(username : String) : List<String> ' throws IOException
+  - readFollowing() : Map<String, Set<String>> ' throws IOException
+  - getFollowing(username : String) : void ' throws IOException
+}
+
+@enduml

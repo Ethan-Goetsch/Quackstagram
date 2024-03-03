@@ -7,6 +7,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import refactored.stored.UserAccount;
+import refactored.stored.UserCredentials;
+
 public abstract class UserDBManager
 {
     private static ArrayList<UserCredentials> credentials;

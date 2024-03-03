@@ -1,0 +1,49 @@
+@startuml Use Case Diagram
+left to right direction
+
+actor User as U
+
+rectangle Quackstagram {
+    (SignUp) as SU
+    (SignIn) as SI
+    (Reject SignUp) as RSU
+    (Reject SignIn) as RSI
+    (Validate Credentials) as VC
+    (Create User) as CU
+
+    (View Personal Profile) as VPP
+    (Edit Personal Profile) as EPP
+
+    (View Other User Profile) as VOUP
+    
+    (View Personal Feed) as VPF
+    (Explore Posts) as EP
+    (View Notifications) as VN
+    
+    (View Post) as VP
+    (Create Post) as CP
+    (Upload Photo) as UP
+
+    (Like Post) as LP
+    (Follow User) as FU
+}
+
+U -- (SU)
+SU <.. (RSU) : <<extend>>
+SU <.. (CU) : <<extend>>
+U -- (SI)
+SI <.. (VC) : <<include>>
+SI <.. (RSI) : <<extend>>
+U -- (VPP)
+VPP <.. (EPP) : <<extend>>
+U -- (VPF)
+U -- (EP)
+U -- (VOUP)
+U -- (VN)
+VOUP <.. (FU) : <<extend>>
+U -- (VP)
+VP <.. (LP) : <<extend>>
+U -- (CP)
+CP <.. (UP) : <<extend>>
+
+@enduml
