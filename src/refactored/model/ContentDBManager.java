@@ -69,9 +69,5 @@ public abstract class ContentDBManager extends DBManager<Content> {
         if(contents == null)
             contents = retrieve(Paths.contentsPath);
     }
-
-    public static void storeContents()
-    {
-        store(contents, Paths.contentsPath);
-    }
+    public static void storeContents() { store(contents, Paths.contentsPath); }
 }

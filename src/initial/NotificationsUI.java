@@ -55,6 +55,7 @@ public class NotificationsUI extends JFrame
            e.printStackTrace();
        }
        
+       // populate the notifications panel
        try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "notifications.txt")))
        {
             String line;

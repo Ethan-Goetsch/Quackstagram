@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import refactored.data.Paths;
 import refactored.entities.UserAccount;
 
-public class UserAccountsDBManager extends DBManager<UserAccount>
+public class UserDBManager extends DBManager<UserAccount>
 {
     private static ArrayList<UserAccount> users;
 
@@ -97,11 +97,11 @@ public class UserAccountsDBManager extends DBManager<UserAccount>
     private static void retrieveUsers()
     {
         if(users == null)
-            users = retrieve(Paths.userAccountsPath);
+            users = retrieve(Paths.usersPath);
     }
 
     private static void storeUsers()
     {
-        store(users, Paths.userAccountsPath);
+        store(users, Paths.usersPath);
     }
 }

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import refactored.entities.UserAccount;
 
-public class Message extends Notification{
+public class Message implements Notification{
     private int id;
 
     private UserAccount sender;

@@ -1,5 +1,9 @@
 package refactored.entities.interactions;
 
-public class Notification {
+/**
+ * Basically only here to remind that every interaction can be a notification
+ *  // when the time comes define the appropriate methods
+ */
+public interface Notification {
     
 }
