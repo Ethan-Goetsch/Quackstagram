@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 
 
-public class InstagramProfileUI extends JFrame
+public class ProfileUI extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -25,7 +25,7 @@ public class InstagramProfileUI extends JFrame
     private JPanel navigationPanel; // Panel for the navigation
     private User currentUser; // User object to store the current user's information
 
-    public InstagramProfileUI(User user)
+    public ProfileUI(User user)
     {
         this.currentUser = user;
          // Initialize counts
@@ -128,7 +128,7 @@ public class InstagramProfileUI extends JFrame
         initializeUI();
     }
 
-    public InstagramProfileUI()
+    public ProfileUI()
     {
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
@@ -499,7 +499,7 @@ public class InstagramProfileUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        InstagramProfileUI profileUI = new InstagramProfileUI();
+        ProfileUI profileUI = new ProfileUI();
         profileUI.setVisible(true);
     }
  
@@ -515,7 +515,7 @@ public class InstagramProfileUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
  

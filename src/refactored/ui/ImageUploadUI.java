@@ -340,7 +340,7 @@ public class ImageUploadUI extends JFrame
          e.printStackTrace();
      }
     User user = new User(loggedInUsername);
-    InstagramProfileUI profileUI = new InstagramProfileUI(user);
+    ProfileUI profileUI = new ProfileUI(user);
     profileUI.setVisible(true);
     }
  
@@ -356,7 +356,7 @@ public class ImageUploadUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
  

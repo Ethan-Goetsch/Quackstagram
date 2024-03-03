@@ -268,7 +268,7 @@ public class ExploreUI extends JFrame
         usernameLabel.addActionListener(e ->
         {
         User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(user);
         profileUI.setVisible(true);
         dispose(); // Close the current frame
     });
@@ -347,7 +347,7 @@ public class ExploreUI extends JFrame
         e.printStackTrace();
     }
         User user = new User(loggedInUsername);
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(user);
         profileUI.setVisible(true);
     }
 
@@ -363,7 +363,7 @@ public class ExploreUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
 
