@@ -3,7 +3,7 @@ package Refactored.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject implements IObservable
+public class Subject implements IObservable, IObserver
 {
     private List<IAction> actions;
 
