@@ -1,4 +1,4 @@
-package Refactored;
+package Refactored.UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,6 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import Refactored.User;
 
 public class ExploreUI extends JFrame
 {

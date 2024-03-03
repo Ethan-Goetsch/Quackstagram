@@ -1,4 +1,4 @@
-package Refactored;
+package Refactored.UI;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -35,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import Refactored.User;
 
 public class QuakstagramHomeUI extends JFrame
 {
