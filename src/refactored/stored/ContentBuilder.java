@@ -1,6 +1,4 @@
-package refactored;
-
-import java.time.LocalDateTime;
+package refactored.stored;
 
 public class ContentBuilder
 {
@@ -9,7 +7,7 @@ public class ContentBuilder
 
     public ContentBuilder()
     {
-        content = new Content("", null, LocalDateTime.now());
+        content = new Content("", null);
         context = this;
     }
 
@@ -22,12 +20,6 @@ public class ContentBuilder
     public ContentBuilder withPicture(Picture picture)
     {
         content.setPicture(picture);
-        return context;
-    }
-
-    public ContentBuilder withDate(LocalDateTime dateTime)
-    {
-        content.setDateCreated(dateTime);
         return context;
     }
 

@@ -1,4 +1,4 @@
-package refactored;
+package refactored.stored;
 
 public class UserFactory
 {
