@@ -1,7 +1,5 @@
 package refactored;
 
-import java.time.LocalDateTime;
-
 import refactored.ui.UIManager;
 
 public class ApplicationManager
@@ -16,11 +14,6 @@ public class ApplicationManager
 
     public static void main(String[] args)
     {
-        ApplicationManager applicationManager = new ApplicationManager();    
-
-        Content testContent = new ContentBuilder()
-        .withPicture(null)
-        .withDate(LocalDateTime.now())
-        .build();
+        ApplicationManager applicationManager = new ApplicationManager();
     }
 }
