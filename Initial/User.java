@@ -1,5 +1,7 @@
-import java.util.List;
+package Initial;
+
 import java.util.ArrayList;
+import java.util.List;
 
 // Represents a user on Quackstagram
 class User
