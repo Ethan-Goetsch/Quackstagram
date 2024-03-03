@@ -1,6 +1,8 @@
-package Refactored;
+package Refactored.UI;
 
 import javax.swing.*;
+
+import Refactored.User;
 
 import java.awt.*;
 import java.io.BufferedReader;

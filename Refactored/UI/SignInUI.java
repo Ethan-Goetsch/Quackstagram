@@ -1,4 +1,4 @@
-package Refactored;
+package Refactored.UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import Refactored.User;
 
 public class SignInUI extends JFrame
 {
