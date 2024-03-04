@@ -2,8 +2,8 @@ package refactored.model;
 
 import java.util.ArrayList;
 
-import refactored.data.Paths;
 import refactored.entities.interactions.Like;
+import refactored.factories.Paths;
 
 public class LikeDBManager extends DBManager<Like>{
     private static ArrayList<Like> likes;

@@ -1,5 +1,7 @@
 @startuml Class Diagram
 
+'classes 
+
 class User {
   - username : String
   - bio : String
@@ -83,8 +85,6 @@ class SignInUI {
   + main(args : String[]) : void ' static
 }
 
-User --> Picture : has ' one-to-many
-
 class Picture {
   - imagePath : String
   - caption : String
@@ -127,14 +127,6 @@ class NotificationsUI {
   - exploreUI() : void
 }
 
-SignInUI --> User : uses
-
-
-NotificationsUI --> InstagramProfileUI : creates
-NotificationsUI --> QuakstagramHomeUI : creates
-NotificationsUI --> ExploreUI : creates
-NotificationsUI --> ImageUploadUI : creates
-
 class InstagramProfileUI {
   - WIDTH : int ' static final
   - HEIGHT : int ' static final
@@ -166,13 +158,6 @@ class InstagramProfileUI {
   - exploreUI() : void
 }
 
-InstagramProfileUI --> User : uses
-InstagramProfileUI --> ImageUploadUI : creates
-InstagramProfileUI --> InstagramProfileUI : creates
-InstagramProfileUI --> NotificationsUI : creates
-InstagramProfileUI --> QuakstagramHomeUI : creates
-InstagramProfileUI --> ExploreUI : creates
-
 class ExploreUI {
   - WIDTH : int ' static final
   - HEIGHT : int ' static final
@@ -194,12 +179,6 @@ class ExploreUI {
   - openHomeUI() : void
   - exploreUI() : void
 }
-
-ExploreUI --> ImageUploadUI : creates
-ExploreUI --> InstagramProfileUI : creates
-ExploreUI --> NotificationsUI : creates
-ExploreUI --> QuakstagramHomeUI : creates
-ExploreUI --> ExploreUI : creates
 
 class ImageUploadUI {
   - WIDTH : int ' static final
@@ -233,11 +212,6 @@ class ImageUploadUI {
   - exploreUI() : void
 }
 
-ImageUploadUI --> InstagramProfileUI : creates
-ImageUploadUI --> NotificationsUI : creates
-ImageUploadUI --> QuakstagramHomeUI : creates
-ImageUploadUI --> ExploreUI : creates
-
 class QuakstagramHomeUI {
   - WIDTH : int ' static final
   - HEIGHT : int ' static final
@@ -270,12 +244,6 @@ class QuakstagramHomeUI {
   - exploreUI() : void
 }
 
-QuakstagramHomeUI --> ImageUploadUI : creates
-QuakstagramHomeUI --> InstagramProfileUI : creates
-QuakstagramHomeUI --> NotificationsUI : creates
-QuakstagramHomeUI --> QuakstagramHomeUI : creates
-QuakstagramHomeUI --> ExploreUI : creates
-
 class ImageLikesManager {
   - likesFilePath : String
 
@@ -293,5 +261,43 @@ class UserRelationshipManager {
   - readFollowing() : Map<String, Set<String>> ' throws IOException
   - getFollowing(username : String) : void ' throws IOException
 }
+
+
+' relationships
+
+Picture }-- User : has
+
+SignInUI --> User : stores
+SignInUI --> SignUpUI : creates
+SignUpUI --> SignInUI : creates
+
+NotificationsUI --> InstagramProfileUI : creates
+NotificationsUI --> QuakstagramHomeUI : creates
+NotificationsUI --> ExploreUI : creates
+NotificationsUI --> ImageUploadUI : creates
+
+InstagramProfileUI --> User : uses
+InstagramProfileUI --> ImageUploadUI : creates
+InstagramProfileUI --> InstagramProfileUI : creates
+InstagramProfileUI --> NotificationsUI : creates
+InstagramProfileUI --> QuakstagramHomeUI : creates
+InstagramProfileUI --> ExploreUI : creates
+
+ExploreUI --> ImageUploadUI : creates
+ExploreUI --> InstagramProfileUI : creates
+ExploreUI --> NotificationsUI : creates
+ExploreUI --> QuakstagramHomeUI : creates
+ExploreUI --> ExploreUI : creates
+
+ImageUploadUI --> InstagramProfileUI : creates
+ImageUploadUI --> NotificationsUI : creates
+ImageUploadUI --> QuakstagramHomeUI : creates
+ImageUploadUI --> ExploreUI : creates
+
+QuakstagramHomeUI --> ImageUploadUI : creates
+QuakstagramHomeUI --> InstagramProfileUI : creates
+QuakstagramHomeUI --> NotificationsUI : creates
+QuakstagramHomeUI --> QuakstagramHomeUI : creates
+QuakstagramHomeUI --> ExploreUI : creates
 
 @enduml

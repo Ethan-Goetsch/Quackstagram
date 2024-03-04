@@ -1,4 +1,4 @@
-package src.Refactored.ui;
+package refactored.refactoring;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,7 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import Refactored.User;
+import refactored.refactoring.nonui.User;
 
 public class ExploreUI extends JFrame
 {
@@ -58,7 +58,7 @@ public class ExploreUI extends JFrame
         getContentPane().removeAll(); // Clear existing components
         setLayout(new BorderLayout()); // Reset the layout manager
 
-        JPanel headerPanel = createHeaderPanel(); // Method from your InstagramProfileUI class
+        JPanel headerPanel = createHeaderPanel(); // Method from your ProfileUI class
         JPanel navigationPanel = createNavigationPanel(); // Method from your InstagramProfileUI class
         JPanel mainContentPanel = createMainContentPanel();
 
@@ -122,16 +122,16 @@ public class ExploreUI extends JFrame
 
     private JPanel createHeaderPanel()
     {
-            // Header Panel (reuse from InstagramProfileUI or customize for home page)
-            // Header with the Register label
-            JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-            JLabel lblRegister = new JLabel(" Explore 🐥");
-            lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-            lblRegister.setForeground(Color.WHITE); // Set the text color to white
-            headerPanel.add(lblRegister);
-            headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
-            return headerPanel;
+        // Header Panel (reuse from InstagramProfileUI or customize for home page)
+        // Header with the Register label
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
+        JLabel lblRegister = new JLabel(" Explore 🐥");
+        lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
+        lblRegister.setForeground(Color.WHITE); // Set the text color to white
+        headerPanel.add(lblRegister);
+        headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+        return headerPanel;
     }
 
     private JPanel createNavigationPanel()
@@ -268,7 +268,7 @@ public class ExploreUI extends JFrame
         usernameLabel.addActionListener(e ->
         {
         User user = new User(finalUsername); // Assuming User class has a constructor that takes a username
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(user);
         profileUI.setVisible(true);
         dispose(); // Close the current frame
     });
@@ -347,7 +347,7 @@ public class ExploreUI extends JFrame
         e.printStackTrace();
     }
         User user = new User(loggedInUsername);
-        InstagramProfileUI profileUI = new InstagramProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(user);
         profileUI.setVisible(true);
     }
 
@@ -355,7 +355,7 @@ public class ExploreUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        NotificationsUI notificationsUI = new NotificationsUI();
+        NotificationUI notificationsUI = new NotificationUI();
         notificationsUI.setVisible(true);
     }
 
@@ -363,7 +363,7 @@ public class ExploreUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
 

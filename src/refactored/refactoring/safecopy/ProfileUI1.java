@@ -1,5 +1,9 @@
+package refactored.refactoring;
+
 import javax.swing.*;
 
+import refactored.factories.Paths;
+import refactored.refactoring.nonui.User;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -7,7 +11,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.awt.*;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +21,7 @@ import java.util.stream.Stream;
 
 
 
-public class InstagramProfileUI extends JFrame {
+public class ProfileUI1 extends JFrame {
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -28,7 +33,7 @@ public class InstagramProfileUI extends JFrame {
     private JPanel navigationPanel; // Panel for the navigation
     private User currentUser; // User object to store the current user's information
 
-    public InstagramProfileUI(User user) {
+    public ProfileUI1(User user) {
         this.currentUser = user;
          // Initialize counts
         int imageCount = 0;
@@ -36,69 +41,69 @@ public class InstagramProfileUI extends JFrame {
         int followingCount = 0;
        
         // Step 1: Read image_details.txt to count the number of images posted by the user
-        Path imageDetailsFilePath = Paths.get("img", "image_details.txt");
-        try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
-            String line;
-            while ((line = imageDetailsReader.readLine()) != null) {
-                if (line.contains("Username: " + currentUser.getUsername())) {
-                    imageCount++;
-                }
+    Path imageDetailsFilePath = Paths.tempImgDetailsPath;
+    try (BufferedReader imageDetailsReader = Files.newBufferedReader(imageDetailsFilePath)) {
+        String line;
+        while ((line = imageDetailsReader.readLine()) != null) {
+            if (line.contains("Username: " + currentUser.getUsername())) {
+                imageCount++;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        // Step 2: Read following.txt to calculate followers and following
-        Path followingFilePath = Paths.get("data", "following.txt");
-        try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
-            String line;
-            while ((line = followingReader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length == 2) {
-                    String username = parts[0].trim();
-                    String[] followingUsers = parts[1].split(";");
-                    if (username.equals(currentUser.getUsername())) {
-                        followingCount = followingUsers.length;
-                    } else {
-                        for (String followingUser : followingUsers) {
-                            if (followingUser.trim().equals(currentUser.getUsername())) {
-                                followersCount++;
-                            }
+    // Step 2: Read following.txt to calculate followers and following
+    Path followingFilePath = Paths.tempFollowingPath;
+    try (BufferedReader followingReader = Files.newBufferedReader(followingFilePath)) {
+        String line;
+        while ((line = followingReader.readLine()) != null) {
+            String[] parts = line.split(":");
+            if (parts.length == 2) {
+                String username = parts[0].trim();
+                String[] followingUsers = parts[1].split(";");
+                if (username.equals(currentUser.getUsername())) {
+                    followingCount = followingUsers.length;
+                } else {
+                    for (String followingUser : followingUsers) {
+                        if (followingUser.trim().equals(currentUser.getUsername())) {
+                            followersCount++;
                         }
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
 
-        String bio = "";
+    String bio = "";
 
-        Path bioDetailsFilePath = Paths.get("data", "credentials.txt");
-        try (BufferedReader bioDetailsReader = Files.newBufferedReader(bioDetailsFilePath)) {
-            String line;
-            while ((line = bioDetailsReader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts[0].equals(currentUser.getUsername()) && parts.length >= 3) {
-                    bio = parts[2];
-                    break; // Exit the loop once the matching bio is found
-                }
+    Path bioDetailsFilePath = Paths.tempCredentialsPath;
+    try (BufferedReader bioDetailsReader = Files.newBufferedReader(bioDetailsFilePath)) {
+        String line;
+        while ((line = bioDetailsReader.readLine()) != null) {
+            String[] parts = line.split(":");
+            if (parts[0].equals(currentUser.getUsername()) && parts.length >= 3) {
+                bio = parts[2];
+                break; // Exit the loop once the matching bio is found
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        
-        System.out.println("Bio for " + currentUser.getUsername() + ": " + bio);
-        currentUser.setBio(bio);
-        
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    
+    System.out.println("Bio for " + currentUser.getUsername() + ": " + bio);
+    currentUser.setBio(bio);
+    
 
-        currentUser.setFollowersCount(followersCount);
-        currentUser.setFollowingCount(followingCount);
-        currentUser.setPostCount(imageCount);
+    currentUser.setFollowersCount(followersCount);
+    currentUser.setFollowingCount(followingCount);
+    currentUser.setPostCount(imageCount);
 
-        System.out.println(currentUser.getPostsCount());
+    System.out.println(currentUser.getPostsCount());
 
-        setTitle("DACS Profile");
+     setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -111,7 +116,7 @@ public class InstagramProfileUI extends JFrame {
     }
 
 
-      public InstagramProfileUI() {
+      public ProfileUI1() {
 
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
@@ -143,7 +148,7 @@ public class InstagramProfileUI extends JFrame {
         String loggedInUsername = "";
 
         // Read the logged-in user's username from users.txt
-    try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "users.txt"))) {
+    try (BufferedReader reader = Files.newBufferedReader(Paths.tempUsersPath)) {
         String line = reader.readLine();
         if (line != null) {
             loggedInUsername = line.split(":")[0].trim();
@@ -156,7 +161,7 @@ public class InstagramProfileUI extends JFrame {
     
        // Header Panel
         JPanel headerPanel = new JPanel();
-        try (Stream<String> lines = Files.lines(Paths.get("data", "users.txt"))) {
+        try (Stream<String> lines = Files.lines(Paths.tempUsersPath)) {
             isCurrentUser = lines.anyMatch(line -> line.startsWith(currentUser.getUsername() + ":"));
         } catch (IOException e) {
             e.printStackTrace();  // Log or handle the exception as appropriate
@@ -196,7 +201,7 @@ JButton followButton;
         followButton = new JButton("Follow");
 
         // Check if the current user is already being followed by the logged-in user
-        Path followingFilePath = Paths.get("data", "following.txt");
+        Path followingFilePath = Paths.tempFollowingPath;
         try (BufferedReader reader = Files.newBufferedReader(followingFilePath)) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -268,8 +273,8 @@ headerPanel.add(profileNameAndBioPanel);
 
 
    private void handleFollowAction(String usernameToFollow) {
-    Path followingFilePath = Paths.get("data", "following.txt");
-    Path usersFilePath = Paths.get("data", "users.txt");
+    Path followingFilePath = Paths.tempFollowingPath;
+    Path usersFilePath = Paths.tempUsersPath;
     String currentUserUsername = "";
 
     try {
@@ -331,24 +336,25 @@ headerPanel.add(profileNameAndBioPanel);
         navigationPanel.setLayout(new BoxLayout(navigationPanel, BoxLayout.X_AXIS));
         navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        navigationPanel.add(createIconButton("img/icons/home.png", "home"));
+        navigationPanel.add(createIconButton(Paths.homeIconPath.toString(), "home"));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createIconButton("img/icons/search.png","explore"));
+        navigationPanel.add(createIconButton(Paths.searchIconPath.toString(),"explore"));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createIconButton("img/icons/add.png","add"));
+        navigationPanel.add(createIconButton(Paths.addIconPath.toString(),"add"));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createIconButton("img/icons/heart.png","notification"));
+        navigationPanel.add(createIconButton(Paths.heartIconPath.toString(),"notification"));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createIconButton("img/icons/profile.png", "profile"));
+        navigationPanel.add(createIconButton(Paths.profileIconPath.toString(), "profile"));
 
         return navigationPanel;
+
     }
 
 private void initializeImageGrid() {
     contentPanel.removeAll(); // Clear existing content
     contentPanel.setLayout(new GridLayout(0, 3, 5, 5)); // Grid layout for image grid
 
-    Path imageDir = Paths.get("img", "uploaded");
+    Path imageDir = Paths.tempImgUploadedPath;
     try (Stream<Path> paths = Files.list(imageDir)) {
         paths.filter(path -> path.getFileName().toString().startsWith(currentUser.getUsername() + "_"))
              .forEach(path -> {
@@ -434,28 +440,28 @@ private void initializeImageGrid() {
     private void ImageUploadUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        ImageUploadUI upload = new ImageUploadUI();
+        UploadUI upload = new UploadUI();
         upload.setVisible(true);
     }
 
     private void openProfileUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        InstagramProfileUI profileUI = new InstagramProfileUI();
+        ProfileUI1 profileUI = new ProfileUI1();
         profileUI.setVisible(true);
     }
  
      private void notificationsUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        NotificationsUI notificationsUI = new NotificationsUI();
+        NotificationUI notificationsUI = new NotificationUI();
         notificationsUI.setVisible(true);
     }
  
     private void openHomeUI() {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
  

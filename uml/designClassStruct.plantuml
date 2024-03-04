@@ -1,0 +1,13 @@
+@startuml MVC Design
+
+class SignInView {
+    + display() : void
+    + getCredentials() : void
+}
+
+class SignInController {
+    - SignInView
+    + validateCredentials() : void
+}
+
+@enduml

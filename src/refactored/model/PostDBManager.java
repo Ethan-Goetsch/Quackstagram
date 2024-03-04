@@ -2,9 +2,9 @@ package refactored.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import refactored.data.Paths;
 import refactored.entities.Post;
 import refactored.entities.UserAccount;
+import refactored.factories.Paths;
 
 public class PostDBManager extends DBManager<Post>
 {

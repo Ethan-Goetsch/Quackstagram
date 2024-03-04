@@ -5,8 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
-import refactored.data.Paths;
 import refactored.entities.Content;
+import refactored.factories.Paths;
 
 /**
  * Manages the contents in the database
@@ -18,7 +18,7 @@ public abstract class ContentDBManager extends DBManager<Content> {
     public static void main(String[] args)
     {
         // test
-        saveContent(Path.of(Paths.imgPath.toString(), "logos/DACS.png"));
+        saveContent(Path.of(Paths.contentsPath.toString(), "test.jpg"));
         storeContents();
 
         contents = null;
@@ -33,7 +33,7 @@ public abstract class ContentDBManager extends DBManager<Content> {
         retrieveContents();
 
         // copy the content to the contents folder
-        Path copyContentPath = Path.of(Paths.imgCopyPath.toString(), contentPath.getFileName().toString());
+        Path copyContentPath = Path.of(Paths.contentsPath.toString(), contentPath.getFileName().toString());
         
         // copy logic
         try

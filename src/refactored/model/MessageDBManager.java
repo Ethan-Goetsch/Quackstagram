@@ -2,8 +2,8 @@ package refactored.model;
 
 import java.util.ArrayList;
 
-import refactored.data.Paths;
 import refactored.entities.interactions.Message;
+import refactored.factories.Paths;
 
 public class MessageDBManager extends DBManager<Message>
 {

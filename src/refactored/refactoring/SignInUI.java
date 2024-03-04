@@ -1,5 +1,12 @@
-import javax.swing.*;
-import java.awt.*;
+package refactored.refactoring;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -7,9 +14,23 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
-public class SignInUI extends JFrame {
+import refactored.factories.Paths;
+import refactored.factories.UIElementFactory;
+import refactored.refactoring.nonui.User;
 
+public class SignInUI extends JFrame
+{
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
 
@@ -19,8 +40,8 @@ public class SignInUI extends JFrame {
     private JLabel lblPhoto;
     private User newUser;
     
-
-    public SignInUI() {
+    public SignInUI()
+    {
         setTitle("Quackstagram - Register");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -29,22 +50,16 @@ public class SignInUI extends JFrame {
         initializeUI();
     }
 
-    private void initializeUI() {
-        // Header with the Register label
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-        JLabel lblRegister = new JLabel("Quackstagram 🐥");
-        lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
-        lblRegister.setForeground(Color.WHITE); // Set the text color to white
-        headerPanel.add(lblRegister);
-        headerPanel.setPreferredSize(new Dimension(WIDTH, 40)); // Give the header a fixed height
+    private void initializeUI()
+    {
+        JPanel headerPanel = UIElementFactory.createHeader(WIDTH, "Quackstagram 🐥");
 
         // Profile picture placeholder without border
         lblPhoto = new JLabel();
         lblPhoto.setPreferredSize(new Dimension(80, 80));
         lblPhoto.setHorizontalAlignment(JLabel.CENTER);
         lblPhoto.setVerticalAlignment(JLabel.CENTER);
-        lblPhoto.setIcon(new ImageIcon(new ImageIcon("img/logos/DACS.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
+        lblPhoto.setIcon(new ImageIcon(new ImageIcon(Paths.logoPath.toString()).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
         JPanel photoPanel = new JPanel(); // Use a panel to center the photo label
         photoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         photoPanel.add(lblPhoto);
@@ -66,7 +81,6 @@ public class SignInUI extends JFrame {
         fieldsPanel.add(Box.createVerticalStrut(10));
         fieldsPanel.add(txtPassword);
         fieldsPanel.add(Box.createVerticalStrut(10));
-
 
         // Register button with black text
         btnSignIn = new JButton("Sign-In");
@@ -101,69 +115,95 @@ public class SignInUI extends JFrame {
 
         // Adding the button panel to the frame
         add(buttonPanel, BorderLayout.SOUTH);
-
     }
 
-   private void onSignInClicked(ActionEvent event) {
-    String enteredUsername = txtUsername.getText();
-    String enteredPassword = txtPassword.getText();
-    System.out.println(enteredUsername+" <-> "+enteredPassword);
-    if (verifyCredentials(enteredUsername, enteredPassword)) {
-        System.out.println("It worked");
-         // Close the SignUpUI frame
-    dispose();
-
-    // Open the SignInUI frame
-    SwingUtilities.invokeLater(() -> {
-        InstagramProfileUI profileUI = new InstagramProfileUI(newUser);
-        profileUI.setVisible(true);
-    });
-    } else {
-        System.out.println("It Didn't");
+   private void onSignInClicked(ActionEvent event)
+   {
+        String enteredUsername = txtUsername.getText();
+        String enteredPassword = txtPassword.getText();
+        System.out.println(enteredUsername+" <-> "+enteredPassword);
+        if (verifyCredentials(enteredUsername, enteredPassword))
+        {
+            System.out.println("It worked");
+            openProfileUI();
+        }
+        else
+        {
+            System.out.println("It Didn't");
+        }
     }
-}
 
-private void onRegisterNowClicked(ActionEvent event) {
-    // Close the SignInUI frame
-    dispose();
+    private void openProfileUI() {
+        // Close the SignUpUI frame
+        dispose();
 
-    // Open the SignUpUI frame
-    SwingUtilities.invokeLater(() -> {
-        SignUpUI signUpFrame = new SignUpUI();
-        signUpFrame.setVisible(true);
-    });
-}
+        // Open the SignInUI frame
+        SwingUtilities.invokeLater(() ->
+        {
+            ProfileUI profileUI = new ProfileUI(newUser);
+            profileUI.setVisible(true);
+        });
+    }
 
-private boolean verifyCredentials(String username, String password) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/credentials.txt"))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] credentials = line.split(":");
-            if (credentials[0].equals(username) && credentials[1].equals(password)) {
-            String bio = credentials[2];
-            // Create User object and save information
-        newUser = new User(username, bio, password); // Assuming User constructor takes these parameters
-        saveUserInformation(newUser);
-    
-                return true;
+    private void onRegisterNowClicked(ActionEvent event)
+    {
+        openSignUpUI();
+    }
+
+    private void openSignUpUI() {
+        // Close the SignInUI frame
+        dispose();
+
+        // Open the SignUpUI frame
+        SwingUtilities.invokeLater(() ->
+        {
+            SignUpUI signUpFrame = new SignUpUI();
+            signUpFrame.setVisible(true);
+        });
+    }
+
+    private boolean verifyCredentials(String username, String password)
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader(Paths.tempCredentialsPath.toString())))
+        {
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                String[] credentials = line.split(":");
+                if (credentials[0].equals(username) && credentials[1].equals(password))
+                {
+                    String bio = credentials[2];
+                    // Create User object and save information
+                    newUser = new User(username, bio, password); // Assuming User constructor takes these parameters
+                    saveUserInformation(newUser);
+                    return true;
+                }
             }
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return false;
-}
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
-   private void saveUserInformation(User user) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/users.txt", false))) {
+        return false;   
+    }
+
+   private void saveUserInformation(User user)
+   {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.tempUsersPath.toString(), false)))
+        {
             writer.write(user.toString());  // Implement a suitable toString method in User class
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(() ->
+        {
             SignInUI frame = new SignInUI();
             frame.setVisible(true);
         });

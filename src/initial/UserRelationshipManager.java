@@ -1,24 +1,15 @@
-package initial;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRelationshipManager
-{
+public class UserRelationshipManager {
+
     private final String followersFilePath = "data/followers.txt";
 
     // Method to follow a user
-    public void followUser(String follower, String followed) throws IOException
-    {
-        if (!isAlreadyFollowing(follower, followed))
-        {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(followersFilePath, true)))
-            {
+    public void followUser(String follower, String followed) throws IOException {
+        if (!isAlreadyFollowing(follower, followed)) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(followersFilePath, true))) {
                 writer.write(follower + ":" + followed);
                 writer.newLine();
             }
@@ -26,15 +17,11 @@ public class UserRelationshipManager
     }
 
     // Method to check if a user is already following another user
-    private boolean isAlreadyFollowing(String follower, String followed) throws IOException
-    {
-        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath)))
-        {
+    private boolean isAlreadyFollowing(String follower, String followed) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath))) {
             String line;
-            while ((line = reader.readLine()) != null)
-            {
-                if (line.equals(follower + ":" + followed))
-                {
+            while ((line = reader.readLine()) != null) {
+                if (line.equals(follower + ":" + followed)) {
                     return true;
                 }
             }
@@ -43,17 +30,13 @@ public class UserRelationshipManager
     }
 
     // Method to get the list of followers for a user
-    public List<String> getFollowers(String username) throws IOException
-    {
+    public List<String> getFollowers(String username) throws IOException {
         List<String> followers = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath)))
-        {
+        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath))) {
             String line;
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
-                if (parts[1].equals(username))
-                {
+                if (parts[1].equals(username)) {
                     followers.add(parts[0]);
                 }
             }
@@ -62,17 +45,13 @@ public class UserRelationshipManager
     }
 
     // Method to get the list of users a user is following
-    public List<String> getFollowing(String username) throws IOException
-    {
+    public List<String> getFollowing(String username) throws IOException {
         List<String> following = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath)))
-        {
+        try (BufferedReader reader = new BufferedReader(new FileReader(followersFilePath))) {
             String line;
-            while ((line = reader.readLine()) != null)
-            {
+            while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
-                if (parts[0].equals(username))
-                {
+                if (parts[0].equals(username)) {
                     following.add(parts[1]);
                 }
             }

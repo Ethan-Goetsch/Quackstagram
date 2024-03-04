@@ -1,8 +1,8 @@
-package src.Refactored.ui;
+package refactored.refactoring;
 
 import javax.swing.*;
 
-import Refactored.User;
+import refactored.refactoring.nonui.User;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class NotificationsUI extends JFrame
+public class NotificationUI extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
     private static final int NAV_ICON_SIZE = 20; // Size for navigation icons
     
-    public NotificationsUI()
+    public NotificationUI()
     {
         setTitle("Notifications");
         setSize(WIDTH, HEIGHT);
@@ -57,6 +57,7 @@ public class NotificationsUI extends JFrame
            e.printStackTrace();
        }
        
+       // populate the notifications panel
        try (BufferedReader reader = Files.newBufferedReader(Paths.get("data", "notifications.txt")))
        {
             String line;
@@ -218,7 +219,7 @@ public class NotificationsUI extends JFrame
         }
 
             User user = new User(loggedInUsername);
-            InstagramProfileUI profileUI = new InstagramProfileUI(user);
+            ProfileUI profileUI = new ProfileUI(user);
             profileUI.setVisible(true);
     }
  
@@ -226,7 +227,7 @@ public class NotificationsUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        NotificationsUI notificationsUI = new NotificationsUI();
+        NotificationUI notificationsUI = new NotificationUI();
         notificationsUI.setVisible(true);
     }
  
@@ -234,7 +235,7 @@ public class NotificationsUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        QuakstagramHomeUI homeUI = new QuakstagramHomeUI();
+        HomeUI homeUI = new HomeUI();
         homeUI.setVisible(true);
     }
 

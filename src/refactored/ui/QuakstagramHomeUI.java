@@ -506,7 +506,7 @@ public class QuakstagramHomeUI extends JFrame
     {
         // Open InstagramProfileUI frame
         this.dispose();
-        ImageUploadUI upload = new ImageUploadUI();
+        UploadUI upload = new UploadUI();
         upload.setVisible(true);
     }
  

@@ -1,8 +1,13 @@
-import java.util.List;
+package refactored.refactoring.nonui;
+
+import refactored.refactoring.nonui.Picture;
+
 import java.util.ArrayList;
+import java.util.List;
 
 // Represents a user on Quackstagram
-class User {
+public class User
+{
     private String username;
     private String bio;
     private String password;
@@ -11,7 +16,8 @@ class User {
     private int followingCount;
     private List<Picture> pictures;
 
-    public User(String username, String bio, String password) {
+    public User(String username, String bio, String password)
+    {
         this.username = username;
         this.bio = bio;
         this.password = password;
@@ -22,33 +28,36 @@ class User {
         this.followingCount = 0;
     }
 
-    public User(String username){
+    public User(String username)
+    {
         this.username = username;
     }
 
     // Add a picture to the user's profile
-    public void addPicture(Picture picture) {
+    public void addPicture(Picture picture)
+    {
         pictures.add(picture);
         postsCount++;
-    }
+    }   
 
     // Getter methods for user details
     public String getUsername() { return username; }
     public String getBio() { return bio; }
-    public void setBio(String bio) {this.bio = bio; }
     public int getPostsCount() { return postsCount; }
     public int getFollowersCount() { return followersCount; }
     public int getFollowingCount() { return followingCount; }
     public List<Picture> getPictures() { return pictures; }
-
+    
     // Setter methods for followers and following counts
+    public void setBio(String bio) {this.bio = bio; }
     public void setFollowersCount(int followersCount) { this.followersCount = followersCount; }
-   public void setFollowingCount(int followingCount) { this.followingCount = followingCount; }
-   public void setPostCount(int postCount) { this.postsCount = postCount;}
+    public void setFollowingCount(int followingCount) { this.followingCount = followingCount; }
+    public void setPostCount(int postCount) { this.postsCount = postCount;}
+    
     // Implement the toString method for saving user information
-@Override
-public String toString() {
-    return username + ":" + bio + ":" + password; // Format as needed
-}
-
+    @Override
+    public String toString()
+    {
+        return username + ":" + bio + ":" + password; // Format as needed
+    }
 }

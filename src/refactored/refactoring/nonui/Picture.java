@@ -1,14 +1,18 @@
-import java.util.List;
+package refactored.refactoring.nonui;
+
 import java.util.ArrayList;
+import java.util.List;
 
 // Represents a picture on Quackstagram
-class Picture {
+class Picture
+{
     private String imagePath;
     private String caption;
     private int likesCount;
     private List<String> comments;
 
-    public Picture(String imagePath, String caption) {
+    public Picture(String imagePath, String caption)
+    {
         this.imagePath = imagePath;
         this.caption = caption;
         this.likesCount = 0;
@@ -16,12 +20,14 @@ class Picture {
     }
 
     // Add a comment to the picture
-    public void addComment(String comment) {
+    public void addComment(String comment)
+    {
         comments.add(comment);
     }
 
     // Increment likes count
-    public void like() {
+    public void like()
+    {
         likesCount++;
     }
 

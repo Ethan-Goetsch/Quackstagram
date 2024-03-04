@@ -2,8 +2,8 @@ package refactored.model;
 
 import java.util.ArrayList;
 
-import refactored.data.Paths;
 import refactored.entities.UserAccount;
+import refactored.factories.Paths;
 
 public class UserDBManager extends DBManager<UserAccount>
 {
