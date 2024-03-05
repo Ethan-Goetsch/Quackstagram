@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import refactored.entities.Post;
-import refactored.entities.UserAccount;
+import refactored.entities.User;
 import refactored.factories.Paths;
 
 public class PostDBManager extends DBManager<Post>

@@ -2,28 +2,29 @@ package refactored.model;
 
 import java.util.ArrayList;
 
-import refactored.entities.UserAccount;
+import refactored.entities.User;
 import refactored.factories.Paths;
 
-public class UserDBManager extends DBManager<UserAccount>
+public class UserDBManager extends DBManager<User>
 {
-    private static ArrayList<UserAccount> users;
+    private static ArrayList<User> users;
+    private static int currentID;
 
     public static void main(String[] args)
     {
-        // test
-        UserAccount ua = new UserAccount();
-        ua.id = 1;
-        ua.username = "user";
-        ua.bio = "bio";
+        // init
         users = new ArrayList<>();
-        users.add(ua);
-        System.out.println(users.get(0).id);
+        users.add(new User(generateID(), "Lorin","Password","For copyright reasons, I am not Grogu"));
+        users.add(new User(generateID(), "Xylo","Password","Fierce warrior, not solo"));
+        users.add(new User(generateID(), "Zara","Password","Humanoid robot much like the rest"));
+        users.add(new User(generateID(), "Mystar","Password","Xylo and I are not the same!"));
         storeUsers();
 
+
+        // test
         users = null;
         retrieveUsers();
-        System.out.println(users.get(0).id);
+        System.out.println(users.get(0).username);
     }
 
     /**
@@ -33,24 +34,25 @@ public class UserDBManager extends DBManager<UserAccount>
      * @param password
      * @return
      */
-    public int getCredentialsID(String username, String password)
+    public static boolean verifyCredentials(String username, String password)
     {
         retrieveUsers();
 
         //credentials validation logic
-        for(UserAccount uc : users)
+        for(User uc : users)
         {
             if(uc.username.equals(username) && uc.password.equals(password))
             {
-                return uc.id;
+                currentID = uc.id;
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
-    public boolean usernameExists(String username) {
+    public static boolean usernameExists(String username) {
         //username validation logic
-        for(UserAccount ua : users)
+        for(User ua : users)
         {
             if(ua.username.equals(username))
             {
@@ -60,13 +62,32 @@ public class UserDBManager extends DBManager<UserAccount>
         return false;
     }
 
-    public void saveNewUser(UserAccount user) {
-        users.add(user);
+    public static void createUser(String username, String password) {
+        retrieveUsers();
+        if(!usernameExists(username))
+        {
+            User user = new User(generateID(), username, password);
+            users.add(user);
+            storeUsers();
+        }
         storeUsers();
     }
 
+    private static int generateID()
+    {
+        retrieveUsers();
+        for(User ua : users)
+        {
+            if(ua.id > currentID)
+            {
+                currentID = ua.id;
+            }
+        }
+        return ++currentID;
+    }
+
     public void deleteUser(int id) {
-        for(UserAccount ua : users)
+        for(User ua : users)
         {
             if(ua.id == id)
             {
@@ -82,8 +103,8 @@ public class UserDBManager extends DBManager<UserAccount>
      * // Might want to replace with something that changes a specific field for an id.
      * @param user
      */
-    public void updateUser(UserAccount user) {
-        for(UserAccount ua : users)
+    public static void updateUser(User user) {
+        for(User ua : users)
         {
             if(ua.id == user.id)
             {

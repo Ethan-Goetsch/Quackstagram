@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import refactored.controllers.SignInController;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.refactoring.nonui.User;
@@ -82,9 +83,11 @@ public class SignInUI extends JFrame
         fieldsPanel.add(txtPassword);
         fieldsPanel.add(Box.createVerticalStrut(10));
 
-        // Register button with black text
+        // SignIn button with black text
         btnSignIn = new JButton("Sign-In");
-        btnSignIn.addActionListener(this::onSignInClicked);
+        btnSignIn.addActionListener(
+            e -> { SignInController.onSignInClicked(txtUsername.getText(), txtPassword.getText(), newUser, this); }
+        );
         btnSignIn.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
         btnSignIn.setForeground(Color.BLACK); // Set the text color to black
         btnSignIn.setFocusPainted(false);
@@ -115,34 +118,6 @@ public class SignInUI extends JFrame
 
         // Adding the button panel to the frame
         add(buttonPanel, BorderLayout.SOUTH);
-    }
-
-   private void onSignInClicked(ActionEvent event)
-   {
-        String enteredUsername = txtUsername.getText();
-        String enteredPassword = txtPassword.getText();
-        System.out.println(enteredUsername+" <-> "+enteredPassword);
-        if (verifyCredentials(enteredUsername, enteredPassword))
-        {
-            System.out.println("It worked");
-            openProfileUI();
-        }
-        else
-        {
-            System.out.println("It Didn't");
-        }
-    }
-
-    private void openProfileUI() {
-        // Close the SignUpUI frame
-        dispose();
-
-        // Open the SignInUI frame
-        SwingUtilities.invokeLater(() ->
-        {
-            ProfileUI profileUI = new ProfileUI(newUser);
-            profileUI.setVisible(true);
-        });
     }
 
     private void onRegisterNowClicked(ActionEvent event)

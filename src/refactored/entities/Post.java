@@ -39,10 +39,4 @@ public class Post
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getLikeCount() { return likeCount; }
     public int getCommentCount() { return commentCount; }
-
-    @Override
-    public String toString()
-    {
-        return "[Post]: " + "Author: " + author.getUsername() + ", Content: " + content;
-    }
 }

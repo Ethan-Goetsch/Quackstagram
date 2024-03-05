@@ -12,7 +12,9 @@ import refactored.refactoring.ExploreUI;
 import refactored.refactoring.HomeUI;
 import refactored.refactoring.NotificationUI;
 import refactored.refactoring.ProfileUI;
+import refactored.refactoring.SignUpUI;
 import refactored.refactoring.UploadUI;
+
 import refactored.refactoring.nonui.User;
 
 public abstract class UIManager {
@@ -21,6 +23,21 @@ public abstract class UIManager {
         // open the new page
         JFrame newUI = null;
         switch (pageType) {
+            /*
+            case SIGNIN:
+                if (thisPage instanceof SignInUI)
+                    return;
+                thisPage.dispose();
+                newUI = new SignInUI();
+                break;
+            */
+            case SIGNUP:
+                if (thisPage instanceof SignUpUI)
+                    return;
+                thisPage.dispose();
+                newUI = new SignUpUI();
+                break;
+    
             case HOME:
                 if (thisPage instanceof HomeUI)
                     return;
@@ -76,6 +93,12 @@ public abstract class UIManager {
             e.printStackTrace();
         }
         User user = new User(loggedInUsername);
+        ProfileUI profileUI = new ProfileUI(user);
+        profileUI.setVisible(true);
+    }
+
+    public static void signInTransition(User user, JFrame thisPage) {
+        thisPage.dispose();
         ProfileUI profileUI = new ProfileUI(user);
         profileUI.setVisible(true);
     }
