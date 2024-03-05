@@ -20,6 +20,7 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.*;
 
 import refactored.util.generic.reactive.Subject;
+import refactored.factories.PageType;
 import refactored.util.generic.functions.IAction;
 
 public abstract class QuackstagramUI extends JFrame implements WindowListener

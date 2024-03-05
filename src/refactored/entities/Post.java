@@ -2,7 +2,7 @@ package refactored.entities;
 
 import java.time.LocalDateTime;
 
-import refactored.User;
+import refactored.entities.User;
 
 public class Post
 {

@@ -265,23 +265,27 @@ class UserRelationshipManager {
 
 ' relationships
 
-Picture }-- User : has
+User "0..+" -- Picture
 
-SignInUI --> User : stores
+SignInUI "1" -- User
+
 SignInUI --> SignUpUI : creates
+SignInUI --> InstagramProfileUI : creates
 SignUpUI --> SignInUI : creates
+
+InstagramProfileUI "1"  -- User
+
+InstagramProfileUI --> ImageUploadUI : creates
+InstagramProfileUI --> NotificationsUI : creates
+InstagramProfileUI --> QuakstagramHomeUI : creates
+InstagramProfileUI --> ExploreUI : creates
 
 NotificationsUI --> InstagramProfileUI : creates
 NotificationsUI --> QuakstagramHomeUI : creates
 NotificationsUI --> ExploreUI : creates
 NotificationsUI --> ImageUploadUI : creates
+NotificationsUI --> NotificationsUI : creates
 
-InstagramProfileUI --> User : uses
-InstagramProfileUI --> ImageUploadUI : creates
-InstagramProfileUI --> InstagramProfileUI : creates
-InstagramProfileUI --> NotificationsUI : creates
-InstagramProfileUI --> QuakstagramHomeUI : creates
-InstagramProfileUI --> ExploreUI : creates
 
 ExploreUI --> ImageUploadUI : creates
 ExploreUI --> InstagramProfileUI : creates
@@ -297,7 +301,12 @@ ImageUploadUI --> ExploreUI : creates
 QuakstagramHomeUI --> ImageUploadUI : creates
 QuakstagramHomeUI --> InstagramProfileUI : creates
 QuakstagramHomeUI --> NotificationsUI : creates
-QuakstagramHomeUI --> QuakstagramHomeUI : creates
 QuakstagramHomeUI --> ExploreUI : creates
+QuakstagramHomeUI --> QuakstagramHomeUI : creates
+
+note "Sign In only if the credentials are valid" as n1
+note "Sign Up only if the username is not taken" as n2
+SignInUI .. n1
+SignUpUI .. n2
 
 @enduml
