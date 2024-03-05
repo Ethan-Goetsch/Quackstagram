@@ -1,14 +1,15 @@
 package refactored.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import refactored.entities.User;
 
-public class Post
+public class Post implements Serializable
 {
     private final int id;
 
-    private User author;
+    private int authorID;
     private LocalDateTime timestamp;
 
     private Content content; //either a picture, a video, or an audio file
@@ -19,11 +20,11 @@ public class Post
     private int commentCount;
 
     // maybe use a builder pattern here // or a factory
-    public Post(Post parentPost, User author, Content content, String text, LocalDateTime timestamp)
+    public Post(Post parentPost, int authorID, Content content, String text, LocalDateTime timestamp)
     {
         this.id = 0; // TODO: 12 years ago: generate a unique id
         
-        this.author = author;
+        this.authorID = authorID;
         this.timestamp = timestamp;
         
         this.content = content;
@@ -34,7 +35,7 @@ public class Post
     }
 
     public int getID() { return id; }
-    public User getAuthor() { return author; }
+    public int getAuthorID() { return authorID; }
     public Content getContent() { return content; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getLikeCount() { return likeCount; }

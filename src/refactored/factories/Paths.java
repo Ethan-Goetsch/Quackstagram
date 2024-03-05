@@ -8,6 +8,8 @@ public abstract class Paths
     public static final Path rootPath = Path.of("src/refactored");
     //data path
     public static final Path dataPath = Path.of(rootPath.toString(), "/data");
+    //profile pictures
+    public static final Path profilePicturesPath = Path.of(dataPath.toString(), "/profile_pictures");
 
     //temp
     public static final Path tempImgDetailsPath = Path.of(dataPath.toString(), "img/image_details.txt");
@@ -15,8 +17,7 @@ public abstract class Paths
     public static final Path tempCredentialsPath = Path.of(dataPath.toString(), "/credentials.txt");
     public static final Path tempUsersPath = Path.of(dataPath.toString(), "/users.txt");
     public static final Path tempImgUploadedPath = Path.of(dataPath.toString(), "/img/uploaded");
-    public static final Path tempProfilePicturesPath = Path.of(dataPath.toString(), "/img/storage/profile");
-
+    public static final Path tempProfilePicturesPath = Path.of(dataPath.toString(), "/img/storage/profile/");
 
     //icons
     public static final Path iconsPath = Path.of(dataPath.toString(), "/icons");

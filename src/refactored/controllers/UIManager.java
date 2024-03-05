@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import javax.swing.JFrame;
 
 import refactored.factories.PageType;
+import refactored.model.UserDBManager;
 import refactored.refactoring.ExploreUI;
 import refactored.refactoring.HomeUI;
 import refactored.refactoring.NotificationUI;
@@ -93,13 +94,13 @@ public abstract class UIManager {
             e.printStackTrace();
         }
         User user = new User(loggedInUsername);
-        ProfileUI profileUI = new ProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(UserDBManager.currentID);
         profileUI.setVisible(true);
     }
 
     public static void signInTransition(User user, JFrame thisPage) {
         thisPage.dispose();
-        ProfileUI profileUI = new ProfileUI(user);
+        ProfileUI profileUI = new ProfileUI(UserDBManager.currentID);
         profileUI.setVisible(true);
     }
 }

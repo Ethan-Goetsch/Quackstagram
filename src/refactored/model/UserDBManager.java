@@ -8,7 +8,7 @@ import refactored.factories.Paths;
 public class UserDBManager extends DBManager<User>
 {
     private static ArrayList<User> users;
-    private static int currentID;
+    public static int currentID;
 
     public static void main(String[] args)
     {
@@ -24,7 +24,33 @@ public class UserDBManager extends DBManager<User>
         // test
         users = null;
         retrieveUsers();
-        System.out.println(users.get(0).username);
+        System.out.println(users.get(0).getUsername());
+    }
+
+    public static String getBio(int id)
+    {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == id)
+            {
+                return u.getBio();
+            }
+        }
+        return null;
+    }
+
+    public static String getUsername (int id)
+    {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == id)
+            {
+                return u.getUsername();
+            }
+        }
+        return null;
     }
 
     /**
@@ -41,36 +67,44 @@ public class UserDBManager extends DBManager<User>
         //credentials validation logic
         for(User uc : users)
         {
-            if(uc.username.equals(username) && uc.password.equals(password))
+            if(uc.getUsername().equals(username) && uc.getPassword().equals(password))
             {
-                currentID = uc.id;
+                currentID = uc.getId();
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean usernameExists(String username) {
-        //username validation logic
-        for(User ua : users)
-        {
-            if(ua.username.equals(username))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void createUser(String username, String password) {
+    /**
+     * If the username doesn't already exist, creates a new user and adds it to the database.
+     * Returns a boolean response to indicate success or failure.
+     * @param username
+     * @param password
+     * @return
+     */
+    public static boolean createUser(String username, String password) {
         retrieveUsers();
         if(!usernameExists(username))
         {
             User user = new User(generateID(), username, password);
             users.add(user);
             storeUsers();
+            return true;
         }
-        storeUsers();
+        return false;
+    }
+    
+    public static boolean usernameExists(String username) {
+        //username validation logic
+        for(User ua : users)
+        {
+            if(ua.getUsername().equals(username))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static int generateID()
@@ -78,41 +112,12 @@ public class UserDBManager extends DBManager<User>
         retrieveUsers();
         for(User ua : users)
         {
-            if(ua.id > currentID)
+            if(ua.getId() > currentID)
             {
-                currentID = ua.id;
+                currentID = ua.getId();
             }
         }
         return ++currentID;
-    }
-
-    public void deleteUser(int id) {
-        for(User ua : users)
-        {
-            if(ua.id == id)
-            {
-                users.remove(ua);
-                storeUsers();
-                return;
-            }
-        }
-    }
-
-    /**
-     * Updates the user with the same id as the given user.
-     * // Might want to replace with something that changes a specific field for an id.
-     * @param user
-     */
-    public static void updateUser(User user) {
-        for(User ua : users)
-        {
-            if(ua.id == user.id)
-            {
-                ua = user;
-                storeUsers();
-                return;
-            }
-        }
     }
 
     private static void retrieveUsers()
@@ -120,9 +125,5 @@ public class UserDBManager extends DBManager<User>
         if(users == null)
             users = retrieve(Paths.usersPath);
     }
-
-    private static void storeUsers()
-    {
-        store(users, Paths.usersPath);
-    }
+    private static void storeUsers() { store(users, Paths.usersPath); }
 }
