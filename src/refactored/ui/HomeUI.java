@@ -5,7 +5,6 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import refactored.factories.PageType;
 import refactored.util.generic.functions.IAction;
 
 public class HomeUI extends QuackstagramUI
