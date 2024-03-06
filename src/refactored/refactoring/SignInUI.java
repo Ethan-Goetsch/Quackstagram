@@ -39,7 +39,6 @@ public class SignInUI extends JFrame
     private JTextField txtPassword;
     private JButton btnSignIn, btnRegisterNow;
     private JLabel lblPhoto;
-    private User newUser;
     
     public SignInUI()
     {
@@ -86,7 +85,7 @@ public class SignInUI extends JFrame
         // SignIn button with black text
         btnSignIn = new JButton("Sign-In");
         btnSignIn.addActionListener(
-            e -> { SignInController.onSignInClicked(txtUsername.getText(), txtPassword.getText(), newUser, this); }
+            e -> { SignInController.onSignInClicked(txtUsername.getText(), txtPassword.getText(), this); }
         );
         btnSignIn.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
         btnSignIn.setForeground(Color.BLACK); // Set the text color to black
@@ -135,44 +134,6 @@ public class SignInUI extends JFrame
             SignUpUI signUpFrame = new SignUpUI();
             signUpFrame.setVisible(true);
         });
-    }
-
-    private boolean verifyCredentials(String username, String password)
-    {
-        try (BufferedReader reader = new BufferedReader(new FileReader(Paths.tempCredentialsPath.toString())))
-        {
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                String[] credentials = line.split(":");
-                if (credentials[0].equals(username) && credentials[1].equals(password))
-                {
-                    String bio = credentials[2];
-                    // Create User object and save information
-                    newUser = new User(username, bio, password); // Assuming User constructor takes these parameters
-                    saveUserInformation(newUser);
-                    return true;
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return false;   
-    }
-
-   private void saveUserInformation(User user)
-   {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.tempUsersPath.toString(), false)))
-        {
-            writer.write(user.toString());  // Implement a suitable toString method in User class
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args)

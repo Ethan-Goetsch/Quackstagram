@@ -123,7 +123,7 @@ public class UserDBManager extends DBManager<User>
     private static void retrieveUsers()
     {
         if(users == null)
-            users = retrieve(Paths.usersPath);
+            users = retrieve(Paths.usersDBPath);
     }
-    private static void storeUsers() { store(users, Paths.usersPath); }
+    private static void storeUsers() { store(users, Paths.usersDBPath); }
 }

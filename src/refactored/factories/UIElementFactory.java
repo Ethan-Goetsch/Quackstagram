@@ -34,7 +34,8 @@ public class UIElementFactory {
 
     private static final int NAV_ICON_SIZE = 20;
 
-    public static JPanel createHeader(int width, String title) {
+    public static JPanel createHeader(int width, String title)
+    {
         // Header with the Register label
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
@@ -73,7 +74,8 @@ public class UIElementFactory {
         return navigationPanel;
     }
 
-    private static JButton createNavButton(PageType pageType, Path iconPath, JFrame topFrame) {
+    private static JButton createNavButton(PageType pageType, Path iconPath, JFrame topFrame)
+    {
         ImageIcon iconOriginal = new ImageIcon(iconPath.toString());
         Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(iconScaled));
@@ -88,7 +90,8 @@ public class UIElementFactory {
 
     private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
     
-    public static JPanel createProfileHeader(int profileOwnerID, boolean isCurrentUser) {
+    public static JPanel createProfileHeader(int profileOwnerID, boolean isCurrentUser)
+    {
         // TODO: Give this job to a controller
         // TODO: BAD DESIGN: This is a bad design, we should not be calling the database from the UI. Furthermore, we should addrest the UserDB, and eventually compute the counts in the init part of the UserDBManager main method.
         // TODO: Replace this with a User object
@@ -148,7 +151,6 @@ public class UIElementFactory {
         editOrFollowButton.setBorderPainted(false);
         editOrFollowButton.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Add some vertical padding
 
-            
         // Add Stats and Follow Button to a combined Panel
         JPanel statsFollowPanel = new JPanel();
         statsFollowPanel.setLayout(new BoxLayout(statsFollowPanel, BoxLayout.Y_AXIS));
@@ -182,7 +184,8 @@ public class UIElementFactory {
         return headerPanel;
     }
 
-    private static JLabel createStatLabel(String number, String text) {
+    private static JLabel createStatLabel(String number, String text)
+    {
         JLabel label = new JLabel("<html><div style='text-align: center;'>" + number + "<br/>" + text + "</div></html>", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 12));
         label.setForeground(Color.BLACK);

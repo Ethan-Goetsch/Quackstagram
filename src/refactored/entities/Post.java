@@ -37,6 +37,8 @@ public class Post implements Serializable
     public int getID() { return id; }
     public int getAuthorID() { return authorID; }
     public Content getContent() { return content; }
+    public String getFileName() { return content.fileName(); }
+    public String getText() { return text; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getLikeCount() { return likeCount; }
     public int getCommentCount() { return commentCount; }

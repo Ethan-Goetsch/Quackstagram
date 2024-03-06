@@ -2,16 +2,15 @@ package refactored.controllers;
 
 import javax.swing.JFrame;
 
-import refactored.refactoring.nonui.User;
 import refactored.model.UserDBManager;
 
 public class SignInController {
-    public static void onSignInClicked(String username, String password, User user, JFrame thisPage) {
+    public static void onSignInClicked(String username, String password, JFrame thisPage) {
         System.out.println(username + " <-> " + password);
         if (UserDBManager.verifyCredentials(username, password))
         {
-            System.out.println("It worked");
-            UIManager.signInTransition(user, thisPage);
+            System.out.println("It worked; UserID: " + UserDBManager.currentID);
+            UIManager.signInTransition(thisPage);
         }
         else
         {

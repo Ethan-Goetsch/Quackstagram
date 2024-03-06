@@ -92,8 +92,8 @@ public class FollowDBManager extends DBManager<Follow>
     public static void retrieveFollows()
     {
         if(follows == null)
-            follows = retrieve(Paths.followsPath);
+            follows = retrieve(Paths.followsDBPath);
     }
-    public static void storeFollows() { store(follows, Paths.followsPath); }
+    public static void storeFollows() { store(follows, Paths.followsDBPath); }
 
 }

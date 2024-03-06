@@ -1,17 +1,12 @@
 package refactored.controllers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import refactored.entities.interactions.FollowType;
-import refactored.factories.Paths;
 import refactored.model.FollowDBManager;
 import refactored.model.UserDBManager;
+import refactored.refactoring.ProfileUI;
 
 public class ProfileController {
 
@@ -32,6 +27,13 @@ public class ProfileController {
             FollowDBManager.createFollow(UserDBManager.currentID, usernameToFollow, FollowType.FOLLOW);
             followButton.setText(FollowType.UNFOLLOW.toString());
         }
+    }
+
+    public static void openProfileUI(int profileUserID, JFrame thisUI)
+    {
+        thisUI.dispose();
+        JFrame profileUI = new ProfileUI(profileUserID);
+        profileUI.setVisible(true);
     }
 
     public static boolean isCurrentUser(int profileUserID) {

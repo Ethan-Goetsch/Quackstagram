@@ -3,11 +3,10 @@ package refactored.refactoring;
 import javax.swing.*;
 
 import refactored.controllers.ProfileController;
+import refactored.entities.Post;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
-import refactored.model.FollowDBManager;
 import refactored.model.PostDBManager;
-import refactored.model.UserDBManager;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,9 +14,8 @@ import java.io.IOException;
 import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.stream.Stream;
-
-
 
 public class ProfileUI extends JFrame {
 
@@ -29,9 +27,12 @@ public class ProfileUI extends JFrame {
     private JPanel navigationPanel; // Panel for the navigation
 
     private boolean isCurrentUser;
+    private int profileUserID;
 
+    // Actions, Functions and Observer Pattern in java
     public ProfileUI(int profileUserID) {
 
+        this.profileUserID = profileUserID;
         isCurrentUser = ProfileController.isCurrentUser(profileUserID);
 
         setTitle("DACS Profile");
@@ -60,28 +61,26 @@ public class ProfileUI extends JFrame {
         repaint();
     }
 
+    /// content grid //TODO : Make selected images fullscreen
+
     private void initializeImageGrid() {
         // TODO : Change "currentUser.getUsername()" just below to soemthing appropriate
         contentPanel.removeAll(); // Clear existing content
         contentPanel.setLayout(new GridLayout(0, 3, 5, 5)); // Grid layout for image grid
 
-        Path imageDir = Paths.tempImgUploadedPath;
-        try (Stream<Path> paths = Files.list(imageDir)) {
-            paths.filter(path -> path.getFileName().toString().startsWith("currentUser.getUsername()" + "_"))
-                .forEach(path -> {
-                    ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
-                    JLabel imageLabel = new JLabel(imageIcon);
-                    imageLabel.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            displayImage(imageIcon); // Call method to display the clicked image
-                        }
-                    });
-                    contentPanel.add(imageLabel);
-                });
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            // Handle exception (e.g., show a message or log)
+        PostDBManager.UserPosts userPosts = new PostDBManager.UserPosts(profileUserID);
+        // get user posts
+        for (Path path : userPosts) {
+            ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
+            JLabel imageLabel = new JLabel(imageIcon);
+            // Add a mouse listener to the image label
+            imageLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    displayImage(imageIcon); // Call method to display the clicked image
+                }
+            });
+            contentPanel.add(imageLabel);
         }
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
@@ -93,8 +92,6 @@ public class ProfileUI extends JFrame {
         revalidate();
         repaint();
     }
-
-
 
     private void displayImage(ImageIcon imageIcon) {
         contentPanel.removeAll(); // Remove existing content

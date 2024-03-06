@@ -69,7 +69,7 @@ public abstract class QuackstagramUI extends JFrame implements WindowListener
     {
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         headerPanel.setBackground(new Color(51, 51, 51)); // Set a darker background for the header
-        JLabel lblRegister = new JLabel("🐥 Quackstagram 🐥");
+        JLabel lblRegister = new JLabel();
         lblRegister.setFont(new Font("Arial", Font.BOLD, 16));
         lblRegister.setForeground(Color.WHITE); // Set the text color to white
         headerPanel.add(lblRegister);

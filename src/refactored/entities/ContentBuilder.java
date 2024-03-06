@@ -1,4 +1,4 @@
-package refactored.stored;
+package refactored.entities;
 
 public class ContentBuilder
 {
