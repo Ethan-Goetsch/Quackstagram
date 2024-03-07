@@ -3,10 +3,8 @@ package refactored.entities.interactions;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import refactored.entities.User;
-
 public class Follow implements Notification, Serializable {
-    //private int id;
+    private int id;
     
     private int followerID;
     private int followeeID;
@@ -17,7 +15,7 @@ public class Follow implements Notification, Serializable {
 
     public Follow(int followerID, int followeeID, FollowType type, LocalDateTime timestamp)
     {
-        //this.id = 0; // TODO: 12 years ago: generate a unique id
+        this.id = 0; // TODO: 12 years ago: generate a unique id
         
         this.followerID = followerID;
         this.followeeID = followeeID;
@@ -25,10 +23,14 @@ public class Follow implements Notification, Serializable {
         this.timestamp = timestamp;
     }
 
+    public int getID() { return id; }
     public int getFollowerID() { return followerID; }
     public int getFolloweeID() { return followeeID; }
     public FollowType getType() { return type; }
     public LocalDateTime getTimestamp() { return timestamp; }
+    public int getSenderID() { return followerID; }
+    public int getReceiverID() { return followeeID; }
+    public String getNotificationMessage() { return "followed you"; }
 }
 
 

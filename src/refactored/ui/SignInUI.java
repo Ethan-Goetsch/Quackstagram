@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import refactored.stored.User;
+import refactored.entities.User;
 
 public class SignInUI extends JFrame
 {
@@ -136,7 +136,7 @@ public class SignInUI extends JFrame
             // Open the SignInUI frame
             SwingUtilities.invokeLater(() ->
             {
-                ProfileUI profileUI = new ProfileUI(newUser);
+                ProfileUI profileUI = new ProfileUI(newUser.);
                 profileUI.setVisible(true);
             });
         }

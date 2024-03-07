@@ -30,7 +30,16 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         // test
         posts = null;
         retrievePosts();
-        System.out.println(posts.get(7).getTimestamp());
+        print();
+    }
+
+    // print contents
+    private static void print()
+    {
+        for(Post p : posts)
+        {
+            System.out.println(p.getAuthorID() + " " + p.getFileName());
+        }
     }
 
     public static int getnerateContentID()
@@ -96,6 +105,19 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         return count;
     }
 
+    public static void likePost(int postID) {
+        retrievePosts();
+        for(Post p : posts)
+        {
+            if(p.getID() == postID)
+            {
+                p.like();
+                storePosts();
+                return;
+            }
+        }
+    }
+
     //return the Paths to the content of the post in an Iterator
     public static class UserFolloweePosts implements Iterable<Post>
     {
@@ -107,8 +129,11 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         {
             retrievePosts();
             this.userID = userID;
-            userFollowees = UserDBManager.getUserFollowees(userID);
+            userFollowees = new ArrayList<>();
+            userFollowees.addAll(UserDBManager.getUserFollowees(userID));
+
             // get posts of followees // uses the fact that posts are ordered chronologically to avoid sorting the list
+            userFolloweePosts = new ArrayList<>();
             for (Post p : posts)
             {
                 for(User u : userFollowees)
@@ -168,7 +193,7 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
     }
 
     //return the Paths to the content of the post in an Iterator
-    public static class UserPosts implements Iterable<Path>
+    public static class UserPosts implements Iterable<Post>
     {
         private int userID;
         private ArrayList<Post> userPosts;
@@ -176,30 +201,74 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         {
             this.userID = userID;
             retrievePosts();
-            posts = getUserPosts(userID);
+            userPosts = new ArrayList<>();
+            userPosts.addAll(getUserPosts(userID));
         }
         
-        public class UserPostPathsIterator implements Iterator<Path>
+        public class UserPostPathsIterator implements Iterator<Post>
         {
             private int index = 0;
 
             @Override
             public boolean hasNext()
             {
-                return index < posts.size();
+                return index < userPosts.size();
             }
 
             @Override
-            public Path next()
+            public Post next()
             {
-                return Path.of(Paths.uploadsPath.toString(), posts.get(index++).getContent().fileName());
+                return userPosts.get(index++);
             }
         }
 
         @Override
-        public Iterator<Path> iterator()
+        public Iterator<Post> iterator()
         {
             return new UserPostPathsIterator();
+        }
+    }
+
+    //return the Paths to the content of the post in an Iterator
+    public static class OtherUsersPosts implements Iterable<Post>
+    {
+        private int userID;
+        private ArrayList<Post> otherUsersPosts;
+        public OtherUsersPosts(int userID)
+        {
+            retrievePosts();
+            this.userID = userID;
+            otherUsersPosts = new ArrayList<>();
+            for (Post p : posts)
+            {
+                if(p.getAuthorID() != userID)
+                {
+                    otherUsersPosts.add(p);
+                }
+            }
+        }
+        
+        public class OtherUsersPostPathsIterator implements Iterator<Post>
+        {
+            private int index = 0;
+
+            @Override
+            public boolean hasNext()
+            {
+                return index < otherUsersPosts.size();
+            }
+
+            @Override
+            public Post next()
+            {
+                return otherUsersPosts.get(index++);
+            }
+        }
+
+        @Override
+        public Iterator<Post> iterator()
+        {
+            return new OtherUsersPostPathsIterator();
         }
     }
 

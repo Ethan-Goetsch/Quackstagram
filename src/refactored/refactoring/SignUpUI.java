@@ -60,7 +60,7 @@ public class SignUpUI extends JFrame
 
     private void initializeUI()
     {
-        JPanel headerPanel = UIElementFactory.createHeader(WIDTH, "Quackstagram 🐥");
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Quackstagram 🐥");
 
         // Profile picture placeholder without border
         lblPhoto = new JLabel();

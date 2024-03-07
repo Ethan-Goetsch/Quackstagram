@@ -36,7 +36,7 @@ public class UploadUI extends JFrame
 
     private void initializeUI()
     {
-        JPanel headerPanel = UIElementFactory.createHeader(WIDTH, "🐥 Quackstagram 🐥");
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "🐥 Quackstagram 🐥");
         JPanel navigationPanel = UIElementFactory.createNavigationPanel(this); // Reuse the createNavigationPanel method
 
         // Main content panel

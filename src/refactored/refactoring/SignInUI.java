@@ -8,11 +8,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,7 +23,6 @@ import javax.swing.SwingUtilities;
 import refactored.controllers.SignInController;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
-import refactored.refactoring.nonui.User;
 
 public class SignInUI extends JFrame
 {
@@ -52,7 +46,7 @@ public class SignInUI extends JFrame
 
     private void initializeUI()
     {
-        JPanel headerPanel = UIElementFactory.createHeader(WIDTH, "Quackstagram 🐥");
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Quackstagram 🐥");
 
         // Profile picture placeholder without border
         lblPhoto = new JLabel();

@@ -193,4 +193,16 @@ public class UserDBManager extends DBManager<User>
             users = retrieve(Paths.usersDBPath);
     }
     private static void storeUsers() { store(users, Paths.usersDBPath); }
+
+    public static String getAuthorBio(Post post) {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == post.getAuthorID())
+            {
+                return u.getBio();
+            }
+        }
+        return null;
+    }
 }

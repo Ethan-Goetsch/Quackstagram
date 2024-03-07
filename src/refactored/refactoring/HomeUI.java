@@ -5,28 +5,14 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,23 +27,22 @@ import refactored.entities.Post;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
-import refactored.refactoring.nonui.User;
 
 public class HomeUI extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
-    private static final int NAV_ICON_SIZE = 20; // Corrected static size for bottom icons
     private static final int IMAGE_WIDTH = WIDTH - 100; // Width for the image posts
     private static final int IMAGE_HEIGHT = 150; // Height for the image posts
     private static final Color LIKE_BUTTON_COLOR = new Color(255, 90, 95); // Color for the like button
 
+    // Home panel
+    private JPanel homePanel;
     // posts panel
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    // 
-    private JPanel homePanel;
-    private JPanel imageViewPanel;
+    // fullscreen post panel
+    private JPanel fullscreenPostPanel;
 
     public HomeUI()
     {
@@ -67,22 +52,23 @@ public class HomeUI extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        homePanel = new JPanel(new BorderLayout());
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         
-        homePanel = new JPanel(new BorderLayout());
-        imageViewPanel = new JPanel(new BorderLayout());
+        fullscreenPostPanel = new JPanel(new BorderLayout());
 
         initializeUI();
 
         cardPanel.add(homePanel, "Home");
-        cardPanel.add(imageViewPanel, "ImageView");
+        cardPanel.add(fullscreenPostPanel, "ImageView");
 
         add(cardPanel, BorderLayout.CENTER);
         cardLayout.show(cardPanel, "Home"); // Start with the home view
         
         // Header
-        JPanel headerPanel = UIElementFactory.createHeader(WIDTH, "🐥 Quackstagram 🐥");
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "🐥 Quackstagram 🐥");
         add(headerPanel, BorderLayout.NORTH);
 
         // Navigation Panel
@@ -111,17 +97,18 @@ public class HomeUI extends JFrame
     {
         PostDBManager.UserFolloweePosts userFolloweePosts = new PostDBManager.UserFolloweePosts(UserDBManager.currentID);
 
-        for (Post post : userFolloweePosts)
-        {
-            JPanel itemPanel = createPostPanel(post);
-            panel.add(itemPanel);
+        if(userFolloweePosts != null)
+            for (Post post : userFolloweePosts)
+            {
+                JPanel itemPanel = createPostPanel(post);
+                panel.add(itemPanel);
 
-            // Grey spacing panel
-            JPanel spacingPanel = new JPanel();
-            spacingPanel.setPreferredSize(new Dimension(WIDTH-10, 5)); // Set the height for spacing
-            spacingPanel.setBackground(new Color(230, 230, 230)); // Grey color for spacing
-            panel.add(spacingPanel);
-        }
+                // Grey spacing panel
+                JPanel spacingPanel = new JPanel();
+                spacingPanel.setPreferredSize(new Dimension(WIDTH-10, 5)); // Set the height for spacing
+                spacingPanel.setBackground(new Color(230, 230, 230)); // Grey color for spacing
+                panel.add(spacingPanel);
+            }
     }
 
     private JPanel createPostPanel(Post post) {
@@ -175,37 +162,77 @@ public class HomeUI extends JFrame
         imageLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                HomeController.displayImage(post);
+                HomeController.onPostClicked(post);
             }
         });
 
         return itemPanel;
     }
 
-    
-
-    private void refreshDisplayImage(String[] postData, String imageId)
+    public void fullscreenPost(Post post)
     {
-        // Read updated likes count from image_details.txt
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get("img", "image_details.txt")))
+        fullscreenPostPanel.removeAll(); // Clear previous content
+
+        // Display the image
+        JLabel fullSizeImageLabel = new JLabel();
+        fullSizeImageLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        try
         {
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                if (line.contains("ImageID: " + imageId))
-                {
-                    String likes = line.split(", ")[4].split(": ")[1];
-                    postData[2] = "Likes: " + likes;
-                    break;
-                }
-            }
-        }
-        catch (IOException e)
+            BufferedImage originalImage = ImageIO.read(new File(post.getFilePath().toString()));
+            BufferedImage croppedImage = originalImage.getSubimage(0, 0, Math.min(originalImage.getWidth(), WIDTH-20), Math.min(originalImage.getHeight(), HEIGHT-40));
+            ImageIcon imageIcon = new ImageIcon(croppedImage);
+            fullSizeImageLabel.setIcon(imageIcon);
+        } catch (IOException ex)
         {
-            e.printStackTrace();
+            // Handle exception: Image file not found or reading error
+            fullSizeImageLabel.setText("Image not found");
         }
-    
-        // Call displayImage with updated postData
-        displayImage(postData);
+
+        //User Info 
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel,BoxLayout.Y_AXIS));
+        JLabel userName = new JLabel(UserDBManager.getAuthorUsername(post));
+        userName.setFont(new Font("Arial", Font.BOLD, 18));
+        userPanel.add(userName);//User Name
+
+        // Like button
+        JButton likeButton = new JButton("❤");
+        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
+        likeButton.setOpaque(true);
+        likeButton.setBorderPainted(false); // Remove border
+       
+        // Information panel at the bottom
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.add(new JLabel(post.getText())); // Description
+        JLabel likesLabel = new JLabel("Likes " + post.getLikeCount());
+        infoPanel.add(likesLabel); // Likes
+        infoPanel.add(likeButton);
+
+        // Like button action listener
+        likeButton.addActionListener(e -> HomeController.handleLikeAction(post, likesLabel));
+
+        fullscreenPostPanel.add(fullSizeImageLabel, BorderLayout.CENTER);
+        fullscreenPostPanel.add(infoPanel, BorderLayout.SOUTH);
+        fullscreenPostPanel.add(userPanel,BorderLayout.NORTH);
+            
+        fullscreenPostPanel.revalidate();
+        fullscreenPostPanel.repaint();
+
+        cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
+    }
+
+    private void refreshDisplayImage(boolean isFullscreen)
+    {
+        if (isFullscreen)
+        {
+            cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
+        }
+        else
+        {
+            cardLayout.show(cardPanel, "Home"); // Switch to the home view
+        }
     }
 }

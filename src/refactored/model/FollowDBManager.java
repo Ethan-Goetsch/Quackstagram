@@ -1,11 +1,8 @@
 package refactored.model;
 
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import refactored.entities.Post;
 import refactored.entities.interactions.Follow;
 import refactored.entities.interactions.FollowType;
 import refactored.factories.Paths;
@@ -49,7 +46,7 @@ public class FollowDBManager extends DBManager<Follow>
     public static boolean isAFollowingB(int userAID, int userBID)
     {
         retrieveFollows();
-        for(int i = follows.size() - 1; i >= 0; i--)
+        for(int i = follows.size() - 1; i >= 0; i--) // iterate backwards to find the most recent follow
         {
             Follow f = follows.get(i);
             if(f.getFollowerID() == userAID && f.getFolloweeID() == userBID)
@@ -90,6 +87,58 @@ public class FollowDBManager extends DBManager<Follow>
             }
         }
         return count;
+    }
+
+    public static class UserFollowings implements Iterable<Follow>
+    {
+        private int userID;
+        private ArrayList<Follow> userFollowings;
+
+        public UserFollowings(int userID)
+        {
+            retrieveFollows();
+            this.userID = userID;
+            userFollowings = new ArrayList<>();
+            for(Follow f : follows)
+            {
+                if(f.getFollowerID() == userID)
+                {
+                    userFollowings.add(f);
+                }
+            }
+        }
+
+        @Override
+        public Iterator<Follow> iterator()
+        {
+            return userFollowings.iterator();
+        }
+    }
+
+    public static class UserReceivedFollows implements Iterable<Follow>
+    {
+        private int userID;
+        private ArrayList<Follow> userReceivedFollows;
+
+        public UserReceivedFollows(int userID)
+        {
+            retrieveFollows();
+            this.userID = userID;
+            userReceivedFollows = new ArrayList<>();
+            for(Follow f : follows)
+            {
+                if(f.getFolloweeID() == userID)
+                {
+                    userReceivedFollows.add(f);
+                }
+            }
+        }
+
+        @Override
+        public Iterator<Follow> iterator()
+        {
+            return userReceivedFollows.iterator();
+        }
     }
 
     public static void retrieveFollows()

@@ -2,9 +2,6 @@ package refactored.entities.interactions;
 
 import java.time.LocalDateTime;
 
-import refactored.entities.Post;
-import refactored.entities.User;
-
 public class Like implements Notification{
     private int id;
 
@@ -29,4 +26,7 @@ public class Like implements Notification{
     public int getPost() { return postID; }
     public LikeType getType() { return type; }
     public LocalDateTime getTimestamp() { return timestamp; }
+    public int getSenderID() { return userID; }
+    public int getReceiverID() { return postID; }
+    public String getNotificationMessage() { return "liked your post"; }
 }

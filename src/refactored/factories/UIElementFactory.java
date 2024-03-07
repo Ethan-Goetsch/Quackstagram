@@ -6,13 +6,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Stream;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,11 +17,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import refactored.controllers.MouseListenerFactory;
 import refactored.controllers.ProfileController;
 import refactored.controllers.UIManager;
+import refactored.entities.Post;
 import refactored.model.FollowDBManager;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
@@ -33,8 +32,9 @@ import refactored.model.UserDBManager;
 public class UIElementFactory {
 
     private static final int NAV_ICON_SIZE = 20;
+    private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
 
-    public static JPanel createHeader(int width, String title)
+    public static JPanel createHeaderPanel(int width, String title)
     {
         // Header with the Register label
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -88,7 +88,30 @@ public class UIElementFactory {
         return button;
     }
 
-    private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
+    public static JScrollPane imageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListenerFactory listenerFactory) {
+        // TODO : Change "currentUser.getUsername()" just below to soemthing appropriate
+
+        // panel to be decorated with scroll bar
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayout(0, 3,2, 2)); // Grid layout for image grid
+
+        // get user posts
+        for (Post post : posts) {
+            Path path = post.getFilePath();
+            ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
+            JLabel imageLabel = new JLabel(imageIcon);
+            // Add a mouse listener to the image label
+            imageLabel.addMouseListener(listenerFactory.createMouseClickListener(imageIcon, post));
+            contentPanel.add(imageLabel);
+        }
+
+        // scroll pane decorator
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
+        return scrollPane;
+    }
     
     public static JPanel createProfileHeader(int profileOwnerID, boolean isCurrentUser)
     {

@@ -34,16 +34,15 @@ public abstract class UIManager {
                 break;
     
             case HOME:
-                if (thisPage instanceof HomeUI)
-                    return;
+                
                 thisPage.dispose();
-                newUI = new HomeUI();
+                HomeController.openHomeUI();
                 break;
             case EXPLORE:
                 if (thisPage instanceof ExploreUI)
                     return;
                 thisPage.dispose();
-                newUI = new ExploreUI();
+                ExploreController.openExploreUI();
                 break;
             case UPLOAD:
                 if (thisPage instanceof UploadUI)
@@ -67,7 +66,6 @@ public abstract class UIManager {
 
     public static void signInTransition(JFrame thisPage) {
         thisPage.dispose();
-        ProfileUI profileUI = new ProfileUI(UserDBManager.currentID);
-        profileUI.setVisible(true);
+        ProfileController.openProfileUI(UserDBManager.currentID, thisPage);
     }
 }
