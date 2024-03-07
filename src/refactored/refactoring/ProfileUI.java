@@ -3,19 +3,13 @@ package refactored.refactoring;
 import javax.swing.*;
 
 import refactored.controllers.ProfileController;
-import refactored.entities.Post;
-import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.awt.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class ProfileUI extends JFrame {
 

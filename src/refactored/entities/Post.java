@@ -1,9 +1,11 @@
 package refactored.entities;
 
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 
 import refactored.entities.User;
+import refactored.factories.Paths;
 
 public class Post implements Serializable
 {
@@ -20,9 +22,9 @@ public class Post implements Serializable
     private int commentCount;
 
     // maybe use a builder pattern here // or a factory
-    public Post(Post parentPost, int authorID, Content content, String text, LocalDateTime timestamp)
+    public Post(int id, Post parentPost, int authorID, Content content, String text, LocalDateTime timestamp)
     {
-        this.id = 0; // TODO: 12 years ago: generate a unique id
+        this.id = id;
         
         this.authorID = authorID;
         this.timestamp = timestamp;
@@ -33,13 +35,19 @@ public class Post implements Serializable
         likeCount = 0;
         commentCount = 0;
     }
+    
+    public void like() {
+        likeCount++;
+    }
 
     public int getID() { return id; }
     public int getAuthorID() { return authorID; }
     public Content getContent() { return content; }
     public String getFileName() { return content.fileName(); }
+    public Path getFilePath() { return Path.of(Paths.uploadsPath.toString(), content.fileName()); }
     public String getText() { return text; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getLikeCount() { return likeCount; }
     public int getCommentCount() { return commentCount; }
+
 }

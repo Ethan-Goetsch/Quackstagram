@@ -1,7 +1,10 @@
 package refactored.model;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import refactored.entities.Post;
 import refactored.entities.User;
 import refactored.factories.Paths;
 
@@ -118,6 +121,70 @@ public class UserDBManager extends DBManager<User>
             }
         }
         return ++currentID;
+    }
+
+    public static String getAuthorUsername(Post post)
+    {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == post.getAuthorID())
+            {
+                return u.getUsername();
+            }
+        }
+        return null;
+    }
+
+    public static ArrayList<User> getUserFollowees(int userID)
+    {
+        retrieveUsers();
+        ArrayList<User> followees = new ArrayList<>();
+        for(User u : users)
+        {
+            //it's impossible for a user to follow himself //maybe in the future it this may change
+            if(FollowDBManager.isAFollowingB(userID, u.getId()))
+            {
+                followees.add(u);
+            }
+        }
+        return followees;
+    }
+
+    //return the Paths to the content of the post in an Iterator
+    public static class UserFollowees implements Iterable<Integer>
+    {
+        private int userID;
+        private ArrayList<User> userFollowees;
+        public UserFollowees(int userID)
+        {
+            this.userID = userID;
+            retrieveUsers();
+            userFollowees = getUserFollowees(userID);
+        }
+        
+        public class UserFolloweeIDsIterator implements Iterator<Integer>
+        {
+            private int index = 0;
+
+            @Override
+            public boolean hasNext()
+            {
+                return index < userFollowees.size();
+            }
+
+            @Override
+            public Integer next()
+            {
+                return userFollowees.get(index++).getId();
+            }
+        }
+
+        @Override
+        public Iterator<Integer> iterator()
+        {
+            return new UserFollowees.UserFolloweeIDsIterator();
+        }
     }
 
     private static void retrieveUsers()

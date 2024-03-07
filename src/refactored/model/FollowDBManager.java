@@ -1,8 +1,11 @@
 package refactored.model;
 
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import refactored.entities.Post;
 import refactored.entities.interactions.Follow;
 import refactored.entities.interactions.FollowType;
 import refactored.factories.Paths;
