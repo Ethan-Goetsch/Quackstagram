@@ -18,21 +18,21 @@ public class ProfileController {
 
     public static void handleEditAction()
     {
-        
+
     }
 
-    public static void handleFollowAction(int usernameToFollow, JButton followButton)
+    public static void handleFollowAction(int userIDToFollow)
     {
-        if (FollowDBManager.isAFollowingB(UserDBManager.currentID, usernameToFollow))
+        FollowDBManager.createFollow(UserDBManager.currentID, userIDToFollow);
+        if (FollowDBManager.isAFollowingB(UserDBManager.currentID, userIDToFollow))
         {
-            FollowDBManager.createFollow(UserDBManager.currentID, usernameToFollow, FollowType.UNFOLLOW);
-            followButton.setText(FollowType.FOLLOW.toString());
+            profileUI.updateEditOrFollowButtonLabel("Unfollow");
         }
         else
         {
-            FollowDBManager.createFollow(UserDBManager.currentID, usernameToFollow, FollowType.FOLLOW);
-            followButton.setText(FollowType.UNFOLLOW.toString());
+            profileUI.updateEditOrFollowButtonLabel("Follow");
         }
+        profileUI.updateFollowerCount();
     }
 
     public static class ImageClickListener implements MouseListenerFactory

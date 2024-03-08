@@ -14,26 +14,42 @@ public class FollowDBManager extends DBManager<Follow>
     public static void main(String[] args)
     {
         // init
-        follows = new ArrayList<>();
-        follows.add(new Follow(1, 4, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(1, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(2, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(2, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(3, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(4, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        follows.add(new Follow(4, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
-        storeFollows();
+        // follows = new ArrayList<>();
+        // follows.add(new Follow(1, 4, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(1, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(2, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(2, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(3, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(4, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // follows.add(new Follow(4, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        // storeFollows();
 
         // test
         follows = null;
         retrieveFollows();
-        System.out.println(follows.get(6).getFollowerID());
+        print();
     }
 
-    public static void createFollow(int followerID, int followeeID, FollowType type)
+    private static void print()
+    {
+        for(Follow f : follows)
+        {
+            System.out.println(f.getFollowerID() + f.getType().toString() + f.getFolloweeID());
+        }
+    }
+
+    public static void createFollow(int followerID, int followeeID)
     {
         retrieveFollows();
-        follows.add(new Follow(followerID, followeeID, type, LocalDateTime.now()));
+        if (!isAFollowingB(followerID, followeeID))
+        {
+            follows.add(new Follow(followerID, followeeID, FollowType.FOLLOW, LocalDateTime.now()));
+            UserDBManager.userAFollowedB(followerID, followeeID);
+        } else
+        {
+            follows.add(new Follow(followerID, followeeID, FollowType.UNFOLLOW, LocalDateTime.now()));
+            UserDBManager.userAUnfollowedB(followerID, followeeID);
+        }
         storeFollows();
     }
 
@@ -69,7 +85,10 @@ public class FollowDBManager extends DBManager<Follow>
         {
             if(f.getFollowerID() == followerID)
             {
-                count++;
+                if (f.getType() == FollowType.FOLLOW)
+                    count++;
+                else
+                    count--;
             }
         }
         return count;
@@ -83,7 +102,10 @@ public class FollowDBManager extends DBManager<Follow>
         {
             if(f.getFolloweeID() == followeeID)
             {
-                count++;
+                if (f.getType() == FollowType.FOLLOW)
+                    count++;
+                else
+                    count--;
             }
         }
         return count;

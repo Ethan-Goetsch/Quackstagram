@@ -16,19 +16,18 @@ public class UserDBManager extends DBManager<User>
     public static void main(String[] args)
     {
         // init
-        // users = new ArrayList<>();
-        // users.add(new User(generateID(), "Lorin","Password","For copyright reasons, I am not Grogu"));
-        // users.add(new User(generateID(), "Xylo","Password","Fierce warrior, not solo"));
-        // users.add(new User(generateID(), "Zara","Password","Humanoid robot much like the rest"));
-        // users.add(new User(generateID(), "Mystar","Password","Xylo and I are not the same!"));
-        // storeUsers();
+        users = new ArrayList<>();
+        users.add(new User(generateID(), "Lorin","Password","For copyright reasons, I am not Grogu"));
+        users.add(new User(generateID(), "Xylo","Password","Fierce warrior, not solo"));
+        users.add(new User(generateID(), "Zara","Password","Humanoid robot much like the rest"));
+        users.add(new User(generateID(), "Mystar","Password","Xylo and I are not the same!"));
+        storeUsers();
 
 
         // test
         users = null;
         retrieveUsers();
         print();
-        System.out.println(users.get(0).getUsername());
     }
 
     private static void print() 
@@ -204,7 +203,8 @@ public class UserDBManager extends DBManager<User>
     }
     private static void storeUsers() { store(users, Paths.usersDBPath); }
 
-    public static String getAuthorBio(Post post) {
+    public static String getAuthorBio(Post post)
+    {
         retrieveUsers();
         for(User u : users)
         {
@@ -214,5 +214,39 @@ public class UserDBManager extends DBManager<User>
             }
         }
         return null;
+    }
+
+    public static void userAFollowedB(int followerID, int followeeID)
+    {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == followeeID)
+            {
+                u.incrementFollowers();
+            }
+            if (u.getId() == followerID)
+            {
+                u.incrementFollowing();
+            }
+        }
+        storeUsers();
+    }
+
+    public static void userAUnfollowedB(int followerID, int followeeID)
+    {
+        retrieveUsers();
+        for(User u : users)
+        {
+            if(u.getId() == followeeID)
+            {
+                u.decrementFollowers();
+            }
+            if (u.getId() == followerID)
+            {
+                u.decrementFollowing();
+            }
+        }
+        storeUsers();
     }
 }

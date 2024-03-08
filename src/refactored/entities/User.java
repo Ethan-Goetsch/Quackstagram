@@ -74,4 +74,20 @@ public class User implements Serializable
     public int getPostsCount() { return postsCount; }
     public int getFollowersCount() { return followersCount; }
     public int getFollowingCount() { return followingCount; }
+
+    public void incrementFollowers() {
+        followersCount++;
+    }
+
+    public void decrementFollowers() {
+        followersCount--;
+    }
+
+    public void incrementFollowing() {
+        followingCount++;
+    }
+
+    public void decrementFollowing() {
+        followingCount--;
+    }
 }
