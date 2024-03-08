@@ -41,7 +41,7 @@ public class SignInUI extends JFrame
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-        
+
         initializeUI();
     }
 
@@ -98,7 +98,7 @@ public class SignInUI extends JFrame
 
         // New button for navigating to SignUpUI
         btnRegisterNow = new JButton("No Account? Register Now");
-        btnRegisterNow.addActionListener(this::onRegisterNowClicked);
+        btnRegisterNow.addActionListener(SignInController::onRegisterNowClicked);
         btnRegisterNow.setBackground(Color.WHITE); // Set a different color for distinction
         btnRegisterNow.setForeground(Color.BLACK);
         btnRegisterNow.setFocusPainted(false);
@@ -112,23 +112,6 @@ public class SignInUI extends JFrame
 
         // Adding the button panel to the frame
         add(buttonPanel, BorderLayout.SOUTH);
-    }
-
-    private void onRegisterNowClicked(ActionEvent event)
-    {
-        openSignUpUI();
-    }
-
-    private void openSignUpUI() {
-        // Close the SignInUI frame
-        dispose();
-
-        // Open the SignUpUI frame
-        SwingUtilities.invokeLater(() ->
-        {
-            SignUpUI signUpFrame = new SignUpUI();
-            signUpFrame.setVisible(true);
-        });
     }
 
     public static void main(String[] args)

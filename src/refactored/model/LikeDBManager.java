@@ -14,9 +14,9 @@ public class LikeDBManager extends DBManager<Like>{
     public static void main(String[] args)
     {
         // init
-        // likes = new ArrayList<>();
-        // likes.add(new Like(1, 1, 1, LikeType.LIKE, LocalDateTime.of(2023, 12, 17, 19, 07, 43)));
-        // storeLikes();
+        likes = new ArrayList<>();
+        likes.add(new Like(1, 1, 1, LikeType.LIKE, LocalDateTime.of(2023, 12, 17, 19, 07, 43)));
+        storeLikes();
 
         // test
         likes = null;
@@ -31,11 +31,18 @@ public class LikeDBManager extends DBManager<Like>{
         }
     }
 
-    public static void createLike(int userID, int postID, LikeType type)
+    public static void createLike(int userID, int postID)
     {
         retrieveLikes();
-        likes.add(new Like(generateID(), userID, postID, type, LocalDateTime.now()));
-        PostDBManager.likePost(postID);
+        if(!postIsLikedByUser(postID, userID))
+        {
+            PostDBManager.likePost(userID, postID);
+            likes.add(new Like(generateID(), userID, postID, LikeType.LIKE, LocalDateTime.now()));
+        } else
+        {
+            PostDBManager.unlikePost(userID, postID);
+            likes.add(new Like(generateID(), userID, postID, LikeType.UNLIKE, LocalDateTime.now()));
+        }
         storeLikes();
     }
 
@@ -53,6 +60,23 @@ public class LikeDBManager extends DBManager<Like>{
         return ++max;
     }
 
+    public static boolean postIsLikedByUser(int postID, int userID) {
+        retrieveLikes();
+
+        boolean liked = false;
+        for(Like l : likes)
+        {
+            if(l.getPostID() == postID && l.getUserID() == userID)
+            {
+                if (l.getType() == LikeType.LIKE)
+                    liked = true;
+                else
+                    liked = false;
+            }
+        }
+        return liked;
+    }
+
     public static class UserReceivedLikes implements Iterable<Like>
     {
         private int userID;
@@ -62,7 +86,6 @@ public class LikeDBManager extends DBManager<Like>{
         public UserReceivedLikes(int userID)
         {
             retrieveLikes();
-            print();
 
             this.userID = userID;
             this.userPosts = PostDBManager.getUserPosts(userID);

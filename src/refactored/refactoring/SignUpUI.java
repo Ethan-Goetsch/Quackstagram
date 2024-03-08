@@ -31,7 +31,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import refactored.controllers.SignUpController;
 import refactored.factories.UIElementFactory;
+import refactored.model.UserDBManager;
 
 public class SignUpUI extends JFrame
 {
@@ -41,6 +43,7 @@ public class SignUpUI extends JFrame
     private JTextField txtUsername;
     private JTextField txtPassword;
     private JTextField txtBio;
+
     private JButton btnRegister;
     private JLabel lblPhoto;
     private JButton btnUploadPhoto;
@@ -94,14 +97,7 @@ public class SignUpUI extends JFrame
         fieldsPanel.add(txtBio);
         btnUploadPhoto = new JButton("Upload Photo");
         
-        btnUploadPhoto.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                handleProfilePictureUpload();
-            }
-        });
+        btnUploadPhoto.addActionListener(e -> SignUpController.handleProfilePictureUpload(txtUsername.getText()));
 
         JPanel photoUploadPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         photoUploadPanel.add(btnUploadPhoto);
@@ -109,7 +105,7 @@ public class SignUpUI extends JFrame
 
         // Register button with black text
         btnRegister = new JButton("Register");
-        btnRegister.addActionListener(this::onRegisterClicked);
+        btnRegister.addActionListener(e -> SignUpController.onRegisterClicked(txtUsername.getText(), txtPassword.getText(), txtBio.getText()));
         btnRegister.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
         btnRegister.setForeground(Color.BLACK); // Set the text color to black
         btnRegister.setFocusPainted(false);
@@ -125,112 +121,7 @@ public class SignUpUI extends JFrame
         add(registerPanel, BorderLayout.SOUTH);
          // Adding the sign in button to the register panel or another suitable panel
         btnSignIn = new JButton("Already have an account? Sign In");
-        btnSignIn.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                openSignInUI();
-            }
-        });
+        btnSignIn.addActionListener(e -> SignUpController.openSignInUI());
         registerPanel.add(btnSignIn, BorderLayout.SOUTH);
-    }
-
-    private void onRegisterClicked(ActionEvent event)
-    {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        String bio = txtBio.getText();
-
-        if (doesUsernameExist(username))
-        {
-            JOptionPane.showMessageDialog(this, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        else
-        {
-            saveCredentials(username, password, bio);
-            handleProfilePictureUpload();
-            dispose();
-
-            // Open the SignInUI frame
-            SwingUtilities.invokeLater(() ->
-            {
-                SignInUI signInFrame = new SignInUI();
-                signInFrame.setVisible(true);
-            });
-        }
-    }
-    
-    private boolean doesUsernameExist(String username)
-    {
-        try (BufferedReader reader = new BufferedReader(new FileReader(credentialsFilePath)))
-        {
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                if (line.startsWith(username + ":"))
-                {
-                    return true;
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-     // Method to handle profile picture upload
-     private void handleProfilePictureUpload()
-     {
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
-        fileChooser.setFileFilter(filter);
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-        {
-            File selectedFile = fileChooser.getSelectedFile();
-            saveProfilePicture(selectedFile, txtUsername.getText());
-        }
-    }
-
-    private void saveProfilePicture(File file, String username)
-    {
-        try
-        {
-            BufferedImage image = ImageIO.read(file);
-            File outputFile = new File(profilePhotoStoragePath + username + ".png");
-            ImageIO.write(image, "png", outputFile);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-    
-    private void saveCredentials(String username, String password, String bio)
-    {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/credentials.txt", true)))
-        {
-            writer.write(username + ":" + password + ":" + bio);
-            writer.newLine();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-        
-    private void openSignInUI()
-    {
-        // Close the SignUpUI frame
-        dispose();
-
-        // Open the SignInUI frame
-        SwingUtilities.invokeLater(() ->
-        {
-            SignInUI signInFrame = new SignInUI();
-            signInFrame.setVisible(true);
-        });
     }
 }

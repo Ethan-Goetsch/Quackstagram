@@ -17,6 +17,7 @@ public class NotificationQuery {
 
         public static void main(String[] args) {
             NotificationQueryResult nqr = new NotificationQueryResult(4);
+            nqr.print();
         }
 
         private void print() {

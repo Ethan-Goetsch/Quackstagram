@@ -1,8 +1,12 @@
 package refactored.controllers;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import refactored.model.UserDBManager;
+import refactored.refactoring.SignInUI;
 
 public class SignInController {
     public static void onSignInClicked(String username, String password, JFrame thisPage) {
@@ -16,5 +20,23 @@ public class SignInController {
         {
             System.out.println("It Didn't");
         }
+    }
+
+    private static SignInUI signInUI;
+
+    public static void openSignInUI()
+    {
+        SwingUtilities.invokeLater(() -> {
+            signInUI = new SignInUI();
+            signInUI.setVisible(true);
+        });
+    }
+
+    public static void onRegisterNowClicked(ActionEvent event)
+    {
+        signInUI.dispose();
+        SwingUtilities.invokeLater(() -> {
+            SignUpController.openSignUpUI();
+        });
     }
 }

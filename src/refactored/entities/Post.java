@@ -39,6 +39,10 @@ public class Post implements Serializable
         likeCount++;
     }
 
+    public void unlike() {
+        likeCount--;
+    }
+
     public int getID() { return id; }
     public int getAuthorID() { return authorID; }
     public Content getContent() { return content; }

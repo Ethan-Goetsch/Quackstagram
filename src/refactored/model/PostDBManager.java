@@ -105,13 +105,26 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         return count;
     }
 
-    public static void likePost(int postID) {
+    public static void likePost(int userID, int postID) {
         retrievePosts();
         for(Post p : posts)
         {
             if(p.getID() == postID)
             {
                 p.like();
+                storePosts();
+                return;
+            }
+        }
+    }
+
+    public static void unlikePost(int userID, int postID) {
+        retrievePosts();
+        for(Post p : posts)
+        {
+            if(p.getID() == postID)
+            {
+                p.unlike();
                 storePosts();
                 return;
             }

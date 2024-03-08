@@ -17,11 +17,11 @@ public class User implements Serializable
     private int followersCount;
     private int followingCount;
 
-    public User(int id, String username, String password)
-    {
+    public User(int id, String username, String password, String bio) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.bio = "";
     }
 
     public User(Builder builder)
@@ -34,13 +34,6 @@ public class User implements Serializable
         this.postsCount = builder.postsCount;
         this.followersCount = builder.followersCount;
         this.followingCount = builder.followingCount;
-    }
-
-    public User(int id, String username, String password, String bio) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.bio = "";
     }
 
     public static class Builder

@@ -19,8 +19,7 @@ public class HomeController {
 
     public static void handleLikeAction(Post post, JLabel likesLabel)
     {
-        LikeDBManager.createLike(UserDBManager.currentID, post.getID(), LikeType.LIKE);
-        post.like();
+        LikeDBManager.createLike(UserDBManager.currentID, post.getID());
         likesLabel.setText("Likes: " + post.getLikeCount());
     }
 

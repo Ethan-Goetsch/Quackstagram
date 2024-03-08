@@ -18,7 +18,7 @@ public class ProfileController {
 
     public static void handleEditAction()
     {
-
+        
     }
 
     public static void handleFollowAction(int usernameToFollow, JButton followButton)

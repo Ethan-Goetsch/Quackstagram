@@ -1,15 +1,12 @@
 package refactored.refactoring;
 
 import javax.swing.*;
+import java.awt.*;
 
 import refactored.controllers.ProfileController;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.*;
-import java.nio.file.Path;
 
 public class ProfileUI extends JFrame {
 

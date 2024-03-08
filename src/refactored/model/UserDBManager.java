@@ -16,18 +16,27 @@ public class UserDBManager extends DBManager<User>
     public static void main(String[] args)
     {
         // init
-        users = new ArrayList<>();
-        users.add(new User(generateID(), "Lorin","Password","For copyright reasons, I am not Grogu"));
-        users.add(new User(generateID(), "Xylo","Password","Fierce warrior, not solo"));
-        users.add(new User(generateID(), "Zara","Password","Humanoid robot much like the rest"));
-        users.add(new User(generateID(), "Mystar","Password","Xylo and I are not the same!"));
-        storeUsers();
+        // users = new ArrayList<>();
+        // users.add(new User(generateID(), "Lorin","Password","For copyright reasons, I am not Grogu"));
+        // users.add(new User(generateID(), "Xylo","Password","Fierce warrior, not solo"));
+        // users.add(new User(generateID(), "Zara","Password","Humanoid robot much like the rest"));
+        // users.add(new User(generateID(), "Mystar","Password","Xylo and I are not the same!"));
+        // storeUsers();
 
 
         // test
         users = null;
         retrieveUsers();
+        print();
         System.out.println(users.get(0).getUsername());
+    }
+
+    private static void print() 
+    {
+        for(User u : users)
+        {
+            System.out.println(u.getId() + " " + u.getUsername() + " " + u.getBio());
+        }
     }
 
     public static String getBio(int id)
@@ -86,11 +95,11 @@ public class UserDBManager extends DBManager<User>
      * @param password
      * @return
      */
-    public static boolean createUser(String username, String password) {
+    public static boolean createUser(String username, String password, String bio) {
         retrieveUsers();
         if(!usernameExists(username))
         {
-            User user = new User(generateID(), username, password);
+            User user = new User(generateID(), username, password, bio);
             users.add(user);
             storeUsers();
             return true;
@@ -99,6 +108,7 @@ public class UserDBManager extends DBManager<User>
     }
     
     public static boolean usernameExists(String username) {
+        retrieveUsers();
         //username validation logic
         for(User ua : users)
         {
