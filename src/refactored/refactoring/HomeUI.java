@@ -223,16 +223,4 @@ public class HomeUI extends JFrame
 
         cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
     }
-
-    private void refreshDisplayImage(boolean isFullscreen)
-    {
-        if (isFullscreen)
-        {
-            cardLayout.show(cardPanel, "ImageView"); // Switch to the image view
-        }
-        else
-        {
-            cardLayout.show(cardPanel, "Home"); // Switch to the home view
-        }
-    }
 }

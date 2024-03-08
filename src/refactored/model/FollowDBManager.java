@@ -15,13 +15,13 @@ public class FollowDBManager extends DBManager<Follow>
     {
         // init
         follows = new ArrayList<>();
-        follows.add(new Follow(1, 4, FollowType.FOLLOW, null));
-        follows.add(new Follow(1, 3, FollowType.FOLLOW, null));
-        follows.add(new Follow(2, 1, FollowType.FOLLOW, null));
-        follows.add(new Follow(2, 3, FollowType.FOLLOW, null));
-        follows.add(new Follow(3, 1, FollowType.FOLLOW, null));
-        follows.add(new Follow(4, 1, FollowType.FOLLOW, null));
-        follows.add(new Follow(4, 3, FollowType.FOLLOW, null));
+        follows.add(new Follow(1, 4, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(1, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(2, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(2, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(3, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(4, 1, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
+        follows.add(new Follow(4, 3, FollowType.FOLLOW, LocalDateTime.of(1999, 12, 31, 23, 59, 59)));
         storeFollows();
 
         // test

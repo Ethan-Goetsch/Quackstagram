@@ -1,13 +1,11 @@
 package refactored.model;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import refactored.entities.Post;
 import refactored.entities.interactions.Like;
 import refactored.entities.interactions.LikeType;
-import refactored.entities.interactions.Notification;
 import refactored.factories.Paths;
 
 public class LikeDBManager extends DBManager<Like>{
@@ -15,7 +13,22 @@ public class LikeDBManager extends DBManager<Like>{
 
     public static void main(String[] args)
     {
-        storeLikes();
+        // init
+        // likes = new ArrayList<>();
+        // likes.add(new Like(1, 1, 1, LikeType.LIKE, LocalDateTime.of(2023, 12, 17, 19, 07, 43)));
+        // storeLikes();
+
+        // test
+        likes = null;
+        retrieveLikes();
+        print();
+    }
+
+    public static void print() {
+        for(Like l : likes)
+        {
+            System.out.println(l.getUserID() + " " + l.getPostID());
+        }
     }
 
     public static void createLike(int userID, int postID, LikeType type)
@@ -44,22 +57,23 @@ public class LikeDBManager extends DBManager<Like>{
     {
         private int userID;
         private ArrayList<Post> userPosts;
-        private ArrayList<Like> likes;
+        private ArrayList<Like> userLikes;
 
         public UserReceivedLikes(int userID)
         {
             retrieveLikes();
+            print();
 
             this.userID = userID;
             this.userPosts = PostDBManager.getUserPosts(userID);
 
-            this.likes = new ArrayList<Like>();
+            this.userLikes = new ArrayList<Like>();
             for(Like l : likes)
             {
                 for(Post p : userPosts)
-                    if(l.getUser() == userID && l.getPost() == p.getID())
+                    if(l.getPostID() == p.getID())
                     {
-                        likes.add(l);
+                        userLikes.add(l);
                     }
             }
         }
@@ -69,10 +83,12 @@ public class LikeDBManager extends DBManager<Like>{
 
         @Override
         public java.util.Iterator<Like> iterator() {
-            return likes.iterator();
+            return userLikes.iterator();
         }
     }
     
-    public static void retrieveLikes() { likes = retrieve(Paths.likesDBPath); }
+    public static void retrieveLikes() {
+        if(likes == null)
+            likes = retrieve(Paths.likesDBPath); }
     public static void storeLikes() { store(likes, Paths.likesDBPath); }
 }

@@ -1,6 +1,5 @@
 package refactored.model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,6 +13,17 @@ public class NotificationQuery {
     {
         private int receiverID;
         private ArrayList<Notification> notifications;
+
+
+        public static void main(String[] args) {
+            NotificationQueryResult nqr = new NotificationQueryResult(4);
+        }
+
+        private void print() {
+            for(Notification n : notifications) {
+                System.out.println(n.getNotificationMessage());
+            }
+        }
 
         public NotificationQueryResult(int id) {
             LikeDBManager.retrieveLikes();
@@ -30,9 +40,11 @@ public class NotificationQuery {
             for(Like l : likes) {
                 notifications.add(l);
             }
+
             for(Follow f : follows) {
                 notifications.add(f);
             }
+            
             for(Message m : messages) {
                 notifications.add(m);
             }
@@ -42,18 +54,18 @@ public class NotificationQuery {
 
         private class NotificationIterator implements Iterator<Notification>
         {
-            private int index = notifications.size() - 1;
+            private int index = 0;
 
             @Override
             public boolean hasNext()
             {
-                return index >= 0;
+                return index < notifications.size();
             }
 
             @Override
             public Notification next()
             {
-                return notifications.get(index--);
+                return notifications.get(index++);
             }
         }
 

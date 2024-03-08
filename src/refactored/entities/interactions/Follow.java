@@ -3,6 +3,8 @@ package refactored.entities.interactions;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import refactored.model.UserDBManager;
+
 public class Follow implements Notification, Serializable {
     private int id;
     
@@ -30,7 +32,7 @@ public class Follow implements Notification, Serializable {
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getSenderID() { return followerID; }
     public int getReceiverID() { return followeeID; }
-    public String getNotificationMessage() { return "followed you"; }
+    public String getNotificationMessage() { return UserDBManager.getUsername(followerID) + " followed you"; }
 }
 
 

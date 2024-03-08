@@ -1,8 +1,11 @@
 package refactored.entities.interactions;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Message implements Notification{
+import refactored.model.UserDBManager;
+
+public class Message implements Serializable, Notification{
     private int id;
 
     private int senderID;
@@ -26,5 +29,5 @@ public class Message implements Notification{
     public int getReceiverID() { return receiverID; }
     public String getMessage() { return message; }
     public LocalDateTime getTimestamp() { return timestamp; }
-    public String getNotificationMessage() { return "said " + "\"" + message + "\""; }
+    public String getNotificationMessage() { return UserDBManager.getUsername(senderID) + " said " + "\"" + message + "\""; }
 }

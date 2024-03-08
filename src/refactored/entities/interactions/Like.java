@@ -1,8 +1,11 @@
 package refactored.entities.interactions;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Like implements Notification{
+import refactored.model.UserDBManager;
+
+public class Like implements Serializable, Notification{
     private int id;
 
     private int userID;
@@ -22,11 +25,11 @@ public class Like implements Notification{
     }
 
     public int getID() { return id; }
-    public int getUser() { return userID; }
-    public int getPost() { return postID; }
+    public int getUserID() { return userID; }
+    public int getPostID() { return postID; }
     public LikeType getType() { return type; }
     public LocalDateTime getTimestamp() { return timestamp; }
     public int getSenderID() { return userID; }
     public int getReceiverID() { return postID; }
-    public String getNotificationMessage() { return "liked your post"; }
+    public String getNotificationMessage() { return UserDBManager.getUsername(userID) + " liked your post"; }
 }

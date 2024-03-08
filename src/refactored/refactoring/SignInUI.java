@@ -41,6 +41,7 @@ public class SignInUI extends JFrame
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        
         initializeUI();
     }
 

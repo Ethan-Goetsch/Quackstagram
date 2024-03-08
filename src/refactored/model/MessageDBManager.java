@@ -1,7 +1,5 @@
 package refactored.model;
 
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +13,23 @@ public class MessageDBManager extends DBManager<Message>
 
     public static void main(String[] args)
     {
+        // init
+        messages = new ArrayList<>();
+        messages.add(new Message(1, 3, 1, "I like your ears!", LocalDateTime.now()));
         storeMessages();
+
+        // test
+        messages = null;
+        retrieveMessages();
+        print();
+    }
+
+    private static void print()
+    {
+        for(Message m : messages)
+        {
+            System.out.println(m.getSenderID() + " " + m.getMessage() + " " + m.getReceiverID());
+        }
     }
 
     public static void createMessage(int senderID, int receiverID, String message)
@@ -68,32 +82,32 @@ public class MessageDBManager extends DBManager<Message>
     public static class UserReceivedMessages implements Iterable<Message>
     {
         private int userID;
-        private ArrayList<Message> messages;
+        private ArrayList<Message> userMessages;
 
         public UserReceivedMessages(int userID)
         {
             retrieveMessages();
 
             this.userID = userID;
-            this.messages = new ArrayList<Message>();
+            this.userMessages = new ArrayList<Message>();
             for(Message m : messages)
             {
                 if(m.getReceiverID() == userID)
                 {
-                    this.messages.add(m);
+                    this.userMessages.add(m);
                 }
             }
         }
 
         public Iterator<Message> iterator()
         {
-            return messages.iterator();
+            return userMessages.iterator();
         }
     }
 
 
     public static void retrieveMessages() {
-        if (messages != null)
+        if (messages == null)
             messages = retrieve(Paths.messagesDBPath);
     }
     public static void storeMessages() {
