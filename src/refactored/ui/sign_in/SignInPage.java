@@ -7,8 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
+import refactored.util.functions.IAction;
 
 public class SignInPage extends JFrame
 {
@@ -32,7 +31,7 @@ public class SignInPage extends JFrame
     private JButton btnSignIn, btnRegisterNow;
     private JLabel lblPhoto;
     
-    public SignInPage(ActionListener signInListener, ActionListener signUpListener)
+    public SignInPage(IAction signInAction, IAction signUpAction)
     {
         setTitle("Quackstagram - Register");
         setSize(WIDTH, HEIGHT);
@@ -40,13 +39,13 @@ public class SignInPage extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        initializeUI(signInListener, signUpListener);
+        initializeUI(signInAction, signUpAction);
     }
 
     public String getUsername() { return txtUsername.getText(); }
     public String getPassword() { return txtPassword.getText(); }
 
-    private void initializeUI(ActionListener signInListener, ActionListener signUpListener)
+    private void initializeUI(IAction signInAction, IAction signUpAction)
     {
         JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Quackstagram 🐥");
 
@@ -80,7 +79,7 @@ public class SignInPage extends JFrame
 
         // SignIn button with black text
         btnSignIn = new JButton("Sign-In");
-        btnSignIn.addActionListener(signInListener);
+        btnSignIn.addActionListener(e -> signInAction.execute());
         btnSignIn.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
         btnSignIn.setForeground(Color.BLACK); // Set the text color to black
         btnSignIn.setFocusPainted(false);
@@ -97,7 +96,7 @@ public class SignInPage extends JFrame
 
         // New button for navigating to SignUpUI
         btnRegisterNow = new JButton("No Account? Register Now");
-        btnRegisterNow.addActionListener(signUpListener);
+        btnRegisterNow.addActionListener(e -> signUpAction.execute());
         btnRegisterNow.setBackground(Color.WHITE); // Set a different color for distinction
         btnRegisterNow.setForeground(Color.BLACK);
         btnRegisterNow.setFocusPainted(false);

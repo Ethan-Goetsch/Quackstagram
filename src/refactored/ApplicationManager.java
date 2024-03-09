@@ -6,6 +6,6 @@ public abstract class ApplicationManager
 {
     public static void main(String[] args)
     {
-        SignInController.openSignInUI();
+        SignInController.handleSignIn();
     }
 }

@@ -1,61 +1,39 @@
 package refactored.ui.sign_in;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import refactored.CredentialsVerifier;
 import refactored.model.UserDBManager;
 import refactored.ui.UIManager;
 
 public class SignInController
 {
-    private class SignInListener implements ActionListener
+    private final UIManager manager;
+    private final SignInPage page;
+
+    public SignInController(UIManager uiManager)
     {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            handleSignIn(signInPage.getUsername(), signInPage.getPassword());
-        }
-    }
-
-    private class SignUpListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            handleSignUp();
-        }
-    }
-
-    private final UIManager uiManager;
-    private final CredentialsVerifier credentialsVerifier;
-    private final SignInPage signInPage;
-
-    public SignInController(UIManager uiManager, CredentialsVerifier credentialsVerifier)
-    {
-        this.uiManager = uiManager;
-        this.credentialsVerifier = credentialsVerifier;
-
-        signInPage = new SignInPage(new SignInListener(), new SignUpListener());
+        this.manager = uiManager;
+        this.page = new SignInPage(() -> handleSignIn(), () -> handleSignUp());
     }
 
     public void Open()
     {
-        signInPage.setVisible(true);
+        page.setVisible(true);
     }
 
     public void Close()
     {
-        signInPage.setVisible(false);
+        page.setVisible(false);
     }
 
-    private void handleSignIn(String username, String password)
+    private void handleSignIn()
     {
+        String username = page.getUsername();
+        String password = page.getPassword();
+
         System.out.println(username + " <-> " + password);
-        if (credentialsVerifier.isVerifiedCredentials(username, password))
+        if (manager.isVerifiedCredentials(username, password))
         {
             System.out.println("It worked; UserID: " + UserDBManager.currentID);
-            uiManager.signIn();
+            manager.signIn();
         }
         else
         {
@@ -65,6 +43,6 @@ public class SignInController
 
     private void handleSignUp()
     {
-        uiManager.signUp();
+        manager.openSignIn();
     }
 }

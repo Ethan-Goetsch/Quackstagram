@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import refactored.factories.UIElementFactory;
+import refactored.util.functions.IAction;
 
 public class SignUpPage extends JFrame
 {
@@ -30,21 +31,23 @@ public class SignUpPage extends JFrame
     private JButton btnRegister;
     private JLabel lblPhoto;
     private JButton btnUploadPhoto;
-    private final String credentialsFilePath = "data/credentials.txt";
-    private final String profilePhotoStoragePath = "img/storage/profile/";
     private JButton btnSignIn;
 
-    public SignUpPage()
+    public SignUpPage(IAction uploadAction, IAction registerAction, IAction signInAction)
     {
         setTitle("Quackstagram - Register");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-        initializeUI();
+        initializeUI(uploadAction, registerAction, signInAction);
     }
 
-    private void initializeUI()
+    public String getUsername() { return txtUsername.getText(); }
+    public String getPassword() { return txtPassword.getText(); }
+    public String getBio() { return txtBio.getText(); }
+
+    private void initializeUI(IAction uploadAction, IAction registerAction, IAction signInAction)
     {
         JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Quackstagram 🐥");
 
@@ -80,7 +83,7 @@ public class SignUpPage extends JFrame
         fieldsPanel.add(txtBio);
         btnUploadPhoto = new JButton("Upload Photo");
         
-        btnUploadPhoto.addActionListener(e -> SignUpController.handleProfilePictureUpload(txtUsername.getText()));
+        btnUploadPhoto.addActionListener(e -> uploadAction.execute());
 
         JPanel photoUploadPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         photoUploadPanel.add(btnUploadPhoto);
@@ -88,7 +91,7 @@ public class SignUpPage extends JFrame
 
         // Register button with black text
         btnRegister = new JButton("Register");
-        btnRegister.addActionListener(e -> SignUpController.onRegisterClicked(txtUsername.getText(), txtPassword.getText(), txtBio.getText()));
+        btnRegister.addActionListener(e -> registerAction.execute());
         btnRegister.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
         btnRegister.setForeground(Color.BLACK); // Set the text color to black
         btnRegister.setFocusPainted(false);
@@ -104,7 +107,7 @@ public class SignUpPage extends JFrame
         add(registerPanel, BorderLayout.SOUTH);
          // Adding the sign in button to the register panel or another suitable panel
         btnSignIn = new JButton("Already have an account? Sign In");
-        btnSignIn.addActionListener(e -> SignUpController.openSignInUI());
+        btnSignIn.addActionListener(e -> signInAction.execute());
         registerPanel.add(btnSignIn, BorderLayout.SOUTH);
     }
 }
