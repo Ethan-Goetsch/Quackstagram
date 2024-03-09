@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseListener;
 import java.nio.file.Path;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -17,12 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import refactored.controllers.MouseListenerFactory;
 import refactored.entities.Post;
 import refactored.ui.UIManager;
 
-public class UIElementFactory {
-
+public class UIElementFactory
+{
     private static final int NAV_ICON_SIZE = 20;
 
     public static JPanel createHeaderPanel(int width, String title)
@@ -79,7 +79,8 @@ public class UIElementFactory {
         return button;
     }
 
-    public static JScrollPane imageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListenerFactory listenerFactory) {
+    public static JScrollPane imageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListener imageClickedListener)
+    {
         // TODO : Change "currentUser.getUsername()" just below to soemthing appropriate
 
         // panel to be decorated with scroll bar
@@ -87,12 +88,14 @@ public class UIElementFactory {
         contentPanel.setLayout(new GridLayout(0, 3,2, 2)); // Grid layout for image grid
 
         // get user posts
-        for (Post post : posts) {
+        for (Post post : posts)
+        {
             Path path = post.getFilePath();
             ImageIcon imageIcon = new ImageIcon(new ImageIcon(path.toString()).getImage().getScaledInstance(GRID_IMAGE_SIZE, GRID_IMAGE_SIZE, Image.SCALE_SMOOTH));
             JLabel imageLabel = new JLabel(imageIcon);
+            
             // Add a mouse listener to the image label
-            imageLabel.addMouseListener(listenerFactory.createMouseClickListener(imageIcon, post));
+            imageLabel.addMouseListener(imageClickedListener);
             contentPanel.add(imageLabel);
         }
 
