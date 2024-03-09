@@ -9,9 +9,10 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import refactored.model.UserDBManager;
+import refactored.ui.IPageController;
 import refactored.ui.UIManager;
 
-public class SignUpController
+public class SignUpController implements IPageController
 {
     private final UIManager manager;
     private final SignUpPage page;
@@ -22,14 +23,16 @@ public class SignUpController
         this.page = new SignUpPage(() -> handleProfilePictureUpload(), () -> handleRegister(), () -> handleSignIn());
     }
 
+    @Override
     public void open()
     {
         page.setVisible(true);
     }
 
+    @Override
     public void close()
     {
-        page.setVisible(false);
+        page.dispose();
     }
 
     private void handleProfilePictureUpload()
@@ -58,13 +61,12 @@ public class SignUpController
         }
         else
         {
-            UserDBManager.createUser(username, password, bio); // TODO
-            manager.openSignIn();
+            manager.signUp(username, password, bio);
         }
     }
 
     public void handleSignIn()
     {
-        manager.openSignIn();
+        manager.signUp();
     }
 }

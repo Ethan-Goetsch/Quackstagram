@@ -1,9 +1,10 @@
 package refactored.ui.sign_in;
 
 import refactored.model.UserDBManager;
+import refactored.ui.IPageController;
 import refactored.ui.UIManager;
 
-public class SignInController
+public class SignInController implements IPageController
 {
     private final UIManager manager;
     private final SignInPage page;
@@ -14,14 +15,16 @@ public class SignInController
         this.page = new SignInPage(() -> handleSignIn(), () -> handleSignUp());
     }
 
-    public void Open()
+    @Override
+    public void open()
     {
         page.setVisible(true);
     }
 
-    public void Close()
+    @Override
+    public void close()
     {
-        page.setVisible(false);
+        page.dispose();
     }
 
     private void handleSignIn()
@@ -43,6 +46,6 @@ public class SignInController
 
     private void handleSignUp()
     {
-        manager.openSignIn();
+        manager.signUp();
     }
 }

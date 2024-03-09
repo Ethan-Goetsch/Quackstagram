@@ -1,29 +1,39 @@
 package refactored.ui.home;
 
-import javax.swing.JLabel;
-
 import refactored.entities.Post;
-import refactored.entities.interactions.LikeType;
-import refactored.model.LikeDBManager;
-import refactored.model.UserDBManager;
+import refactored.ui.IPageController;
+import refactored.ui.UIManager;
 
-public class HomeController {
+public class HomeController implements IPageController
+{
+    private final UIManager manager;
+    private final HomePage page;
 
-    private static HomePage homeUI;
-    public static void openHomeUI()
+    public HomeController(UIManager manager)
     {
-        homeUI = new HomePage();
-        homeUI.setVisible(true);
-    } 
-
-    public static void handleLikeAction(Post post, JLabel likesLabel)
-    {
-        LikeDBManager.createLike(UserDBManager.currentID, post.getID());
-        likesLabel.setText("Likes: " + post.getLikeCount());
+        this.manager = manager;
+        this.page = new HomePage(post -> handleLikeAction(post), post -> onPostClicked(post));
     }
 
-    public static void onPostClicked(Post post)
+    @Override
+    public void open()
     {
-        homeUI.fullscreenPost(post);
+        page.setVisible(true);
+    }
+
+    @Override
+    public void close()
+    {
+        page.dispose();
+    }
+
+    private void handleLikeAction(Post post)
+    {
+        manager.likePost(post);
+    }
+
+    private void onPostClicked(Post post)
+    {
+        page.fullscreenPost(post);
     }
 }

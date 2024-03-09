@@ -2,13 +2,12 @@ package refactored.ui.notifications;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.*;
 
 import refactored.entities.interactions.Notification;
 import refactored.factories.UIElementFactory;
-import refactored.model.NotificationQuery;
-import refactored.model.UserDBManager;
 import refactored.util.TimeFormatter;
 
 public class NotificationPage extends JFrame
@@ -20,8 +19,7 @@ public class NotificationPage extends JFrame
     private JPanel contentPanel;
     private JPanel navigationPanel;
 
-
-    public NotificationPage()
+    public NotificationPage(List<Notification> notifications)
     {
         setTitle("Notifications");
         setSize(WIDTH, HEIGHT);
@@ -29,10 +27,10 @@ public class NotificationPage extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        initializeUI();
+        initializeUI(notifications);
     }
 
-    private void initializeUI()
+    private void initializeUI(List<Notification> notifications)
     {
         // Reuse the header and navigation panel creation methods from the InstagramProfileUI class
         headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Notifications 🐥");
@@ -40,18 +38,16 @@ public class NotificationPage extends JFrame
 
         // Content Panel for notifications
         contentPanel = new JPanel();
-    
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
         // populate the notifications panel
-        NotificationQuery.NotificationQueryResult notifications = new NotificationQuery.NotificationQueryResult(UserDBManager.currentID);
-        for(Notification n : notifications)
+        for(Notification notification : notifications)
         {
             // Format the notification message
-            String notificationMessage = n.getNotificationMessage() + " :: " + TimeFormatter.getElapsedTime(n.getTimestamp()) + " ago";
+            String notificationMessage = notification.getNotificationMessage() + " :: " + TimeFormatter.getElapsedTime(notification.getTimestamp()) + " ago";
 
             // Add the notification to the panel
             JPanel notificationPanel = new JPanel(new BorderLayout());
