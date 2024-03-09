@@ -12,22 +12,40 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import refactored.factories.Paths;
-import refactored.model.PostDBManager;
-import refactored.model.UserDBManager;
+import refactored.ui.IPageController;
+import refactored.ui.UIManager;
 
-public class UploadController {
+public class UploadController implements IPageController
+{
+    private final UIManager manager;
+    private final UploadPage page;
+    
+    private final int userId;
+    private final String username;
 
-    private static int currentID;
-    private static boolean imageUploaded;
-    private static UploadPage uploadUI;
+    public UploadController(UIManager manager, int userId, String username)
+    {
+        this.manager = manager;
+        this.page = new UploadPage(() -> handleUpload(), pageType -> manager.navigateToPage(pageType));
 
-    public static void openUploadUI() {
-        uploadUI = new UploadPage();
-        imageUploaded = false;
-        uploadUI.setVisible(true);
+        this.userId = userId;
+        this.username = username;
     }
     
-    public static void uploadAction() {
+    @Override
+    public void open()
+    {
+        page.setVisible(true);
+    }
+
+    @Override
+    public void close()
+    {
+        page.dispose();
+    }
+
+    private void handleUpload()
+    {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select an image file");
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -35,14 +53,13 @@ public class UploadController {
         fileChooser.addChoosableFileFilter(filter);
     
         int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
+        if (returnValue == JFileChooser.APPROVE_OPTION)
+        {
             File selectedFile = fileChooser.getSelectedFile();
-            try {
-                //get user info
-                currentID = UserDBManager.currentID;
-                String username = UserDBManager.getUsername(currentID);
+            try
+            {
                 //create image info
-                int imageId = PostDBManager.getnerateContentID();
+                int imageId = manager.createContentId();
                 String fileExtension = getFileExtension(selectedFile);
                 String newFileName = username + "_" + imageId + "." + fileExtension;
                 //copy image
@@ -50,26 +67,26 @@ public class UploadController {
                 Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
     
                 //save to posts database
-                PostDBManager.createPost(currentID, newFileName, uploadUI.getCaption());
+                manager.savePost(userId, newFileName, page.getCaption());
 
                 // Load the image from the saved path
                 ImageIcon imageIcon = new ImageIcon(destPath.toString());
-                uploadUI.updateImagePreview(imageIcon);
-    
-                // Update the flag to indicate that an image has been uploaded
-                imageUploaded = true;
+                page.updateImagePreview(imageIcon);
     
                 // Change the text of the upload button
-                uploadUI.updateUploadButtonText(imageUploaded);
+                page.updateUploadButtonText(true);
     
-                JOptionPane.showMessageDialog(uploadUI, "Image uploaded and preview updated!");
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(uploadUI, "Error saving image: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(page, "Image uploaded and preview updated!");
+            }
+            catch (IOException ex)
+            {
+                JOptionPane.showMessageDialog(page, "Error saving image: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    private static String getFileExtension(File file) {
+    private String getFileExtension(File file)
+    {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
         if (lastIndexOf == -1) {

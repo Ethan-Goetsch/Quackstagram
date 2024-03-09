@@ -2,22 +2,57 @@ package refactored.ui.profile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.nio.file.Path;
+import java.util.List;
 
+import refactored.entities.Post;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.model.FollowDBManager;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
+import refactored.ui.PageType;
+import refactored.util.generic.functions.IAction;
 
 
-public class ProfilePage extends JFrame {
+public class ProfilePage extends JFrame
+{
+    private class PostClickedListener implements MouseListener
+    {
+        @Override
+        public void mouseClicked(MouseEvent e)
+        {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {}
+
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+
+        @Override
+        public void mouseExited(MouseEvent e) {}
+    }
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
     private static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
     private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
     
+    private final boolean isOwner;
+    private final int userId;
+
+    private final IAction<Integer> followAction;
+    private final IAction<PageType> navigateAction;
+
+    private final List<Post> posts;
+
     private JPanel headerPanel;   // Panel for the header
     private JPanel contentPanel; // Panel to display the image grid or the clicked image
     private JPanel navigationPanel; // Panel for the navigation
@@ -25,14 +60,18 @@ public class ProfilePage extends JFrame {
     private JButton editOrFollowButton;
     private JLabel followersLabel;
 
-    private boolean isCurrentUser;
-    private int profileUserID;
+    private boolean isFollowing;
 
-    // TODO: Actions, Functions and Observer Pattern in java
-    public ProfilePage(int profileUserID, boolean isCurrentUser) {
+    public ProfilePage(int userId, boolean isOwner, boolean isFollowing, IAction<Integer> followAction, IAction<PageType> navigateAction, List<Post> posts)
+    {
+        this.userId = userId;
+        this.isOwner = isOwner;
+        this.isFollowing = isFollowing;
 
-        this.profileUserID = profileUserID;
-        this.isCurrentUser = isCurrentUser;
+        this.followAction = followAction;
+        this.navigateAction = navigateAction;
+
+        this.posts = posts;
 
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
@@ -43,15 +82,17 @@ public class ProfilePage extends JFrame {
         initializeUI();
     }
 
-    private void initializeUI() {
+    private void initializeUI()
+    {
         getContentPane().removeAll(); // Clear existing components
         
-        headerPanel = createProfileHeader(profileUserID, isCurrentUser); // state-dependent : either follow button or edit profile button
+        headerPanel = createProfileHeader(); // state-dependent : either follow button or edit profile button
+
         /// content grid //TODO : Make selected images fullscreen
-        JScrollPane contentScrollPane = UIElementFactory.imageGridPanel(GRID_IMAGE_SIZE, new PostDBManager.UserPosts(profileUserID), new ProfileController.ImageClickListener());
+        JScrollPane contentScrollPane = UIElementFactory.createImageGridPanel(GRID_IMAGE_SIZE, posts, new PostClickedListener());
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(contentScrollPane, BorderLayout.CENTER);
-        navigationPanel = UIElementFactory.createNavigationPanel(this); // state-independent : always opens the current user profile
+        navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction); // state-independent : always opens the current user profile
 
         // Re-add the header and navigation panels
         add(headerPanel, BorderLayout.NORTH);
@@ -62,7 +103,8 @@ public class ProfilePage extends JFrame {
         repaint();
     }
 
-    public void displayImage(ImageIcon imageIcon) {
+    public void displayImage(ImageIcon imageIcon)
+    {
         contentPanel.removeAll(); // Remove existing content
         contentPanel.setLayout(new BorderLayout()); // Change layout for image display
 
@@ -73,7 +115,8 @@ public class ProfilePage extends JFrame {
 
         // Add a back button to return to the grid view
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> {
+        backButton.addActionListener(e ->
+        {
             getContentPane().removeAll(); // Remove all components from the frame
             initializeUI(); // Re-initialize the UI
         });
@@ -83,17 +126,14 @@ public class ProfilePage extends JFrame {
         repaint();
     }
 
-    private JPanel createProfileHeader(int profileOwnerID, boolean isCurrentUser)
+    private JPanel createProfileHeader()
     {
-        // TODO: Give this job to a controller
-        // TODO: BAD DESIGN: This is a bad design, we should not be calling the database from the UI. Furthermore, we should addrest the UserDB, and eventually compute the counts in the init part of the UserDBManager main method.
-        // TODO: Replace this with a User object
         // profile's user account
-        String username = UserDBManager.getUsername(profileOwnerID);
-        String bio = UserDBManager.getBio(profileOwnerID);
-        int postsCount = PostDBManager.getPostCount(profileOwnerID);
-        int followingCount = FollowDBManager.getFollowerCount(profileOwnerID);
-        int followeeCount = FollowDBManager.getFolloweeCount(profileOwnerID);
+        String username = UserDBManager.getUsername(userId);
+        String bio = UserDBManager.getBio(userId);
+        int postsCount = PostDBManager.getPostCount(userId);
+        int followingCount = FollowDBManager.getFollowerCount(userId);
+        int followeeCount = FollowDBManager.getFolloweeCount(userId);
 
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
@@ -121,20 +161,8 @@ public class ProfilePage extends JFrame {
         statsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 10, 0)); // Add some vertical padding
         
         // Follow or Edit Profile Button (depending on the user)
-        editOrFollowButton = new JButton();
-        if (isCurrentUser) {
-            editOrFollowButton.setText("Edit Profile");
-            editOrFollowButton.addActionListener(e -> ProfileController.handleEditAction());
-        } else {
-            // set initial text
-            // TODO: BAD DESIGN: This is a bad design, we should not be calling the database from the UI
-            if(FollowDBManager.isAFollowingB(UserDBManager.currentID, profileOwnerID))
-                editOrFollowButton.setText("Unfollow");
-            else
-                editOrFollowButton.setText("Follow");
-
-            editOrFollowButton.addActionListener(e -> {ProfileController.handleFollowAction(profileOwnerID);} );
-        }
+        editOrFollowButton = new JButton(isOwner ? "Edit Profile" : isFollowing ? "Unfollow" : "Follow");
+        editOrFollowButton.addActionListener(e -> followAction.execute(userId));
         
         editOrFollowButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         editOrFollowButton.setFont(new Font("Arial", Font.BOLD, 12));
@@ -178,7 +206,7 @@ public class ProfilePage extends JFrame {
         return headerPanel;
     }
 
-    private static JLabel createStatLabel(String number, String text)
+    private JLabel createStatLabel(String number, String text)
     {
         JLabel label = new JLabel("<html><div style='text-align: center;'>" + number + "<br/>" + text + "</div></html>", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 12));
@@ -186,14 +214,14 @@ public class ProfilePage extends JFrame {
         return label;
     }
 
-    public void updateEditOrFollowButtonLabel(String string) {
+
+    public void updateEditOrFollowButtonLabel(String string)
+    {
         editOrFollowButton.setText(string);
     }
 
-    public void updateFollowerCount()
+    public void updateFollowerCount(int followerCount)
     {
-        int followeeCount = FollowDBManager.getFolloweeCount(profileUserID);
-        followersLabel.setText("<html><div style='text-align: center;'>" + followeeCount + "<br/>" + "Followers" + "</div></html>");
-
+        followersLabel.setText("<html><div style='text-align: center;'>" + followerCount + "<br/>" + "Followers" + "</div></html>");
     }
 }

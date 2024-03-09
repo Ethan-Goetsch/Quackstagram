@@ -15,7 +15,7 @@ public class NotificationController implements IPageController
     {
         this.manager = manager;
         this.userId = userId;
-        this.page = new NotificationPage(new NotificationQuery(userId).getNotifications());
+        this.page = new NotificationPage(pageType -> manager.navigateToPage(pageType), new NotificationQuery(userId).getNotifications());
     }
 
     @Override

@@ -8,19 +8,25 @@ import javax.swing.*;
 
 import refactored.entities.interactions.Notification;
 import refactored.factories.UIElementFactory;
+import refactored.ui.PageType;
 import refactored.util.TimeFormatter;
+import refactored.util.generic.functions.IAction;
 
 public class NotificationPage extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
 
+    private final IAction<PageType> navigateAction;
+
     private JPanel headerPanel;
     private JPanel contentPanel;
     private JPanel navigationPanel;
 
-    public NotificationPage(List<Notification> notifications)
+    public NotificationPage(IAction<PageType> navigateAction, List<Notification> notifications)
     {
+        this.navigateAction = navigateAction;
+
         setTitle("Notifications");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -34,7 +40,7 @@ public class NotificationPage extends JFrame
     {
         // Reuse the header and navigation panel creation methods from the InstagramProfileUI class
         headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Notifications 🐥");
-        navigationPanel = UIElementFactory.createNavigationPanel(this);
+        navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction);
 
         // Content Panel for notifications
         contentPanel = new JPanel();

@@ -42,7 +42,7 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
         }
     }
 
-    public static int getnerateContentID()
+    public static int generateContentId()
     {
         retrievePosts();
         int max = 0;
@@ -73,7 +73,7 @@ public class PostDBManager extends DBManager<Post> implements Iterable<Path>
     public static void createPost(int authorID, String imageFileName, String text)
     {
         retrievePosts();
-        posts.add(new Post(generateID(), null, authorID, new Content(getnerateContentID(), imageFileName), text, LocalDateTime.now()));
+        posts.add(new Post(generateID(), null, authorID, new Content(generateContentId(), imageFileName), text, LocalDateTime.now()));
         storePosts();
     }
 

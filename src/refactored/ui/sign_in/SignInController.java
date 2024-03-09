@@ -36,7 +36,7 @@ public class SignInController implements IPageController
         if (manager.isVerifiedCredentials(username, password))
         {
             System.out.println("It worked; UserID: " + UserDBManager.currentID);
-            manager.signIn();
+            manager.signIn(username, password);
         }
         else
         {
@@ -46,6 +46,6 @@ public class SignInController implements IPageController
 
     private void handleSignUp()
     {
-        manager.signUp();
+        manager.openSignUp();
     }
 }

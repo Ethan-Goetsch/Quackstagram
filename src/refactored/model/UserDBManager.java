@@ -1,8 +1,8 @@
 package refactored.model;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 
 import refactored.entities.Post;
 import refactored.entities.User;
@@ -36,6 +36,15 @@ public class UserDBManager extends DBManager<User>
         {
             System.out.println(u.getId() + " " + u.getUsername() + " " + u.getBio());
         }
+    }
+
+    public static int getUserId(String username, String password)
+    {
+        Optional<User> foundUser = users.stream()
+        .filter(user -> user.getUsername() == username && user.getPassword() == password)
+        .findFirst();
+
+        return foundUser.isPresent() ? foundUser.get().getId() : -1;
     }
 
     public static String getBio(int id)
@@ -94,7 +103,8 @@ public class UserDBManager extends DBManager<User>
      * @param password
      * @return
      */
-    public static boolean createUser(String username, String password, String bio) {
+    public static boolean createUser(String username, String password, String bio)
+    {
         retrieveUsers();
         if(!usernameExists(username))
         {
@@ -106,7 +116,8 @@ public class UserDBManager extends DBManager<User>
         return false;
     }
     
-    public static boolean usernameExists(String username) {
+    public static boolean usernameExists(String username)
+    {
         retrieveUsers();
         //username validation logic
         for(User ua : users)

@@ -1,11 +1,15 @@
 package refactored;
 
-import refactored.ui.sign_in.SignInController;
+import refactored.ui.UIManager;
 
-public abstract class ApplicationManager
+public class ApplicationManager
 {
     public static void main(String[] args)
     {
-        SignInController.handleSignIn();
+        ApplicationManager applicationManager = new ApplicationManager();
+        CredentialsVerifier credentialsVerifier = new CredentialsVerifier();
+
+        UIManager uiManager = new UIManager(applicationManager, credentialsVerifier);
+        uiManager.openSignIn();
     }
 }

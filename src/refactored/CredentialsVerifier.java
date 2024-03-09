@@ -1,14 +1,16 @@
 package refactored;
 
+import refactored.model.UserDBManager;
+
 public class CredentialsVerifier
 {
     public boolean isVerifiedCredentials(String username, String password)
     {
-        return true;
+        return UserDBManager.verifyCredentials(username, password);
     }
 
     public boolean isValidUsername(String username)
     {
-        return true;
+        return !UserDBManager.usernameExists(username);
     }
 }

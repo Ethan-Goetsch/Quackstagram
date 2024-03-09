@@ -26,6 +26,7 @@ import refactored.entities.Post;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
+import refactored.ui.PageType;
 import refactored.util.generic.functions.IAction;
 
 public class HomePage extends JFrame
@@ -44,7 +45,7 @@ public class HomePage extends JFrame
     private JPanel cardPanel;
     private JPanel fullscreenPostPanel;
 
-    public HomePage(IAction<Post> postLikedAction, IAction<Post> postClickedAction)
+    public HomePage(IAction<Post> postLikedAction, IAction<Post> postClickedAction, IAction<PageType> navigateAction)
     {
         this.postLikedAction = postLikedAction;
         this.postClickedAction = postClickedAction;
@@ -75,7 +76,7 @@ public class HomePage extends JFrame
         add(headerPanel, BorderLayout.NORTH);
 
         // Navigation Panel
-        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this);
+        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction);
         add(navigationPanel, BorderLayout.SOUTH);
     }
 

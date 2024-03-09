@@ -12,7 +12,7 @@ public class HomeController implements IPageController
     public HomeController(UIManager manager)
     {
         this.manager = manager;
-        this.page = new HomePage(post -> handleLikeAction(post), post -> onPostClicked(post));
+        this.page = new HomePage(post -> handleLikeAction(post), post -> onPostClicked(post), pageType -> manager.navigateToPage(pageType));
     }
 
     @Override

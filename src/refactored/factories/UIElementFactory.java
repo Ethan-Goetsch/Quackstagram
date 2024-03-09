@@ -19,7 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import refactored.entities.Post;
-import refactored.ui.UIManager;
+import refactored.ui.PageType;
+import refactored.util.generic.functions.IAction;
 
 public class UIElementFactory
 {
@@ -44,7 +45,7 @@ public class UIElementFactory
      * @param this
      * @return
      */
-    public static JPanel createNavigationPanel(JFrame topFrame)
+    public static JPanel createNavigationPanel(JFrame topFrame, IAction<PageType> navigateAction)
     {
         JPanel navigationPanel = new JPanel();
         navigationPanel.setBackground(new Color(249, 249, 249));
@@ -52,34 +53,31 @@ public class UIElementFactory
         navigationPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // Buttons
-        navigationPanel.add(createNavButton(PageType.HOME, Paths.homeIconPath, topFrame));
+        navigationPanel.add(createNavButton(navigateAction, PageType.HOME, Paths.homeIconPath, topFrame));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createNavButton(PageType.EXPLORE, Paths.searchIconPath, topFrame));
+        navigationPanel.add(createNavButton(navigateAction, PageType.EXPLORE, Paths.searchIconPath, topFrame));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createNavButton(PageType.UPLOAD, Paths.addIconPath, topFrame));
+        navigationPanel.add(createNavButton(navigateAction, PageType.UPLOAD, Paths.addIconPath, topFrame));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createNavButton(PageType.NOTIFICATION, Paths.heartIconPath, topFrame));
+        navigationPanel.add(createNavButton(navigateAction, PageType.NOTIFICATION, Paths.heartIconPath, topFrame));
         navigationPanel.add(Box.createHorizontalGlue());
-        navigationPanel.add(createNavButton(PageType.PROFILE, Paths.profileIconPath, topFrame));
+        navigationPanel.add(createNavButton(navigateAction, PageType.PROFILE, Paths.profileIconPath, topFrame));
 
         return navigationPanel;
     }
 
-    private static JButton createNavButton(PageType pageType, Path iconPath, JFrame topFrame)
+    private static JButton createNavButton(IAction<PageType> navigateAction, PageType pageType, Path iconPath, JFrame topFrame)
     {
         ImageIcon iconOriginal = new ImageIcon(iconPath.toString());
         Image iconScaled = iconOriginal.getImage().getScaledInstance(NAV_ICON_SIZE, NAV_ICON_SIZE, Image.SCALE_SMOOTH);
         JButton button = new JButton(new ImageIcon(iconScaled));
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setContentAreaFilled(false);
-
-        button.addActionListener(e -> {
-            UIManager.transition(pageType, topFrame);
-        });
+        button.addActionListener(e -> navigateAction.execute(pageType));
         return button;
     }
 
-    public static JScrollPane imageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListener imageClickedListener)
+    public static JScrollPane createImageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListener imageClickedListener)
     {
         // TODO : Change "currentUser.getUsername()" just below to soemthing appropriate
 

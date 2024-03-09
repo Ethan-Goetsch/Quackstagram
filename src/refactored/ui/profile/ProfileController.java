@@ -1,61 +1,61 @@
 package refactored.ui.profile;
 
-import java.awt.event.MouseListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import java.util.List;
 
 import refactored.entities.Post;
-import refactored.entities.interactions.FollowType;
 import refactored.model.FollowDBManager;
 import refactored.model.UserDBManager;
+import refactored.ui.IPageController;
+import refactored.ui.UIManager;
 
-public class ProfileController {
+public class ProfileController implements IPageController
+{
+    private final UIManager manager;
+    private final ProfilePage page;
 
-    public static ProfilePage profileUI;
+    private final int userId;
+    private final boolean isOwner;
 
-    public static void handleEditAction()
+    public ProfileController(UIManager uiManager, int userId, boolean isOwner, boolean isFollowing, List<Post> posts)
     {
-
+        this.manager = uiManager;
+        this.page = new ProfilePage(userId, isOwner, isFollowing, id -> handleFollowOrEditAction(id), pageType -> manager.navigateToPage(pageType), posts);
+        this.userId = userId;
+        this.isOwner = isOwner;
     }
 
-    public static void handleFollowAction(int userIDToFollow)
+    private void handleFollowOrEditAction(int id)
     {
-        FollowDBManager.createFollow(UserDBManager.currentID, userIDToFollow);
-        if (FollowDBManager.isAFollowingB(UserDBManager.currentID, userIDToFollow))
-        {
-            profileUI.updateEditOrFollowButtonLabel("Unfollow");
-        }
+        if (isOwner)
+            handleEdit(id);
         else
-        {
-            profileUI.updateEditOrFollowButtonLabel("Follow");
-        }
-        profileUI.updateFollowerCount();
+            handleFollow(id);
     }
 
-    public static class ImageClickListener implements MouseListenerFactory
+    private void handleFollow(int userIdToFollow)
     {
-        public MouseListener createMouseClickListener(ImageIcon imageIcon, Post post)
-        {
-            return new java.awt.event.MouseAdapter() {
-                @Override 
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    profileUI.displayImage(imageIcon);
-                }
-            };
-        }
+        FollowDBManager.createFollow(UserDBManager.currentID, userIdToFollow);
+        boolean isFollowing = FollowDBManager.isAFollowingB(UserDBManager.currentID, userIdToFollow);
+        int followers = FollowDBManager.getFollowerCount(userIdToFollow);
+
+        page.updateEditOrFollowButtonLabel(isFollowing ? "Unfollow" : "Follow");
+        page.updateFollowerCount(followers);
     }
 
-    public static void openProfileUI(int profileUserID, JFrame thisUI)
+    private void handleEdit(int userId)
     {
-        thisUI.dispose();
-        boolean isCurrentUser = ProfileController.isCurrentUser(profileUserID);
-        profileUI = new ProfilePage(profileUserID, isCurrentUser);
-        profileUI.setVisible(true);
+        
     }
 
-    public static boolean isCurrentUser(int profileUserID) {
-        return UserDBManager.currentID == profileUserID;
+    @Override
+    public void open()
+    {
+        page.setVisible(true);
+    }
+
+    @Override
+    public void close()
+    {
+        page.dispose();
     }
 }

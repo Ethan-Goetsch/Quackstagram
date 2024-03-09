@@ -14,17 +14,26 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import refactored.factories.UIElementFactory;
+import refactored.ui.PageType;
+import refactored.util.functions.IAction;
 
 public class UploadPage extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
+
+    private final IAction uploadAction;
+    private final refactored.util.generic.functions.IAction<PageType> navigateAction;
+
     private JLabel imagePreviewLabel;
     private JTextArea captionTextArea;
     private JButton uploadButton;
 
-    public UploadPage()
+    public UploadPage(IAction uploadAction, refactored.util.generic.functions.IAction<PageType> navigateAction)
     {
+        this.uploadAction = uploadAction;
+        this.navigateAction = navigateAction;
+
         setTitle("Upload Image");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -36,7 +45,7 @@ public class UploadPage extends JFrame
     private void initializeUI()
     {
         JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "🐥 Quackstagram 🐥");
-        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this); // Reuse the createNavigationPanel method
+        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction); // Reuse the createNavigationPanel method
 
         // Main content panel
         JPanel contentPanel = new JPanel();
@@ -66,7 +75,7 @@ public class UploadPage extends JFrame
         uploadButton = new JButton("Upload Image");
         uploadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         // ask UploadController for proper handler
-        uploadButton.addActionListener(e -> UploadController.uploadAction());
+        uploadButton.addActionListener(e -> uploadAction.execute());
         contentPanel.add(uploadButton);
 
         // Add panels to frame
@@ -106,7 +115,8 @@ public class UploadPage extends JFrame
 
     public void updateUploadButtonText(boolean imageUploaded)
     {
-        if (imageUploaded) {
+        if (imageUploaded)
+        {
             uploadButton.setText("Upload Another Image");
         } else {
             uploadButton.setText("Upload Image");

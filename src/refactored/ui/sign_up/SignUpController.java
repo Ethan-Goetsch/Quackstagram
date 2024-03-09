@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import refactored.model.UserDBManager;
 import refactored.ui.IPageController;
 import refactored.ui.UIManager;
 
@@ -55,7 +54,7 @@ public class SignUpController implements IPageController
         String password = page.getPassword();
         String bio = page.getBio();
 
-        if (manager.isValidUsername(username))
+        if (!manager.isValidUsername(username))
         {
             JOptionPane.showMessageDialog(page, "Username already exists. Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -67,6 +66,6 @@ public class SignUpController implements IPageController
 
     public void handleSignIn()
     {
-        manager.signUp();
+        manager.openSignIn();
     }
 }

@@ -1,30 +1,41 @@
 package refactored.ui.explore;
 
-import java.awt.event.MouseListener;
+import java.util.List;
 
-import javax.swing.ImageIcon;
-
-import refactored.controllers.MouseListenerFactory;
 import refactored.entities.Post;
+import refactored.ui.IPageController;
+import refactored.ui.UIManager;
 
-public class ExploreController {
-    public static ExplorePage exploreUI;
+public class ExploreController implements IPageController
+{
+    private final UIManager manager;
+    private final ExplorePage page;
 
-    public static void openExploreUI() {
-        exploreUI = new ExplorePage();
-        exploreUI.setVisible(true);
+    public ExploreController(UIManager manager, List<Post> posts)
+    {
+        this.manager = manager;
+        this.page = new ExplorePage(post -> displayImage(post), id -> openProfile(id), pageType -> manager.navigateToPage(pageType), posts);
     }
 
-    public static class ImageClickListener implements MouseListenerFactory
+    @Override
+    public void open()
     {
-        public MouseListener createMouseClickListener(ImageIcon imageIcon, Post post)
-        {
-            return new java.awt.event.MouseAdapter() {
-                @Override 
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    exploreUI.displayImage(imageIcon, post);
-                }
-            };
-        }
+        page.setVisible(true);
+    }
+
+    @Override
+    public void close()
+    {
+        page.dispose();
+    }
+
+    private void displayImage(Post post)
+    {
+        
+    }
+
+    private void openProfile(int userId)
+    {
+        manager.openProfile(userId);
     }
 }
