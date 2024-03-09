@@ -51,7 +51,8 @@ public class ProfileController {
     public static void openProfileUI(int profileUserID, JFrame thisUI)
     {
         thisUI.dispose();
-        profileUI = new ProfileUI(profileUserID);
+        boolean isCurrentUser = ProfileController.isCurrentUser(profileUserID);
+        profileUI = new ProfileUI(profileUserID, isCurrentUser);
         profileUI.setVisible(true);
     }
 
