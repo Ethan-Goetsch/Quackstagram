@@ -33,6 +33,7 @@ public class ProfileUI extends JFrame {
     public ProfileUI(int profileUserID, boolean isCurrentUser) {
 
         this.profileUserID = profileUserID;
+        this.isCurrentUser = isCurrentUser;
 
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
