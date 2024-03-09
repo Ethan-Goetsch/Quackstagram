@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.home;
 
 import javax.swing.JLabel;
 
@@ -6,14 +6,13 @@ import refactored.entities.Post;
 import refactored.entities.interactions.LikeType;
 import refactored.model.LikeDBManager;
 import refactored.model.UserDBManager;
-import refactored.ui.HomeUI;
 
 public class HomeController {
 
-    private static HomeUI homeUI;
+    private static HomePage homeUI;
     public static void openHomeUI()
     {
-        homeUI = new HomeUI();
+        homeUI = new HomePage();
         homeUI.setVisible(true);
     } 
 

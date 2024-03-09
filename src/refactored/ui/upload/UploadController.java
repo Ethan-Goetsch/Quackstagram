@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.upload;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,16 +14,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import refactored.factories.Paths;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
-import refactored.ui.UploadUI;
 
 public class UploadController {
 
     private static int currentID;
     private static boolean imageUploaded;
-    private static UploadUI uploadUI;
+    private static UploadPage uploadUI;
 
     public static void openUploadUI() {
-        uploadUI = new UploadUI();
+        uploadUI = new UploadPage();
         imageUploaded = false;
         uploadUI.setVisible(true);
     }

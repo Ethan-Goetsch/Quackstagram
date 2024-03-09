@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.sign_up;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -14,16 +14,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import refactored.factories.Paths;
 import refactored.model.UserDBManager;
-import refactored.ui.SignUpUI;
+import refactored.ui.sign_in.SignInController;
 
 public class SignUpController {
 
-    private static SignUpUI signUpUI;
+    private static SignUpPage signUpUI;
 
     public static void openSignUpUI()
     {
         SwingUtilities.invokeLater(() -> {
-            signUpUI = new SignUpUI();
+            signUpUI = new SignUpPage();
             signUpUI.setVisible(true);
         });
     }

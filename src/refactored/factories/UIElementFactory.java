@@ -18,8 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import refactored.controllers.MouseListenerFactory;
-import refactored.controllers.UIManager;
 import refactored.entities.Post;
+import refactored.ui.UIManager;
 
 public class UIElementFactory {
 

@@ -1,4 +1,4 @@
-package refactored.ui;
+package refactored.ui.notifications;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,7 +11,7 @@ import refactored.model.NotificationQuery;
 import refactored.model.UserDBManager;
 import refactored.util.TimeFormatter;
 
-public class NotificationUI extends JFrame
+public class NotificationPage extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -21,7 +21,7 @@ public class NotificationUI extends JFrame
     private JPanel navigationPanel;
 
 
-    public NotificationUI()
+    public NotificationPage()
     {
         setTitle("Notifications");
         setSize(WIDTH, HEIGHT);

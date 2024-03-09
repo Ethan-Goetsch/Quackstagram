@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.profile;
 
 import java.awt.event.MouseListener;
 
@@ -10,11 +10,10 @@ import refactored.entities.Post;
 import refactored.entities.interactions.FollowType;
 import refactored.model.FollowDBManager;
 import refactored.model.UserDBManager;
-import refactored.ui.ProfileUI;
 
 public class ProfileController {
 
-    public static ProfileUI profileUI;
+    public static ProfilePage profileUI;
 
     public static void handleEditAction()
     {
@@ -52,7 +51,7 @@ public class ProfileController {
     {
         thisUI.dispose();
         boolean isCurrentUser = ProfileController.isCurrentUser(profileUserID);
-        profileUI = new ProfileUI(profileUserID, isCurrentUser);
+        profileUI = new ProfilePage(profileUserID, isCurrentUser);
         profileUI.setVisible(true);
     }
 

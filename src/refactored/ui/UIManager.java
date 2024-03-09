@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,12 +11,16 @@ import refactored.factories.PageType;
 import refactored.model.DBManager;
 import refactored.model.UserDBManager;
 import refactored.refactoring.nonui.User;
-import refactored.ui.ExploreUI;
-import refactored.ui.HomeUI;
-import refactored.ui.NotificationUI;
-import refactored.ui.ProfileUI;
-import refactored.ui.SignUpUI;
-import refactored.ui.UploadUI;
+import refactored.ui.explore.ExploreController;
+import refactored.ui.explore.ExplorePage;
+import refactored.ui.home.HomeController;
+import refactored.ui.home.HomePage;
+import refactored.ui.notifications.NotificationPage;
+import refactored.ui.profile.ProfileController;
+import refactored.ui.profile.ProfilePage;
+import refactored.ui.sign_up.SignUpPage;
+import refactored.ui.upload.UploadController;
+import refactored.ui.upload.UploadPage;
 
 public abstract class UIManager {
     //work in progress
@@ -26,10 +30,10 @@ public abstract class UIManager {
         Controller controller = null;
         switch (pageType) {
             case SIGNUP:
-                if (thisPage instanceof SignUpUI)
+                if (thisPage instanceof SignUpPage)
                     return;
                 thisPage.dispose();
-                newUI = new SignUpUI();
+                newUI = new SignUpPage();
                 break;
     
             case HOME:
@@ -38,22 +42,22 @@ public abstract class UIManager {
                 HomeController.openHomeUI();
                 break;
             case EXPLORE:
-                if (thisPage instanceof ExploreUI)
+                if (thisPage instanceof ExplorePage)
                     return;
                 thisPage.dispose();
                 ExploreController.openExploreUI();
                 break;
             case UPLOAD:
-                if (thisPage instanceof UploadUI)
+                if (thisPage instanceof UploadPage)
                     return;
                 thisPage.dispose();
                 UploadController.openUploadUI();
                 break;
             case NOTIFICATION:
-                if (thisPage instanceof NotificationUI)
+                if (thisPage instanceof NotificationPage)
                     return;
                 thisPage.dispose();
-                newUI = new NotificationUI();
+                newUI = new NotificationPage();
                 break;
             case PROFILE:
                 ProfileController.openProfileUI(UserDBManager.currentID, thisPage);

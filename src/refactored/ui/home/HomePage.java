@@ -1,4 +1,4 @@
-package refactored.ui;
+package refactored.ui.home;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -22,13 +22,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import refactored.controllers.HomeController;
 import refactored.entities.Post;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
 
-public class HomeUI extends JFrame
+public class HomePage extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -44,7 +43,7 @@ public class HomeUI extends JFrame
     // fullscreen post panel
     private JPanel fullscreenPostPanel;
 
-    public HomeUI()
+    public HomePage()
     {
         setTitle("Quakstagram Home");
         setSize(WIDTH, HEIGHT);

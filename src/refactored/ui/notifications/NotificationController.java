@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.notifications;
 
 public class NotificationController {
     

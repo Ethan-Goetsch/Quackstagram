@@ -1,4 +1,4 @@
-package refactored.refactoring.nonui;
+package refactored;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

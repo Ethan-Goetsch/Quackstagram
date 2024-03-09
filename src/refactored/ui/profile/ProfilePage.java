@@ -1,10 +1,9 @@
-package refactored.ui;
+package refactored.ui.profile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.nio.file.Path;
 
-import refactored.controllers.ProfileController;
 import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.model.FollowDBManager;
@@ -12,7 +11,7 @@ import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
 
 
-public class ProfileUI extends JFrame {
+public class ProfilePage extends JFrame {
 
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -30,7 +29,7 @@ public class ProfileUI extends JFrame {
     private int profileUserID;
 
     // TODO: Actions, Functions and Observer Pattern in java
-    public ProfileUI(int profileUserID, boolean isCurrentUser) {
+    public ProfilePage(int profileUserID, boolean isCurrentUser) {
 
         this.profileUserID = profileUserID;
         this.isCurrentUser = isCurrentUser;

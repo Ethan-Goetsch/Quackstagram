@@ -1,9 +1,9 @@
-package refactored.controllers;
+package refactored;
+
+import refactored.ui.sign_in.SignInController;
 
 public abstract class ApplicationManager
 {
-    // public static currentID; // Should be moved from UserDBManager to here
-
     public static void main(String[] args)
     {
         SignInController.openSignInUI();

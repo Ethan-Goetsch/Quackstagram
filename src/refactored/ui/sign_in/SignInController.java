@@ -1,4 +1,4 @@
-package refactored.controllers;
+package refactored.ui.sign_in;
 
 import java.awt.event.ActionEvent;
 
@@ -6,10 +6,30 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import refactored.model.UserDBManager;
-import refactored.ui.SignInUI;
+import refactored.ui.UIManager;
+import refactored.ui.sign_up.SignUpController;
 
-public class SignInController {
-    public static void onSignInClicked(String username, String password, JFrame thisPage) {
+public class SignInController
+{
+    private SignInPage signInPage;
+
+    public SignInController()
+    {
+        signInPage = new SignInPage();
+    }
+
+    public void Open()
+    {
+
+    }
+
+    public void Close()
+    {
+
+    }
+
+    public void onSignInClicked(String username, String password, JFrame thisPage)
+    {
         System.out.println(username + " <-> " + password);
         if (UserDBManager.verifyCredentials(username, password))
         {
@@ -22,20 +42,20 @@ public class SignInController {
         }
     }
 
-    private static SignInUI signInUI;
-
-    public static void openSignInUI()
+    public void openSignInUI()
     {
-        SwingUtilities.invokeLater(() -> {
-            signInUI = new SignInUI();
+        SwingUtilities.invokeLater(() ->
+        {
+            signInUI = new SignInPage();
             signInUI.setVisible(true);
         });
     }
 
-    public static void onRegisterNowClicked(ActionEvent event)
+    public void onRegisterNowClicked(ActionEvent event)
     {
         signInUI.dispose();
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() ->
+        {
             SignUpController.openSignUpUI();
         });
     }

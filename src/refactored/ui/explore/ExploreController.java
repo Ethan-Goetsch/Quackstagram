@@ -1,17 +1,17 @@
-package refactored.controllers;
+package refactored.ui.explore;
 
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 
+import refactored.controllers.MouseListenerFactory;
 import refactored.entities.Post;
-import refactored.ui.ExploreUI;
 
 public class ExploreController {
-    public static ExploreUI exploreUI;
+    public static ExplorePage exploreUI;
 
     public static void openExploreUI() {
-        exploreUI = new ExploreUI();
+        exploreUI = new ExplorePage();
         exploreUI.setVisible(true);
     }
 

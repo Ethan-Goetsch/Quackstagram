@@ -1,10 +1,8 @@
-package refactored.ui;
+package refactored.ui.explore;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,15 +13,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import refactored.controllers.ExploreController;
-import refactored.controllers.ProfileController;
 import refactored.entities.Post;
 import refactored.factories.UIElementFactory;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
+import refactored.ui.profile.ProfileController;
 import refactored.util.TimeFormatter;
 
-public class ExploreUI extends JFrame
+public class ExplorePage extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
@@ -33,7 +30,7 @@ public class ExploreUI extends JFrame
     private JPanel contentPanel;
     private JPanel navigationPanel;
 
-    public ExploreUI()
+    public ExplorePage()
     {
         setTitle("Explore");
         setSize(WIDTH, HEIGHT);
