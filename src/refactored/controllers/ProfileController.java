@@ -10,7 +10,7 @@ import refactored.entities.Post;
 import refactored.entities.interactions.FollowType;
 import refactored.model.FollowDBManager;
 import refactored.model.UserDBManager;
-import refactored.refactoring.ProfileUI;
+import refactored.ui.ProfileUI;
 
 public class ProfileController {
 

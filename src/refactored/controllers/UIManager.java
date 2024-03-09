@@ -10,14 +10,13 @@ import javax.swing.JFrame;
 import refactored.factories.PageType;
 import refactored.model.DBManager;
 import refactored.model.UserDBManager;
-import refactored.refactoring.ExploreUI;
-import refactored.refactoring.HomeUI;
-import refactored.refactoring.NotificationUI;
-import refactored.refactoring.ProfileUI;
-import refactored.refactoring.SignUpUI;
-import refactored.refactoring.UploadUI;
-
 import refactored.refactoring.nonui.User;
+import refactored.ui.ExploreUI;
+import refactored.ui.HomeUI;
+import refactored.ui.NotificationUI;
+import refactored.ui.ProfileUI;
+import refactored.ui.SignUpUI;
+import refactored.ui.UploadUI;
 
 public abstract class UIManager {
     //work in progress

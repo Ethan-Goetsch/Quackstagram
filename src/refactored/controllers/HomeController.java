@@ -6,7 +6,7 @@ import refactored.entities.Post;
 import refactored.entities.interactions.LikeType;
 import refactored.model.LikeDBManager;
 import refactored.model.UserDBManager;
-import refactored.refactoring.HomeUI;
+import refactored.ui.HomeUI;
 
 public class HomeController {
 

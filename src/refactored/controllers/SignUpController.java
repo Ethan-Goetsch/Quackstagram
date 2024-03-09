@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import refactored.factories.Paths;
 import refactored.model.UserDBManager;
-import refactored.refactoring.SignUpUI;
+import refactored.ui.SignUpUI;
 
 public class SignUpController {
 

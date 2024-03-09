@@ -1,47 +1,63 @@
-package refactored.refactoring;
+package refactored.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import refactored.controllers.SignInController;
-import refactored.factories.Paths;
+import refactored.controllers.SignUpController;
 import refactored.factories.UIElementFactory;
+import refactored.model.UserDBManager;
 
-public class SignInUI extends JFrame
+public class SignUpUI extends JFrame
 {
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
 
     private JTextField txtUsername;
     private JTextField txtPassword;
-    private JButton btnSignIn, btnRegisterNow;
+    private JTextField txtBio;
+
+    private JButton btnRegister;
     private JLabel lblPhoto;
-    
-    public SignInUI()
+    private JButton btnUploadPhoto;
+    private final String credentialsFilePath = "data/credentials.txt";
+    private final String profilePhotoStoragePath = "img/storage/profile/";
+    private JButton btnSignIn;
+
+    public SignUpUI()
     {
         setTitle("Quackstagram - Register");
         setSize(WIDTH, HEIGHT);
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-
         initializeUI();
     }
 
@@ -54,7 +70,7 @@ public class SignInUI extends JFrame
         lblPhoto.setPreferredSize(new Dimension(80, 80));
         lblPhoto.setHorizontalAlignment(JLabel.CENTER);
         lblPhoto.setVerticalAlignment(JLabel.CENTER);
-        lblPhoto.setIcon(new ImageIcon(new ImageIcon(Paths.logoPath.toString()).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
+        lblPhoto.setIcon(new ImageIcon(new ImageIcon("img/logos/DACS.png").getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
         JPanel photoPanel = new JPanel(); // Use a panel to center the photo label
         photoPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         photoPanel.add(lblPhoto);
@@ -66,6 +82,8 @@ public class SignInUI extends JFrame
 
         txtUsername = new JTextField("Username");
         txtPassword = new JTextField("Password");
+        txtBio = new JTextField("Bio");
+        txtBio.setForeground(Color.GRAY);
         txtUsername.setForeground(Color.GRAY);
         txtPassword.setForeground(Color.GRAY);
 
@@ -76,50 +94,34 @@ public class SignInUI extends JFrame
         fieldsPanel.add(Box.createVerticalStrut(10));
         fieldsPanel.add(txtPassword);
         fieldsPanel.add(Box.createVerticalStrut(10));
+        fieldsPanel.add(txtBio);
+        btnUploadPhoto = new JButton("Upload Photo");
+        
+        btnUploadPhoto.addActionListener(e -> SignUpController.handleProfilePictureUpload(txtUsername.getText()));
 
-        // SignIn button with black text
-        btnSignIn = new JButton("Sign-In");
-        btnSignIn.addActionListener(
-            e -> { SignInController.onSignInClicked(txtUsername.getText(), txtPassword.getText(), this); }
-        );
-        btnSignIn.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
-        btnSignIn.setForeground(Color.BLACK); // Set the text color to black
-        btnSignIn.setFocusPainted(false);
-        btnSignIn.setBorderPainted(false);
-        btnSignIn.setFont(new Font("Arial", Font.BOLD, 14));
+        JPanel photoUploadPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        photoUploadPanel.add(btnUploadPhoto);
+        fieldsPanel.add(photoUploadPanel);
+
+        // Register button with black text
+        btnRegister = new JButton("Register");
+        btnRegister.addActionListener(e -> SignUpController.onRegisterClicked(txtUsername.getText(), txtPassword.getText(), txtBio.getText()));
+        btnRegister.setBackground(new Color(255, 90, 95)); // Use a red color that matches the mockup
+        btnRegister.setForeground(Color.BLACK); // Set the text color to black
+        btnRegister.setFocusPainted(false);
+        btnRegister.setBorderPainted(false);
+        btnRegister.setFont(new Font("Arial", Font.BOLD, 14));
         JPanel registerPanel = new JPanel(new BorderLayout()); // Panel to contain the register button
         registerPanel.setBackground(Color.WHITE); // Background for the panel
-        registerPanel.add(btnSignIn, BorderLayout.CENTER);
+        registerPanel.add(btnRegister, BorderLayout.CENTER);
 
         // Adding components to the frame
         add(headerPanel, BorderLayout.NORTH);
         add(fieldsPanel, BorderLayout.CENTER);
         add(registerPanel, BorderLayout.SOUTH);
-
-        // New button for navigating to SignUpUI
-        btnRegisterNow = new JButton("No Account? Register Now");
-        btnRegisterNow.addActionListener(SignInController::onRegisterNowClicked);
-        btnRegisterNow.setBackground(Color.WHITE); // Set a different color for distinction
-        btnRegisterNow.setForeground(Color.BLACK);
-        btnRegisterNow.setFocusPainted(false);
-        btnRegisterNow.setBorderPainted(false);
-
-        // Panel to hold both buttons
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10)); // Grid layout with 1 row, 2 columns
-        buttonPanel.setBackground(Color.white);
-        buttonPanel.add(btnSignIn);
-        buttonPanel.add(btnRegisterNow);
-
-        // Adding the button panel to the frame
-        add(buttonPanel, BorderLayout.SOUTH);
-    }
-
-    public static void main(String[] args)
-    {
-        SwingUtilities.invokeLater(() ->
-        {
-            SignInUI frame = new SignInUI();
-            frame.setVisible(true);
-        });
+         // Adding the sign in button to the register panel or another suitable panel
+        btnSignIn = new JButton("Already have an account? Sign In");
+        btnSignIn.addActionListener(e -> SignUpController.openSignInUI());
+        registerPanel.add(btnSignIn, BorderLayout.SOUTH);
     }
 }

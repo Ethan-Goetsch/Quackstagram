@@ -1,4 +1,4 @@
-package refactored.refactoring.nonui;
+package refactored.entities;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package refactored.refactoring;
+package refactored.ui;
 
 import javax.swing.*;
 import java.awt.*;

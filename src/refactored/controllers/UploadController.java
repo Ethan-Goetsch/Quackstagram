@@ -14,9 +14,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import refactored.factories.Paths;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
-import refactored.refactoring.UploadUI;
+import refactored.ui.UploadUI;
 
-public class UploadController implements Controller {
+public class UploadController {
 
     private static int currentID;
     private static boolean imageUploaded;

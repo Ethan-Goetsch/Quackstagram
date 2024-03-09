@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 
 import refactored.entities.Post;
-import refactored.refactoring.ExploreUI;
+import refactored.ui.ExploreUI;
 
 public class ExploreController {
     public static ExploreUI exploreUI;

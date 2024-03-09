@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import refactored.model.UserDBManager;
-import refactored.refactoring.SignInUI;
+import refactored.ui.SignInUI;
 
 public class SignInController {
     public static void onSignInClicked(String username, String password, JFrame thisPage) {
