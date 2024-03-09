@@ -19,9 +19,9 @@ public class ProfileUI extends JFrame {
     private static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
     private static final int PROFILE_IMAGE_SIZE = 80; // Adjusted size for the profile image to match UI
     
-    private JPanel headerPanel;
-    private JPanel contentPanel;
-    private JPanel navigationPanel;
+    private JPanel headerPanel;   // Panel for the header
+    private JPanel contentPanel; // Panel to display the image grid or the clicked image
+    private JPanel navigationPanel; // Panel for the navigation
 
     private JButton editOrFollowButton;
     private JLabel followersLabel;
@@ -30,9 +30,10 @@ public class ProfileUI extends JFrame {
     private int profileUserID;
 
     // TODO: Actions, Functions and Observer Pattern in java
-    public ProfileUI(int profileUserID, boolean isCurrentUser) {
+    public ProfileUI(int profileUserID) {
 
         this.profileUserID = profileUserID;
+        isCurrentUser = ProfileController.isCurrentUser(profileUserID);
 
         setTitle("DACS Profile");
         setSize(WIDTH, HEIGHT);
