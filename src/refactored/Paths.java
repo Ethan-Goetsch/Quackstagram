@@ -1,4 +1,4 @@
-package refactored.factories;
+package refactored;
 import java.nio.file.Path;
 
 public abstract class Paths
@@ -15,14 +15,6 @@ public abstract class Paths
     // uploads
     public static final Path uploadsPath = Path.of(contentsPath.toString(), "/uploads/");
 
-    /* //temp
-    public static final Path tempImgDetailsPath = Path.of(dataPath.toString(), "img/image_details.txt");
-    public static final Path tempFollowingPath = Path.of(dataPath.toString(), "/following.txt");
-    public static final Path tempCredentialsPath = Path.of(dataPath.toString(), "/credentials.txt");
-    public static final Path tempUsersPath = Path.of(dataPath.toString(), "/users.txt");
-    public static final Path tempImgUploadedPath = Path.of(dataPath.toString(), "/img/uploaded");
-    public static final Path tempProfilePicturesPath = Path.of(dataPath.toString(), "/img/storage/profile/");
-    */
     //icons
     public static final Path iconsPath = Path.of(dataPath.toString(), "/icons");
     public static final Path logoPath = Path.of(iconsPath.toString(), "/DACS.png");

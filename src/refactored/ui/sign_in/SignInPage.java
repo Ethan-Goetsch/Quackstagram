@@ -16,7 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import refactored.factories.Paths;
+
+import refactored.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.util.functions.IAction;
 

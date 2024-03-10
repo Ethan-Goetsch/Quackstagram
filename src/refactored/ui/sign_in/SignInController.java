@@ -35,7 +35,7 @@ public class SignInController implements IPageController
         System.out.println(username + " <-> " + password);
         if (manager.isVerifiedCredentials(username, password))
         {
-            System.out.println("It worked; UserID: " + UserDBManager.currentID);
+            System.out.println("It worked; UserID: ");
             manager.signIn(username, password);
         }
         else

@@ -21,7 +21,7 @@ public class User implements Serializable
         this.id = id;
         this.username = username;
         this.password = password;
-        this.bio = "";
+        this.bio = bio;
     }
 
     public User(Builder builder)

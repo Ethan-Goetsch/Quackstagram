@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
+import refactored.Paths;
 import refactored.entities.Post;
 import refactored.entities.User;
-import refactored.factories.Paths;
 
 public class UserDBManager extends DBManager<User>
 {
     private static ArrayList<User> users;
-    public static int currentID;
+    private static int currentID = -1;
 
     public static void main(String[] args)
     {
@@ -40,6 +40,11 @@ public class UserDBManager extends DBManager<User>
 
     public static int getUserId(String username, String password)
     {
+        if (currentID != -1)
+        {
+            return currentID;
+        }
+
         Optional<User> foundUser = users.stream()
         .filter(user -> user.getUsername() == username && user.getPassword() == password)
         .findFirst();
@@ -89,7 +94,7 @@ public class UserDBManager extends DBManager<User>
         {
             if(uc.getUsername().equals(username) && uc.getPassword().equals(password))
             {
-                currentID = uc.getId();
+                currentID =  uc.getId();
                 return true;
             }
         }
@@ -133,14 +138,15 @@ public class UserDBManager extends DBManager<User>
     private static int generateID()
     {
         retrieveUsers();
+        int max = 0;
         for(User ua : users)
         {
-            if(ua.getId() > currentID)
+            if(ua.getId() > max)
             {
-                currentID = ua.getId();
+                max = ua.getId();
             }
         }
-        return ++currentID;
+        return ++max;
     }
 
     public static String getAuthorUsername(Post post)

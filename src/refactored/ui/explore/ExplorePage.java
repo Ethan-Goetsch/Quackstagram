@@ -3,9 +3,6 @@ package refactored.ui.explore;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -23,46 +20,24 @@ import refactored.model.UserDBManager;
 import refactored.ui.PageType;
 import refactored.util.TimeFormatter;
 import refactored.util.generic.functions.IAction;
+import refactored.util.generic.functions.IAction2;
 
 public class ExplorePage extends JFrame
 {
-    private class PostClickedListener implements MouseListener
-    {
-        @Override
-        public void mouseClicked(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {}
-
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-
-        @Override
-        public void mouseExited(MouseEvent e) {}
-    }
-
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
     private static final int IMAGE_SIZE = WIDTH / 3 - 10; // Size for each image in the grid
 
-    private final IAction<Post> displayPostAction;
     private final IAction<Integer> openProfileAction;
     private final IAction<PageType> navigateAction;
-    private final List<Post> posts;
+    private final Iterable<Post> posts;
 
     private JPanel headerPanel;
     private JPanel contentPanel;
     private JPanel navigationPanel;
 
-    public ExplorePage(IAction<Post> displayPostAction, IAction<Integer> openProfileAction, IAction<PageType> navigateAction, List<Post> posts)
+    public ExplorePage(IAction<Integer> openProfileAction, IAction<PageType> navigateAction, Iterable<Post> posts)
     {
-        this.displayPostAction = displayPostAction;
         this.openProfileAction = openProfileAction;
         this.navigateAction = navigateAction;
 
@@ -104,7 +79,7 @@ public class ExplorePage extends JFrame
         searchPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, searchField.getPreferredSize().height)); // Limit the height
 
         // Image grid below the search bar
-        JScrollPane imageGridPanel = UIElementFactory.createImageGridPanel(IMAGE_SIZE, posts, new PostClickedListener());
+        JScrollPane imageGridPanel = UIElementFactory.createImageGridPanel(IMAGE_SIZE, posts, (post, imageIcon) -> displayImage(post, imageIcon));
 
         // Main content panel that holds both the search bar and the image grid
         JPanel mainContentPanel = new JPanel();
@@ -137,13 +112,12 @@ public class ExplorePage extends JFrame
 
         // Bottom panel for bio and likes, and back button
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        JTextArea bioTextArea = new JTextArea(UserDBManager.getAuthorBio(post));
-        bioTextArea.setEditable(false);
+        JLabel bioTextArea = new JLabel(post.getText());
         JLabel likesLabel = new JLabel("Likes: " + post.getLikeCount());
         JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("Back");
         
-        bottomPanel.add(bioTextArea, BorderLayout.CENTER);
+        bottomPanel.add(bioTextArea, BorderLayout.NORTH);
         bottomPanel.add(likesLabel, BorderLayout.CENTER);
         bottomPanel.add(backButtonPanel, BorderLayout.SOUTH);
 

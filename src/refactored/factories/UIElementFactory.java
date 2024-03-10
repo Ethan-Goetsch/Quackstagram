@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.nio.file.Path;
 import javax.swing.BorderFactory;
@@ -18,9 +19,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import refactored.Paths;
 import refactored.entities.Post;
 import refactored.ui.PageType;
 import refactored.util.generic.functions.IAction;
+import refactored.util.generic.functions.IAction2;
 
 public class UIElementFactory
 {
@@ -77,10 +80,8 @@ public class UIElementFactory
         return button;
     }
 
-    public static JScrollPane createImageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, MouseListener imageClickedListener)
+    public static JScrollPane createImageGridPanel(int GRID_IMAGE_SIZE, Iterable<Post> posts, IAction2<Post, ImageIcon> imageClickedListener)
     {
-        // TODO : Change "currentUser.getUsername()" just below to soemthing appropriate
-
         // panel to be decorated with scroll bar
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayout(0, 3,2, 2)); // Grid layout for image grid
@@ -93,7 +94,12 @@ public class UIElementFactory
             JLabel imageLabel = new JLabel(imageIcon);
             
             // Add a mouse listener to the image label
-            imageLabel.addMouseListener(imageClickedListener);
+            imageLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    imageClickedListener.execute(post, imageIcon);
+                }
+            });
             contentPanel.add(imageLabel);
         }
 

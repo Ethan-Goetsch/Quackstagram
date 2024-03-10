@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 
-import refactored.factories.Paths;
+import refactored.Paths;
 
 public class Post implements Serializable
 {

@@ -3,10 +3,10 @@ package refactored.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import refactored.Paths;
 import refactored.entities.Post;
 import refactored.entities.interactions.Like;
 import refactored.entities.interactions.LikeType;
-import refactored.factories.Paths;
 
 public class LikeDBManager extends DBManager<Like>{
     private static ArrayList<Like> likes;

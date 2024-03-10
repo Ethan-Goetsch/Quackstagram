@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import refactored.Paths;
 import refactored.entities.Content;
 import refactored.entities.Post;
 import refactored.entities.User;
-import refactored.factories.Paths;
 
 public class PostDBManager extends DBManager<Post> implements Iterable<Path>
 {

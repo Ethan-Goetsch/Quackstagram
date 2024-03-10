@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import refactored.Paths;
 import refactored.entities.interactions.Message;
-import refactored.factories.Paths;
 
 public class MessageDBManager extends DBManager<Message>
 {

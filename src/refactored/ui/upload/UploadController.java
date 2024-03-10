@@ -11,7 +11,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import refactored.factories.Paths;
+import refactored.Paths;
 import refactored.ui.IPageController;
 import refactored.ui.UIManager;
 

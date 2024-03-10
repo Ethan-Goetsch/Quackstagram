@@ -39,7 +39,7 @@ public class NotificationPage extends JFrame
     private void initializeUI(List<Notification> notifications)
     {
         // Reuse the header and navigation panel creation methods from the InstagramProfileUI class
-        headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Notifications 🐥");
+        headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Notifications");
         navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction);
 
         // Content Panel for notifications

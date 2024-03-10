@@ -1,7 +1,5 @@
 package refactored.ui.explore;
 
-import java.util.List;
-
 import refactored.entities.Post;
 import refactored.ui.IPageController;
 import refactored.ui.UIManager;
@@ -11,10 +9,10 @@ public class ExploreController implements IPageController
     private final UIManager manager;
     private final ExplorePage page;
 
-    public ExploreController(UIManager manager, List<Post> posts)
+    public ExploreController(UIManager manager, Iterable<Post> posts)
     {
         this.manager = manager;
-        this.page = new ExplorePage(post -> displayImage(post), id -> openProfile(id), pageType -> manager.navigateToPage(pageType), posts);
+        this.page = new ExplorePage(id -> openProfile(id), pageType -> manager.navigateToPage(pageType), posts);
     }
 
     @Override
@@ -27,11 +25,6 @@ public class ExploreController implements IPageController
     public void close()
     {
         page.dispose();
-    }
-
-    private void displayImage(Post post)
-    {
-        
     }
 
     private void openProfile(int userId)

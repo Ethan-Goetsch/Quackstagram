@@ -28,6 +28,7 @@ import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
 import refactored.ui.PageType;
 import refactored.util.generic.functions.IAction;
+import refactored.util.generic.functions.IAction2;
 
 public class HomePage extends JFrame
 {
@@ -37,18 +38,23 @@ public class HomePage extends JFrame
     private static final int IMAGE_HEIGHT = 150; // Height for the image posts
     private static final Color LIKE_BUTTON_COLOR = new Color(255, 90, 95); // Color for the like button
 
-    private final IAction<Post> postLikedAction;
+    private final IAction2<Post, JLabel> postLikedAction;
     private final IAction<Post> postClickedAction;
+    private final IAction<PageType> navigateAction;
+
+    private final int currentUserID;
 
     private JPanel homePanel;
     private CardLayout postLayout;
     private JPanel cardPanel;
     private JPanel fullscreenPostPanel;
 
-    public HomePage(IAction<Post> postLikedAction, IAction<Post> postClickedAction, IAction<PageType> navigateAction)
+    public HomePage(int currentUserID, IAction2<Post, JLabel> postLikedAction, IAction<Post> postClickedAction, IAction<PageType> navigateAction)
     {
         this.postLikedAction = postLikedAction;
         this.postClickedAction = postClickedAction;
+        this.navigateAction = navigateAction;
+        this.currentUserID = currentUserID;
 
         setTitle("Quakstagram Home");
         setSize(WIDTH, HEIGHT);
@@ -64,80 +70,6 @@ public class HomePage extends JFrame
         fullscreenPostPanel = new JPanel(new BorderLayout());
 
         initializeUI();
-
-        cardPanel.add(homePanel, "Home");
-        cardPanel.add(fullscreenPostPanel, "ImageView");
-
-        add(cardPanel, BorderLayout.CENTER);
-        postLayout.show(cardPanel, "Home"); // Start with the home view
-        
-        // Header
-        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "🐥 Quackstagram 🐥");
-        add(headerPanel, BorderLayout.NORTH);
-
-        // Navigation Panel
-        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction);
-        add(navigationPanel, BorderLayout.SOUTH);
-    }
-
-    public void fullscreenPost(Post post)
-    {
-        fullscreenPostPanel.removeAll(); // Clear previous content
-
-        // Display the image
-        JLabel fullSizeImageLabel = new JLabel();
-        fullSizeImageLabel.setHorizontalAlignment(JLabel.CENTER);
-
-        try
-        {
-            BufferedImage originalImage = ImageIO.read(new File(post.getFilePath().toString()));
-            BufferedImage croppedImage = originalImage.getSubimage(0, 0, Math.min(originalImage.getWidth(), WIDTH-20), Math.min(originalImage.getHeight(), HEIGHT-40));
-            ImageIcon imageIcon = new ImageIcon(croppedImage);
-            fullSizeImageLabel.setIcon(imageIcon);
-        }
-        catch (IOException ex)
-        {
-            // Handle exception: Image file not found or reading error
-            fullSizeImageLabel.setText("Image not found");
-        }
-
-        //User Info 
-        JPanel userPanel = new JPanel();
-        userPanel.setLayout(new BoxLayout(userPanel,BoxLayout.Y_AXIS));
-        JLabel userName = new JLabel(UserDBManager.getAuthorUsername(post));
-        userName.setFont(new Font("Arial", Font.BOLD, 18));
-        userPanel.add(userName);//User Name
-
-        // Like button
-        JButton likeButton = new JButton("❤");
-        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
-        likeButton.setOpaque(true);
-        likeButton.setBorderPainted(false); // Remove border
-       
-        // Information panel at the bottom
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.add(new JLabel(post.getText())); // Description
-        JLabel likesLabel = new JLabel("Likes " + post.getLikeCount());
-        infoPanel.add(likesLabel); // Likes
-        infoPanel.add(likeButton);
-
-        // Like button action listener
-        likeButton.addActionListener(e ->
-        {
-            postLikedAction.execute(post);
-            likeButton.setText("Likes: " + post.getLikeCount());
-        });
-
-        fullscreenPostPanel.add(fullSizeImageLabel, BorderLayout.CENTER);
-        fullscreenPostPanel.add(infoPanel, BorderLayout.SOUTH);
-        fullscreenPostPanel.add(userPanel,BorderLayout.NORTH);
-            
-        fullscreenPostPanel.revalidate();
-        fullscreenPostPanel.repaint();
-
-        postLayout.show(cardPanel, "ImageView"); // Switch to the image view
     }
 
     private void initializeUI()
@@ -151,15 +83,28 @@ public class HomePage extends JFrame
         populateContentPanel(contentPanel);
         add(scrollPane, BorderLayout.CENTER);
 
-
         // Set up the home panel
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         homePanel.add(scrollPane, BorderLayout.CENTER);
+
+        cardPanel.add(homePanel, "Home");
+        cardPanel.add(fullscreenPostPanel, "ImageView");
+
+        add(cardPanel, BorderLayout.CENTER);
+        postLayout.show(cardPanel, "Home"); // Start with the home view
+        
+        // Header
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Home");
+        add(headerPanel, BorderLayout.NORTH);
+
+        // Navigation Panel
+        JPanel navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction);
+        add(navigationPanel, BorderLayout.SOUTH);
     }
 
     private void populateContentPanel(JPanel panel)
     {
-        PostDBManager.UserFolloweePosts userFolloweePosts = new PostDBManager.UserFolloweePosts(UserDBManager.currentID);
+        PostDBManager.UserFolloweePosts userFolloweePosts = new PostDBManager.UserFolloweePosts(currentUserID);
 
         if(userFolloweePosts != null)
         {
@@ -217,7 +162,7 @@ public class HomePage extends JFrame
         likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
         likeButton.setOpaque(true);
         likeButton.setBorderPainted(false); // Remove border
-        likeButton.addActionListener(e -> postLikedAction.execute(post));
+        likeButton.addActionListener(e -> postLikedAction.execute(post, likesLabel));
 
         itemPanel.add(nameLabel);
         itemPanel.add(imageLabel);
@@ -236,5 +181,61 @@ public class HomePage extends JFrame
         });
 
         return itemPanel;
+    }
+
+    public void fullscreenPost(Post post)
+    {
+        fullscreenPostPanel.removeAll(); // Clear previous content
+
+        // Display the image
+        JLabel fullSizeImageLabel = new JLabel();
+        fullSizeImageLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        try
+        {
+            BufferedImage originalImage = ImageIO.read(new File(post.getFilePath().toString()));
+            BufferedImage croppedImage = originalImage.getSubimage(0, 0, Math.min(originalImage.getWidth(), WIDTH-20), Math.min(originalImage.getHeight(), HEIGHT-40));
+            ImageIcon imageIcon = new ImageIcon(croppedImage);
+            fullSizeImageLabel.setIcon(imageIcon);
+        }
+        catch (IOException ex)
+        {
+            // Handle exception: Image file not found or reading error
+            fullSizeImageLabel.setText("Image not found");
+        }
+
+        //User Info 
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel,BoxLayout.Y_AXIS));
+        JLabel userName = new JLabel(UserDBManager.getAuthorUsername(post));
+        userName.setFont(new Font("Arial", Font.BOLD, 18));
+        userPanel.add(userName);//User Name
+
+        // Like button
+        JButton likeButton = new JButton("❤");
+        likeButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        likeButton.setBackground(LIKE_BUTTON_COLOR); // Set the background color for the like button
+        likeButton.setOpaque(true);
+        likeButton.setBorderPainted(false); // Remove border
+       
+        // Information panel at the bottom
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.add(new JLabel(post.getText())); // Description
+        JLabel likesLabel = new JLabel("Likes " + post.getLikeCount());
+        infoPanel.add(likesLabel); // Likes
+        infoPanel.add(likeButton);
+
+        // Like button action listener
+        likeButton.addActionListener(e -> { postLikedAction.execute(post, likesLabel); });
+
+        fullscreenPostPanel.add(fullSizeImageLabel, BorderLayout.CENTER);
+        fullscreenPostPanel.add(infoPanel, BorderLayout.SOUTH);
+        fullscreenPostPanel.add(userPanel,BorderLayout.NORTH);
+            
+        fullscreenPostPanel.revalidate();
+        fullscreenPostPanel.repaint();
+
+        postLayout.show(cardPanel, "ImageView"); // Switch to the image view
     }
 }

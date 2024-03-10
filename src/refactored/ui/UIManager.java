@@ -9,12 +9,13 @@ import javax.imageio.ImageIO;
 
 import refactored.ApplicationManager;
 import refactored.CredentialsVerifier;
+import refactored.Paths;
 import refactored.entities.Post;
-import refactored.factories.Paths;
 import refactored.model.FollowDBManager;
 import refactored.model.LikeDBManager;
 import refactored.model.PostDBManager;
 import refactored.model.UserDBManager;
+import refactored.model.PostDBManager.OtherUsersPosts;
 import refactored.ui.explore.ExploreController;
 import refactored.ui.home.HomeController;
 import refactored.ui.notifications.NotificationController;
@@ -65,7 +66,8 @@ public class UIManager
 
     public void openExplore(int userId)
     {
-        explorePage = new ExploreController(this, PostDBManager.getUserPosts(currentUserId));
+        OtherUsersPosts posts = new OtherUsersPosts(currentUserId);
+        explorePage = new ExploreController(this, posts);
         setActivePage(explorePage);
     }
 
@@ -139,7 +141,7 @@ public class UIManager
 
     public void likePost(Post post)
     {
-        LikeDBManager.createLike(UserDBManager.currentID, post.getID());
+        LikeDBManager.createLike(currentUserId, post.getID());
     }
 
     public void savePost(int userId, String fileName, String caption)
@@ -168,5 +170,10 @@ public class UIManager
             activePage.close();
         activePage = page;
         activePage.open();
+    }
+
+    public int getCurrentUserId()
+    {
+        return currentUserId;
     }
 }

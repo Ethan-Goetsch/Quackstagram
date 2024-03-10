@@ -44,7 +44,7 @@ public class UploadPage extends JFrame
 
     private void initializeUI()
     {
-        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "🐥 Quackstagram 🐥");
+        JPanel headerPanel = UIElementFactory.createHeaderPanel(WIDTH, "Upload");
         JPanel navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction); // Reuse the createNavigationPanel method
 
         // Main content panel

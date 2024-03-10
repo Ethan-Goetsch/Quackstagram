@@ -7,8 +7,8 @@ import java.awt.event.MouseListener;
 import java.nio.file.Path;
 import java.util.List;
 
+import refactored.Paths;
 import refactored.entities.Post;
-import refactored.factories.Paths;
 import refactored.factories.UIElementFactory;
 import refactored.model.FollowDBManager;
 import refactored.model.PostDBManager;
@@ -16,30 +16,8 @@ import refactored.model.UserDBManager;
 import refactored.ui.PageType;
 import refactored.util.generic.functions.IAction;
 
-
 public class ProfilePage extends JFrame
 {
-    private class PostClickedListener implements MouseListener
-    {
-        @Override
-        public void mouseClicked(MouseEvent e)
-        {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {}
-
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-
-        @Override
-        public void mouseExited(MouseEvent e) {}
-    }
-
     private static final int WIDTH = 300;
     private static final int HEIGHT = 500;
     private static final int GRID_IMAGE_SIZE = WIDTH / 3; // Static size for grid images
@@ -88,8 +66,8 @@ public class ProfilePage extends JFrame
         
         headerPanel = createProfileHeader(); // state-dependent : either follow button or edit profile button
 
-        /// content grid //TODO : Make selected images fullscreen
-        JScrollPane contentScrollPane = UIElementFactory.createImageGridPanel(GRID_IMAGE_SIZE, posts, new PostClickedListener());
+        /// content grid //TODO : Make selected images fullscreen //TODO : Bad design: Logic handled in the UI (lambda)
+        JScrollPane contentScrollPane = UIElementFactory.createImageGridPanel(GRID_IMAGE_SIZE, posts, (post, imageIcon) -> displayImage(post, imageIcon));
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(contentScrollPane, BorderLayout.CENTER);
         navigationPanel = UIElementFactory.createNavigationPanel(this, navigateAction); // state-independent : always opens the current user profile
@@ -103,7 +81,7 @@ public class ProfilePage extends JFrame
         repaint();
     }
 
-    public void displayImage(ImageIcon imageIcon)
+    public void displayImage(Post post, ImageIcon imageIcon)
     {
         contentPanel.removeAll(); // Remove existing content
         contentPanel.setLayout(new BorderLayout()); // Change layout for image display
@@ -192,7 +170,7 @@ public class ProfilePage extends JFrame
         profileNameLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Padding on the sides
 
         JTextArea profileBio = new JTextArea(bio);
-        System.out.println("This is the bio "+username);
+        System.out.println("This is the bio "+username + " " + userId);
         profileBio.setEditable(false);
         profileBio.setFont(new Font("Arial", Font.PLAIN, 12));
         profileBio.setBackground(new Color(249, 249, 249));
@@ -220,8 +198,9 @@ public class ProfilePage extends JFrame
         editOrFollowButton.setText(string);
     }
 
-    public void updateFollowerCount(int followerCount)
+    public void updateFollowerCount(int followeeCount)
     {
-        followersLabel.setText("<html><div style='text-align: center;'>" + followerCount + "<br/>" + "Followers" + "</div></html>");
+        followeeCount = FollowDBManager.getFolloweeCount(userId); // Retrieve followerCount // should be done in the controller, but is bugged.
+        followersLabel.setText("<html><div style='text-align: center;'>" + followeeCount + "<br/>" + "Followers" + "</div></html>");
     }
 }
