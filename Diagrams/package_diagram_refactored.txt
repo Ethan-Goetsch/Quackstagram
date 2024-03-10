@@ -1,0 +1,136 @@
+@startuml
+package refactored {
+    package entities {
+        [Content]
+        [Post]
+        [User]
+    }
+    package entities.interactions {
+        [Follow]
+        [FollowType]
+        [Like]
+        [LikeType]
+        [Message]
+        [Notification]
+    }
+    package factories {
+        [UIElementFactory]
+    }
+    package model {
+        [DBManager]
+        [FollowDBManager]
+        [LikeDBManager]
+        [MessageDBManager]
+        [NotificationQuery]
+        [PostDBManager]
+        [UserDBManager]
+    }
+    package ui {
+        [IPageController]
+        [PageType]
+        [UIManager]
+        package explore {
+            [ExploreController]
+            [ExplorePage]
+        }
+        package home {
+            [HomeController]
+            [HomePage]
+        }
+        package notifications {
+            [NotificationController]
+            [NotificationPage]
+        }
+        package profile {
+            [ProfileController]
+            [ProfilePage]
+        }
+        package sign_in {
+            [SignInController]
+            [SignInPage]
+        }
+        package sign_up {
+            [SignUpController]
+            [SignUpPage]
+        }
+        package upload {
+            [UploadController]
+            [UploadPage]
+        }
+    }
+    package util {
+        [TimeFormatter]
+        package functions {
+            [IAction]
+            [IFunc]
+        }
+        package generic {
+            package functions {
+                [IAction]
+                [IAction2]
+                [IFunc]
+            }
+            package reactive {
+                [IObservable]
+                [IObserver]
+                [Subject]
+            }
+        }
+        package reactive {
+            [IObservable]
+            [IObserver]
+            [Subject]
+        }
+    }
+    [ApplicationManager]
+    [CredentialsVerifier]
+    [Paths]
+}
+
+[NotificationQuery] ..> [LikeDBManager]
+[NotificationQuery] ..> [FollowDBManager]
+[NotificationQuery] ..> [MessageDBManager]
+[NotificationQuery] ..> [Like]
+[NotificationQuery] ..> [Follow]
+[NotificationQuery] ..> [Message]
+[NotificationQuery] ..> [Notification]
+
+[DBManager] <|-- [FollowDBManager]
+[DBManager] <|-- [LikeDBManager]
+[DBManager] <|-- [MessageDBManager]
+[DBManager] <|-- [PostDBManager]
+[DBManager] <|-- [UserDBManager]
+
+[FollowDBManager] ..> [UserDBManager]
+[LikeDBManager] ..> [PostDBManager]
+[MessageDBManager] ..> [Paths]
+[PostDBManager] ..> [Content]
+[UserDBManager] ..> [FollowDBManager]
+[UserDBManager] ..> [Paths]
+
+[PostDBManager] ..> [UserDBManager]
+[PostDBManager] ..> [Paths]
+
+[Message] ..> [UserDBManager]
+[Like] ..> [UserDBManager]
+[Follow] ..> [UserDBManager]
+[Post] ..> [Content]
+[Post] ..> [Paths]
+[PostDBManager] ..> [Post]
+[PostDBManager] ..> [Content]
+[PostDBManager] ..> [Paths]
+[UserDBManager] ..> [User]
+[UserDBManager] ..> [FollowDBManager]
+[UserDBManager] ..> [Paths]
+[LikeDBManager] ..> [PostDBManager]
+[LikeDBManager] ..> [Paths]
+[MessageDBManager] ..> [Paths]
+[NotificationQuery] ..> [LikeDBManager]
+[NotificationQuery] ..> [FollowDBManager]
+[NotificationQuery] ..> [MessageDBManager]
+[NotificationQuery] ..> [Notification]
+
+[ApplicationManager] ..> [CredentialsVerifier]
+[ApplicationManager] ..> [UIManager]
+[CredentialsVerifier] ..> [UserDBManager]
+@enduml

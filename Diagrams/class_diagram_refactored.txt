@@ -1,0 +1,408 @@
+@startuml
+namespace refactored {
+    class CredentialsVerifier {
+        +isVerifiedCredentials(username: String, password: String): boolean
+        +isValidUsername(username: String): boolean
+    }
+
+    class ApplicationManager {
+        +main(args: String[]): void
+    }
+
+    class Paths {
+        {static} rootPath: Path
+        {static} dataPath: Path
+        {static} contentsPath: Path
+        {static} profilePicturesPath: Path
+        {static} uploadsPath: Path
+        {static} iconsPath: Path
+        {static} logoPath: Path
+        {static} homeIconPath: Path
+        {static} searchIconPath: Path
+        {static} addIconPath: Path
+        {static} heartIconPath: Path
+        {static} profileIconPath: Path
+        {static} contentsDBPath: Path
+        {static} postsDBPath: Path
+        {static} messagesDBPath: Path
+        {static} commentsDBPath: Path
+        {static} followsDBPath: Path
+        {static} likesDBPath: Path
+        {static} usersDBPath: Path
+    }
+
+    ApplicationManager --> CredentialsVerifier : creates
+    ApplicationManager --> UIManager : creates
+    CredentialsVerifier ..> UserDBManager : uses
+}
+
+namespace refactored.util.functions {
+    interface IAction {
+        +execute(): void   
+    }
+
+    interface IFunc<T> {
+        +execute(): T
+    }
+}
+
+namespace refactored.util.generic.functions {
+    interface IAction<T> {
+        +execute(item: T): void
+    }
+
+    interface IFunc<T, TK> {
+        +execute(item: T): TK
+    }
+
+    interface IAction2<T1, T2> {
+        +execute(item1: T1, item2: T2): void
+    }
+}
+
+namespace refactored.util {
+    class TimeFormatter {
+        {static} +getElapsedTime(timestamp: LocalDateTime): String
+    }
+}
+
+namespace refactored.model {
+    abstract class DBManager<T> {
+        {static} +retrieve(from: Path): ArrayList<T>
+        {static} +store(from: ArrayList<T>, to: Path): void
+    }
+
+    class NotificationQuery {
+        -receiverID: int
+        -notifications: ArrayList<Notification>
+        +NotificationQuery(id: int)
+        +getNotifications(): List<Notification>
+    }
+
+    class FollowDBManager extends DBManager {
+        -follows: ArrayList<Follow>
+        +createFollow(followerID: int, followeeID: int): void
+        +isAFollowingB(userAID: int, userBID: int): boolean
+        +getFollowerCount(followerID: int): int
+        +getFolloweeCount(followeeID: int): int
+        +UserFollowings(userID: int)
+        +UserReceivedFollows(userID: int)
+    }
+
+    class LikeDBManager extends DBManager {
+        -likes: ArrayList<Like>
+        +createLike(userID: int, postID: int): void
+        +postIsLikedByUser(postID: int, userID: int): boolean
+        +UserReceivedLikes(userID: int)
+    }
+
+    class MessageDBManager extends DBManager {
+        -messages: ArrayList<Message>
+        +sendMessage(fromUserID: int, toUserID: int, messageText: String): void
+        +UserReceivedMessages(userID: int)
+    }
+
+    class PostDBManager extends DBManager {
+        -posts: ArrayList<Post>
+        +createPost(userID: int, content: String): void
+        +likePost(userID: int, postID: int): void
+        +unlikePost(userID: int, postID: int): void
+        +UserPosts(userID: int)
+    }
+
+    class UserDBManager extends DBManager {
+        -users: ArrayList<User>
+        +createUser(name: String, username: String, password: String, email: String): void
+        +verifyCredentials(username: String, password: String): boolean
+        +usernameExists(username: String): boolean
+    }
+}
+
+namespace refactored.entities {
+    class User {
+        -id: int
+        -username: String
+        -password: String
+        -bio: String
+        -profilePicture: Content
+        -postsCount: int
+        -followersCount: int
+        -followingCount: int
+        +User(id: int, username: String, password: String, bio: String)
+        +Builder: class
+    }
+
+    class Content {
+        -id: int
+        -fileName: String
+    }
+
+    class Post {
+        -id: int
+        -authorID: int
+        -timestamp: LocalDateTime
+        -content: Content
+        -text: String
+        -likeCount: int
+        -commentCount: int
+        +Post(id: int, authorID: int, content: Content, text: String, timestamp: LocalDateTime)
+    }
+}
+
+namespace refactored.entities.interactions {
+    enum LikeType {
+        LIKE,
+        UNLIKE
+    }
+
+    enum FollowType {
+        FOLLOW,
+        UNFOLLOW
+    }
+
+    interface Notification {
+        +getID(): int
+        +getTimestamp(): LocalDateTime
+        +getSenderID(): int
+        +getReceiverID(): int
+        +getNotificationMessage(): String
+    }
+
+    class Message implements Notification {
+        -id: int
+        -senderID: int
+        -receiverID: int
+        -message: String
+        -timestamp: LocalDateTime
+        +Message(id: int, senderID: int, receiverID: int, message: String, timestamp: LocalDateTime)
+    }
+
+    class Like implements Notification {
+        -id: int
+        -userID: int
+        -postID: int
+        -type: LikeType
+        -timestamp: LocalDateTime
+        +Like(id: int, userID: int, postID: int, type: LikeType, timestamp: LocalDateTime)
+    }
+
+    class Follow implements Notification {
+        -id: int
+        -followerID: int
+        -followeeID: int
+        -type: FollowType
+        -timestamp: LocalDateTime
+        +Follow(followerID: int, followeeID: int, type: FollowType, timestamp: LocalDateTime)
+    }
+
+
+}
+
+namespace refactored.factories {
+    class UIElementFactory {
+        +createHeaderPanel(width: int, title: String): JPanel
+        +createNavigationPanel(topFrame: JFrame, navigateAction: IAction<PageType>): JPanel
+        +createNavButton(navigateAction: IAction<PageType>, pageType: PageType, iconPath: Path, topFrame: JFrame): JButton
+        +createImageGridPanel(GRID_IMAGE_SIZE: int, posts: Iterable<Post>, imageClickedListener: IAction2<Post, ImageIcon>): JScrollPane
+    }
+}
+
+namespace refactored.ui {
+    interface IPageController {
+        +open(): void
+        +close(): void
+    }
+
+    enum PageType {
+        SIGN_IN,
+        SIGN_UP,
+        HOME,
+        EXPLORE,
+        UPLOAD,
+        NOTIFICATION,
+        PROFILE
+    }
+
+    class UIManager {
+        -applicationManager: ApplicationManager
+        -credentialsVerifier: CredentialsVerifier
+        -signInPage: IPageController
+        -signUpPage: IPageController
+        -homePage: IPageController
+        -explorePage: IPageController
+        -uploadPage: IPageController
+        -notificationPage: IPageController
+        -profilePage: IPageController
+        -activePage: IPageController
+        -currentUserId: int
+        +UIManager(applicationManager: ApplicationManager, credentialsVerifier: CredentialsVerifier)
+        +openSignUp(): void
+        +openSignIn(): void
+        +openHome(userId: int): void
+        +openExplore(userId: int): void
+        +openProfile(userId: int): void
+        +navigateToPage(page: PageType): void
+        +signIn(username: String, password: String): void
+        +signUp(username: String, password: String, bio: String): void
+        +saveProfilePicture(file: File, username: String): void
+        +likePost(post: Post): void
+        +savePost(userId: int, fileName: String, caption: String): void
+        +isVerifiedCredentials(username: String, password: String): boolean
+        +isValidUsername(username: String): boolean
+        +createContentId(): int
+        +getCurrentUserId(): int
+    }
+
+namespace refactored.ui.explore {
+    class ExploreController implements IPageController {
+        -manager: UIManager
+        -page: ExplorePage
+        +ExploreController(manager: UIManager, posts: Iterable<Post>)
+        +open(): void
+        +close(): void
+    }
+
+    class ExplorePage extends JFrame {
+        -openProfileAction: IAction<Integer>
+        -navigateAction: IAction<PageType>
+        -posts: Iterable<Post>
+        +ExplorePage(openProfileAction: IAction<Integer>, navigateAction: IAction<PageType>, posts: Iterable<Post>)
+        +initializeUI(): void
+        +createContentPanel(): JPanel
+        +displayImage(post: Post, imageIcon: ImageIcon): void
+    }
+}
+
+namespace refactored.ui.home {
+    class HomeController implements IPageController {
+        -manager: UIManager
+        -page: HomePage
+        +HomeController(manager: UIManager)
+        +open(): void
+        +close(): void
+    }
+
+    class HomePage extends JFrame {
+        -currentUserID: int
+        -postLikedAction: IAction2<Post, JLabel>
+        -postClickedAction: IAction<Post>
+        -navigateAction: IAction<PageType>
+        +HomePage(currentUserID: int, postLikedAction: IAction2<Post, JLabel>, postClickedAction: IAction<Post>, navigateAction: IAction<PageType>)
+        +initializeUI(): void
+        +createPostPanel(post: Post): JPanel
+        +fullscreenPost(post: Post): void
+    }
+}
+
+namespace refactored.ui.notifications {
+    class NotificationController implements IPageController {
+        -manager: UIManager
+        -userId: int
+        -page: NotificationPage
+        +NotificationController(manager: UIManager, userId: int)
+        +open(): void
+        +close(): void
+    }
+
+    class NotificationPage extends JFrame {
+        -navigateAction: IAction<PageType>
+        +NotificationPage(navigateAction: IAction<PageType>, notifications: List<Notification>)
+        +initializeUI(notifications: List<Notification>): void
+    }
+}
+
+namespace refactored.ui.profile {
+    class ProfileController implements IPageController {
+        -manager: UIManager
+        -userID: int
+        -isOwner: boolean
+        -page: ProfilePage
+        +ProfileController(uiManager: UIManager, userID: int, isOwner: boolean, isFollowing: boolean, posts: List<Post>)
+        +open(): void
+        +close(): void
+    }
+
+    class ProfilePage extends JFrame {
+        -isOwner: boolean
+        -userId: int
+        -followAction: IAction<Integer>
+        -navigateAction: IAction<PageType>
+        -posts: List<Post>
+        +ProfilePage(userId: int, isOwner: boolean, isFollowing: boolean, followAction: IAction<Integer>, navigateAction: IAction<PageType>, posts: List<Post>)
+        +initializeUI(): void
+        +displayImage(post: Post, imageIcon: ImageIcon): void
+    }
+}
+
+namespace refactored.ui.sign_in {
+    class SignInController implements IPageController {
+        -manager: UIManager
+        -page: SignInPage
+        +SignInController(uiManager: UIManager)
+        +open(): void
+        +close(): void
+    }
+
+    class SignInPage extends JFrame {
+        -txtUsername: JTextField
+        -txtPassword: JTextField
+        -btnSignIn: JButton
+        -btnRegisterNow: JButton
+        -lblPhoto: JLabel
+        +SignInPage(signInAction: IAction, signUpAction: IAction)
+        +getUsername(): String
+        +getPassword(): String
+    }
+}
+
+namespace refactored.ui.upload {
+    class UploadController implements IPageController {
+        -manager: UIManager
+        -page: UploadPage
+        -userId: int
+        -username: String
+        +UploadController(manager: UIManager, userId: int, username: String)
+        +open(): void
+        +close(): void
+    }
+
+    class UploadPage extends JFrame {
+        -uploadAction: IAction
+        -navigateAction: refactored.util.generic.functions.IAction<PageType>
+        -imagePreviewLabel: JLabel
+        -captionTextArea: JTextArea
+        -uploadButton: JButton
+        +UploadPage(uploadAction: IAction, navigateAction: refactored.util.generic.functions.IAction<PageType>)
+        +initializeUI(): void
+        +updateImagePreview(imageIcon: ImageIcon): void
+        +getCaption(): String
+        +updateUploadButtonText(imageUploaded: boolean): void
+    }
+}
+
+namespace refactored.ui.sign_up {
+    class SignUpController implements IPageController {
+        -manager: UIManager
+        -page: SignUpPage
+        +SignUpController(manager: UIManager)
+        +open(): void
+        +close(): void
+    }
+
+    class SignUpPage extends JFrame {
+        -txtUsername: JTextField
+        -txtPassword: JTextField
+        -txtBio: JTextField
+        -btnRegister: JButton
+        -lblPhoto: JLabel
+        -btnUploadPhoto: JButton
+        -btnSignIn: JButton
+        +SignUpPage(uploadAction: IAction, registerAction: IAction, signInAction: IAction)
+        +getUsername(): String
+        +getPassword(): String
+        +getBio(): String
+    }
+}
+}
+@enduml
+
