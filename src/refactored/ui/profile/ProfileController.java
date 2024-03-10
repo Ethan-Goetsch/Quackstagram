@@ -33,13 +33,13 @@ public class ProfileController implements IPageController
 
     private void handleFollow(int userIdToFollow)
     {
-        FollowDBManager.createFollow(manager.getCurrentUserId(), userIdToFollow);
+        FollowDBManager.createFollow(userID, userIdToFollow);
 
         boolean isFollowing = FollowDBManager.isAFollowingB(manager.getCurrentUserId(), userIdToFollow);
-        int followers = FollowDBManager.getFollowerCount(userIdToFollow);
+        int followees = FollowDBManager.getFolloweeCount(userIdToFollow);
 
         page.updateEditOrFollowButtonLabel(isFollowing ? "Unfollow" : "Follow");
-        page.updateFollowerCount(followers); // followers actually retrieved in updateFollowerCount
+        page.updateFolloweeCount(followees); // followers actually retrieved in updateFollowerCount
     }
 
     private void handleEdit(int userId)

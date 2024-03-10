@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import refactored.entities.Post;
@@ -20,7 +19,6 @@ import refactored.model.UserDBManager;
 import refactored.ui.PageType;
 import refactored.util.TimeFormatter;
 import refactored.util.generic.functions.IAction;
-import refactored.util.generic.functions.IAction2;
 
 public class ExplorePage extends JFrame
 {

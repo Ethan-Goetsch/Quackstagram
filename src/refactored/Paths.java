@@ -1,7 +1,7 @@
 package refactored;
 import java.nio.file.Path;
 
-public abstract class Paths
+public class Paths
 {
     // TODO: Change the paths to the correct ones, rework model
     // root path

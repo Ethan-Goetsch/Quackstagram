@@ -2,8 +2,6 @@ package refactored.ui.profile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -66,7 +64,7 @@ public class ProfilePage extends JFrame
         
         headerPanel = createProfileHeader(); // state-dependent : either follow button or edit profile button
 
-        /// content grid //TODO : Make selected images fullscreen //TODO : Bad design: Logic handled in the UI (lambda)
+        /// content grid //TODO : Make selected images fullscreen
         JScrollPane contentScrollPane = UIElementFactory.createImageGridPanel(GRID_IMAGE_SIZE, posts, (post, imageIcon) -> displayImage(post, imageIcon));
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(contentScrollPane, BorderLayout.CENTER);
@@ -192,15 +190,13 @@ public class ProfilePage extends JFrame
         return label;
     }
 
-
     public void updateEditOrFollowButtonLabel(String string)
     {
         editOrFollowButton.setText(string);
     }
 
-    public void updateFollowerCount(int followeeCount)
+    public void updateFolloweeCount(int followeeCount)
     {
-        followeeCount = FollowDBManager.getFolloweeCount(userId); // Retrieve followerCount // should be done in the controller, but is bugged.
         followersLabel.setText("<html><div style='text-align: center;'>" + followeeCount + "<br/>" + "Followers" + "</div></html>");
     }
 }
