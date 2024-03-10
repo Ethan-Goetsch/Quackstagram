@@ -43,18 +43,20 @@ public class HomePage extends JFrame
     private final IAction<PageType> navigateAction;
 
     private final int currentUserID;
+    private Iterable<Post> userFolloweePosts;
 
     private JPanel homePanel;
     private CardLayout postLayout;
     private JPanel cardPanel;
     private JPanel fullscreenPostPanel;
 
-    public HomePage(int currentUserID, IAction2<Post, JLabel> postLikedAction, IAction<Post> postClickedAction, IAction<PageType> navigateAction)
+    public HomePage(int currentUserID, IAction2<Post, JLabel> postLikedAction, IAction<Post> postClickedAction, IAction<PageType> navigateAction, Iterable<Post> userFolloweePosts)
     {
         this.postLikedAction = postLikedAction;
         this.postClickedAction = postClickedAction;
         this.navigateAction = navigateAction;
         this.currentUserID = currentUserID;
+        this.userFolloweePosts = userFolloweePosts;
 
         setTitle("Quakstagram Home");
         setSize(WIDTH, HEIGHT);
@@ -104,8 +106,7 @@ public class HomePage extends JFrame
 
     private void populateContentPanel(JPanel panel)
     {
-        PostDBManager.UserFolloweePosts userFolloweePosts = new PostDBManager.UserFolloweePosts(currentUserID);
-
+        
         if(userFolloweePosts != null)
         {
             for (Post post : userFolloweePosts)

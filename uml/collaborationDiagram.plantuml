@@ -1,0 +1,12 @@
+@startuml Collaboration Diagram
+
+actor Actor
+boundary View
+control Controller
+entity Model
+
+Actor --> (View) : 1. action\n2.another action
+(View) --> (Controller) : 3.
+(Controller) --> (Model) : 4.
+
+@enduml

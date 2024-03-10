@@ -60,7 +60,8 @@ public class UIManager
 
     public void openHome(int userId)
     {
-        homePage = new HomeController(this);
+        PostDBManager.UserFolloweePosts userFolloweePosts = new PostDBManager.UserFolloweePosts(currentUserId);
+        homePage = new HomeController(this, userFolloweePosts);
         setActivePage(homePage);
     }
 

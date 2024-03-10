@@ -1,0 +1,62 @@
+@startuml UserDatabase
+|SignInPage|
+start
+split
+:Enter Your Credentials;
+split again
+:Not Registered, sign up here!;
+endsplit
+
+
+|SignInController|
+start
+if (Checking if Signing in or Registering) then (Sign in)
+:HandleSignIn;
+fork
+split
+:Get username from SignInPage;
+split again
+:Get password from SignInPage;
+endsplit
+endfork
+while (Verify credentials) is (Invalid)
+:Incorrect credentials;
+endwhile (Valid)
+:Welcome to QuackStagram;
+end
+else (Register)
+:Redirecting to SignUpPage;
+
+|SignUpPage|
+start
+:Upload a profile picture;
+fork
+split
+:Enter a username;
+split again
+:Enter a password;
+endsplit
+endfork
+:Create a bio;
+
+
+|SignUpController|
+start
+:handleProfilePicture;
+:Upload profile picture;
+:handleRegister;
+fork
+split
+:Get Username from SignUpPage;
+while (Username invalid?) is (Yes)
+:Username is already taken!;
+endwhile (No)
+split again
+:Get Password from SignUpPage;
+split again 
+:Get Bio from SignUpPage;
+endsplit
+endfork
+:handleSignIn;
+:Redirecting to SignInPage;
+stop

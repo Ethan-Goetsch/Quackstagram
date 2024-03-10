@@ -1,0 +1,37 @@
+@startuml Home Sequence Diagra
+participant IPageController as IPC
+participant UIManager as UIM
+participant HomeController as HC
+actor User as U
+participant HomePage as HP
+participant UIElementFactory as UIF
+participant PostDBManager as PDBM
+participant UserDBManager as UDBM
+participant LikeDBManager as LDBM
+
+IPC -> UIM: openHome(userID : int)
+UIM -> PDBM: UserFolloweePosts()
+PDBM -> UDBM: UserFollowees()
+UDBM --> PDBM: userFollowees
+PDBM --> UIM: followeePosts
+UIM -> HC: HomeController(userID, followeePosts)
+HC -> UIM : getCurrentUserID()
+UIM --> HC : currentUserID
+
+HC -> HP: ProfilePage(userID, handleLikeAction : function, navigateToPage : function, followeePosts)
+HP -> HP : populateContentPanel(posts, handleLikeAction, displayImage : function)
+
+HP -> UIF: createHeaderPanel(title)
+UIF --> HP: headerPanel
+HP -> UIF : createNavigationPanel(navigateToPage : function)
+UIF --> HP: navigationPanel
+U -> HP : image click
+HP -> HP : displayImage(post, imageIcon)
+U -> HP : like click
+HC -> LDBM : createLike(userID, postID)
+LDBM -> PDBM : updateLikes(postID)
+HC -> HP : updateLikeLabel()
+
+U -> HP : navigation bar click
+HP -> HC : navigateToPage()
+@enduml

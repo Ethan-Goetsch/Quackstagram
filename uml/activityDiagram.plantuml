@@ -1,0 +1,94 @@
+@startuml
+|SignInPage|
+start
+split
+:Enter Your Credentials;
+split again
+:Not Registered, sign up here!;
+endsplit
+
+
+|SignInController|
+start
+if (Checking if Signing in or Registering) then (Sign in)
+:HandleSignIn;
+fork
+split
+:Get username from SignInPage;
+split again
+:Get password from SignInPage;
+endsplit
+endfork
+while (Verify credentials) is (Invalid)
+:Incorrect credentials;
+endwhile (Valid)
+:Welcome to QuackStagram;
+end
+else (Register)
+:Redirecting to SignUpPage;
+
+|SignUpPage|
+start
+:Upload a profile picture;
+fork
+split
+:Enter a username;
+split again
+:Enter a password;
+endsplit
+endfork
+:Create a bio;
+
+
+|SignUpController|
+start
+:handleProfilePicture;
+:Upload profile picture;
+:handleRegister;
+fork
+split
+:Get Username from SignUpPage;
+while (Username invalid?) is (Yes)
+:Username is already taken!;
+endwhile (No)
+split again
+:Get Password from SignUpPage;
+split again 
+:Get Bio from SignUpPage;
+endsplit
+endfork
+:handleSignIn;
+:Redirecting to SignInPage;
+stop
+
+|Sign in|
+start
+:Sign in; 
+split
+:Log in;
+while (Enter your credentials) is (Incorrect)
+:Username or password is incorrect! Please try again;
+endwhile (Correct)
+split again
+:Not a user? Register Here;
+|Sign up|
+while (Enter a Username) is (Taken)
+:Username is taken, try another username!;
+endwhile (Not taken)
+:Enter a password;
+:Upload a profile Picture;
+:Create a bio;
+|User|
+endsplit
+:Welcome to Quackstagram!;
+split
+:Upload a picture?;
+kill
+split again
+:Visit your profile;
+kill
+split again
+:Log out;
+stop
+endsplit
+@enduml

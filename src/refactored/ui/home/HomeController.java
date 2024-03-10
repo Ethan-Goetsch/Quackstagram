@@ -11,10 +11,10 @@ public class HomeController implements IPageController
     private final UIManager manager;
     private final HomePage page;
 
-    public HomeController(UIManager manager)
+    public HomeController(UIManager manager, Iterable<Post> userFolloweePosts)
     {
         this.manager = manager;
-        this.page = new HomePage(manager.getCurrentUserId(), (post, likesLabel) -> handleLikeAction(post, likesLabel), post -> onPostClicked(post), pageType -> manager.navigateToPage(pageType));
+        this.page = new HomePage(manager.getCurrentUserId(), (post, likesLabel) -> handleLikeAction(post, likesLabel), post -> onPostClicked(post), pageType -> manager.navigateToPage(pageType), userFolloweePosts);
     }
 
     @Override

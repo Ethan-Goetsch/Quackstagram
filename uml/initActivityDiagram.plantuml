@@ -1,0 +1,41 @@
+@startuml
+|Sign in|
+start
+repeat
+split
+:Enter credentials;
+while (Log In) is (Incorrect)
+:Username or password is incorrect! Please try again;
+endwhile (Correct)
+split again
+:Not a user? Register Here;
+|Sign up|
+repeat
+fork
+split
+:Enter credentials;
+split again
+:Upload a profile Picture;
+split again
+:Create a bio;
+endsplit
+endfork
+:Register;
+repeat while (Username Exists) is (Taken)
+-> Not taken;
+:Create Account;
+repeat while (s) is (s)
+-> Sign in;
+|User|
+:Welcome to Quackstagram!;
+split
+:Upload a picture?;
+kill
+split again
+:Visit your profile;
+kill
+split again
+:Log out;
+stop
+endsplit
+@enduml

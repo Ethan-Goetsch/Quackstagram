@@ -1,0 +1,36 @@
+@startuml Profile Sequence Diagram
+
+participant IPageController as IPC
+participant UIManager as UIM
+participant ProfileController as PC
+actor User as U
+participant ProfilePage as PP
+participant UIElementFactory as UIF
+participant PostDBManager as PDBM
+participant UserDBManager as UDBM
+participant FollowDBManager as FDBM
+
+IPC -> UIM: openProfile(userID : int)
+UIM -> FDBM: isAFollowingB(currentUserID, userID)
+FDBM --> UIM: isFollowing
+UIM -> UDBM: getUserPosts(userID)
+UDBM --> UIM: userPosts
+UIM -> PC: ProfileController(userID, isFollowing, userPosts)
+
+PC -> PP: ProfilePage(userID, isFollowing, userPosts, handleEditOrFollowAction : function, navigateToPage : function)
+PP -> PP: createProfileHeader()
+PP -> UIF : createImageGrid(userPosts, displayImage : function)
+UIF --> PP: imageGrid
+PP -> UIF : createNavigationPanel(navigateToPage : function)
+U -> PP : image click
+PP -> PP : displayImage(post, imageIcon)
+U -> PP : followButton click
+PP -> PC : handleEditOrFollowAction()
+PC -> FDBM : createFollow(userID)
+FDBM -> UDBM : updateFollowers(userID)
+FDBM -> UDBM : updateFollowing(currentUserID)
+PC -> PP : updateFollowButton()
+
+U -> PP : navigation bar click
+PP -> PC : navigateToPage()
+@enduml
